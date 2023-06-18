@@ -25,14 +25,10 @@ public class Turtle {
     @NotNull
     private int level;
 
-    @NotNull
     private int unassignedPoints;
 
-    @NotNull
-    private int rankingPlace;
-
     @ManyToOne
-    @JoinColumn(name = "turtle_type_id")
+    @JoinColumn(name = "type_id")
     private TurtleType turtleType;
 
     @OneToMany(mappedBy = "winner")
@@ -63,6 +59,6 @@ public class Turtle {
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
 
     @OneToMany(mappedBy = "turtle")
-    private List<Raport> raportList;
+    private List<Report> reportList;
 
 }

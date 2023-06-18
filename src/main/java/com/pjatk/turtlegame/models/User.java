@@ -24,11 +24,11 @@ public class User {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @NotNull
+
     @Size(max = 300)
     private String activationToken;
 
-    @NotNull
+
     private LocalDateTime activationTokenExpireAt;
 
     @NotNull
@@ -36,7 +36,7 @@ public class User {
     private String username;
 
     @NotNull
-    @Size(min = 2, max = 20)
+    @Size(min = 2, max = 64)
     private String password;
 
     @Size(max = 300)
@@ -49,17 +49,19 @@ public class User {
     @NotNull
     private int isEmailConfirmed;
 
-    private LocalDateTime birthday;
+    private LocalDateTime birthdate;
 
     @Size(max = 300)
     private String avatarPath;
 
+    @NotNull
+    @Column(columnDefinition = "default '0'")
     private int gold;
 
     private String about;
 
     @Size(max = 50)
-    private String location;
+    private String city;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -78,7 +80,7 @@ public class User {
     private List<ChatEntry> chatEntryList;
 
     @OneToMany(mappedBy = "user")
-    private List<Raport> raportList;
+    private List<Report> reportList;
 
     @OneToMany(mappedBy = "sender")
     private List<PrivateMessage> sendPrivateMessageList;

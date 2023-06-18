@@ -6,27 +6,23 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "care")
-@Setter
+@Table(name = "user_status_action")
 @Getter
-public class Care {
+@Setter
+public class UserStatusAction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
     @NotNull
-    private LocalDateTime lastCareDateAt;
+    @Size(min = 2, max = 25)
+    private String type;
 
-    @NotNull
-    @Size(min = 2, max = 50)
-    private String turtleStatus;
-
-    @OneToMany(mappedBy = "care")
-    private List<TurtleCare> turtleCareList;
+    @OneToMany(mappedBy = "user_status_action")
+    private List<UserStatus> userStatusList;
 
 }

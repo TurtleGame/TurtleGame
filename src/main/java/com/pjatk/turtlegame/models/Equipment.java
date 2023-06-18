@@ -27,9 +27,9 @@ public class Equipment {
     @Enumerated(EnumType.STRING)
     private EquipmentSlot slot;
 
-    private int attack;
+    private Integer attack;
 
-    private int defence;
+    private Integer defence;
 
     @OneToMany(mappedBy = "equipment")
     private List<UserEquipmentHistory> userEquipmentHistoryList;

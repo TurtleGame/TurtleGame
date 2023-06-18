@@ -2,11 +2,15 @@ package com.pjatk.turtlegame.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "turtle_owner_history")
+@Setter
+@Getter
 public class TurtleOwnerHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +20,6 @@ public class TurtleOwnerHistory {
     @NotNull
     private LocalDateTime startAt;
 
-    @NotNull
     private LocalDateTime endAt;
 
     @ManyToOne
