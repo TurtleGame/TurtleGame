@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
+                    auth.requestMatchers("/css/**").permitAll();
                     auth.requestMatchers("/test/**").hasAuthority("ADMIN");
                 })
                 .formLogin(withDefaults())
