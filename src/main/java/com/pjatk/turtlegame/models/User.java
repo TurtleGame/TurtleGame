@@ -39,9 +39,6 @@ public class User {
     @Size(min = 2, max = 64)
     private String password;
 
-    @Size(max = 300)
-    private String salt;
-
     @NotNull
     @Size(min = 2, max = 50)
     private String email;
@@ -55,8 +52,7 @@ public class User {
     private String avatarPath;
 
     @NotNull
-    @Column(columnDefinition = "default '0'")
-    private int gold;
+    private Integer gold;
 
     private String about;
 

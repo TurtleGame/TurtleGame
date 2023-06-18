@@ -194,12 +194,11 @@ CREATE TABLE user
     activation_token_expire_at datetime           NULL,
     username                   VARCHAR(15)        NOT NULL,
     password                   VARCHAR(64)        NOT NULL,
-    salt                       VARCHAR(300)       NULL,
     email                      VARCHAR(50)        NOT NULL,
     is_email_confirmed         INT                NOT NULL,
     birthdate                  datetime           NULL,
     avatar_path                VARCHAR(300)       NULL,
-    gold DEFAULT '0'                              NOT NULL,
+    gold                       INT    NOT NULL,
     about                      VARCHAR(255)       NULL,
     city                       VARCHAR(50)        NULL,
     role_id                    INT                NULL,
@@ -219,13 +218,13 @@ CREATE TABLE user_equipment_history
 
 CREATE TABLE user_status
 (
-    id        INT AUTO_INCREMENT NOT NULL,
-    start_at  datetime           NOT NULL,
-    end_at    datetime           NULL,
-    reason    VARCHAR(250)       NULL,
-    action_id INT                NULL,
-    giver_id  INT                NULL,
-    user_id   INT                NULL,
+    id                    INT AUTO_INCREMENT NOT NULL,
+    start_at              datetime           NOT NULL,
+    end_at                datetime           NULL,
+    reason                VARCHAR(250)       NULL,
+    user_status_action_id INT                NULL,
+    giver_id              INT                NULL,
+    user_id               INT                NULL,
     CONSTRAINT pk_user_status PRIMARY KEY (id)
 );
 
@@ -300,10 +299,10 @@ ALTER TABLE turtle_training_history
     ADD CONSTRAINT FK_TURTLE_TRAINING_HISTORY_ON_TURTLE FOREIGN KEY (turtle_id) REFERENCES turtle (id);
 
 ALTER TABLE turtle_transtation_history
-    ADD CONSTRAINT FK_TURTLE_TRANSTATION_HISTORY_ON_NEW_OWNER FOREIGN KEY (new_owner_id) REFERENCES turtle (id);
+    ADD CONSTRAINT FK_TURTLE_TRANSTATION_HISTORY_ON_NEW_OWNER FOREIGN KEY (new_owner_id) REFERENCES user (id);
 
 ALTER TABLE turtle_transtation_history
-    ADD CONSTRAINT FK_TURTLE_TRANSTATION_HISTORY_ON_PAST_OWNER FOREIGN KEY (past_owner_id) REFERENCES turtle (id);
+    ADD CONSTRAINT FK_TURTLE_TRANSTATION_HISTORY_ON_PAST_OWNER FOREIGN KEY (past_owner_id) REFERENCES user (id);
 
 ALTER TABLE turtle_transtation_history
     ADD CONSTRAINT FK_TURTLE_TRANSTATION_HISTORY_ON_TURTLE FOREIGN KEY (turtle_id) REFERENCES turtle (id);
@@ -324,10 +323,10 @@ ALTER TABLE user
     ADD CONSTRAINT FK_USER_ON_ROLE FOREIGN KEY (role_id) REFERENCES `role` (id);
 
 ALTER TABLE user_status
-    ADD CONSTRAINT FK_USER_STATUS_ON_ACTION FOREIGN KEY (action_id) REFERENCES user_status_action (id);
-
-ALTER TABLE user_status
     ADD CONSTRAINT FK_USER_STATUS_ON_GIVER FOREIGN KEY (giver_id) REFERENCES user (id);
 
 ALTER TABLE user_status
     ADD CONSTRAINT FK_USER_STATUS_ON_USER FOREIGN KEY (user_id) REFERENCES user (id);
+
+ALTER TABLE user_status
+    ADD CONSTRAINT FK_USER_STATUS_ON_USER_STATUS_ACTION FOREIGN KEY (user_status_action_id) REFERENCES user_status_action (id);

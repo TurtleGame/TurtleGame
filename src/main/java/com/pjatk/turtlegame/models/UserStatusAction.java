@@ -22,7 +22,7 @@ public class UserStatusAction {
     @Size(min = 2, max = 25)
     private String type;
 
-    @OneToMany(mappedBy = "user_status_action")
+    @OneToMany(mappedBy = "userStatusAction")
     private List<UserStatus> userStatusList;
 
 }

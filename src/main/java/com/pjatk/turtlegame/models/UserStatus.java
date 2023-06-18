@@ -27,8 +27,8 @@ public class UserStatus {
     private String reason;
 
     @ManyToOne
-    @JoinColumn(name = "action_id")
-    private UserStatusAction action;
+    @JoinColumn(name = "user_status_action_id")
+    private UserStatusAction userStatusAction;
 
     @ManyToOne
     @JoinColumn(name = "giver_id")

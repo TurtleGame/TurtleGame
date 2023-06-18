@@ -23,7 +23,6 @@ public class Attack {
     private String name;
 
     @NotNull
-    @Column(precision = 3, scale = 2)
     private double power;
 
     @ManyToOne

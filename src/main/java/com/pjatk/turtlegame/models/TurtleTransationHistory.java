@@ -26,9 +26,9 @@ public class TurtleTransationHistory {
 
     @ManyToOne
     @JoinColumn(name = "past_owner_id")
-    private Turtle pastOwner;
+    private User pastOwner;
 
     @ManyToOne
     @JoinColumn(name = "new_owner_id")
-    private Turtle newOwner;
+    private User newOwner;
 }
