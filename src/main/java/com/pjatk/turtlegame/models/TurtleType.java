@@ -34,4 +34,5 @@ public class TurtleType {
 
     @OneToMany(mappedBy = "turtleType")
     private List<Turtle> turtleList;
+
 }

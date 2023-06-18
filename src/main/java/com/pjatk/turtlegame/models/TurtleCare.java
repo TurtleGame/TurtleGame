@@ -17,4 +17,5 @@ public class TurtleCare {
     @ManyToOne
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
+
 }

@@ -24,4 +24,5 @@ public class Statistic {
 
     @OneToMany(mappedBy = "statistic")
     private List<TurtleStatistic> turtleStatisticList;
+
 }

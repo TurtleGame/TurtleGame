@@ -24,5 +24,4 @@ public class AttackType {
 
     @OneToMany(mappedBy = "attackType")
     private List<Attack> attackList;
-
 }

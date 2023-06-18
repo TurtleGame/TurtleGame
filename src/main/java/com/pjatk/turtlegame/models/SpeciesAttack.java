@@ -21,5 +21,4 @@ public class SpeciesAttack {
     @ManyToOne
     @JoinColumn(name = "turtle_type_id")
     private TurtleType turtleType;
-
 }

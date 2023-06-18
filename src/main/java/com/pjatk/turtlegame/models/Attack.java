@@ -32,5 +32,4 @@ public class Attack {
 
     @OneToMany(mappedBy = "attack")
     private List<SpeciesAttack> speciesAttackList;
-
 }

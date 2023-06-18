@@ -24,4 +24,5 @@ public class ActionType {
 
     @OneToMany(mappedBy = "actionType")
     private List<UserStatus> userStatusList;
+    
 }

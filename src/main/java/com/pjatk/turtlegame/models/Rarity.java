@@ -25,4 +25,5 @@ public class Rarity {
 
     @OneToMany(mappedBy = "rarity")
     private List<TurtleType> turtleTypeList;
+
 }

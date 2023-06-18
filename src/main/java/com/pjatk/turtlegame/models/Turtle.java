@@ -41,10 +41,28 @@ public class Turtle {
     @OneToMany(mappedBy = "loser")
     private List<TurtleBattleHistory> lostBattles;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleTrainingHistory> turtleTrainingHistoryList;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleOwnerHistory> turtleOwnerHistoryList;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleTransationHistory> turtleTransationHistoryList;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleStatistic> turtleStatisticList;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleCare> turtleCareList;
 
+    @OneToMany(mappedBy = "turtle")
+    private List<UserEquipmentHistory> equipmentHistoryList;
+
+    @OneToMany(mappedBy = "turtle")
+    private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
+
+    @OneToMany(mappedBy = "turtle")
+    private List<Raport> raportList;
 
 }

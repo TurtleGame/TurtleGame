@@ -21,10 +21,8 @@ public class UserStatus {
     @NotNull
     private LocalDateTime startAt;
 
-    @NotNull
     private LocalDateTime endAt;
 
-    @NotNull
     @Size(min = 2, max = 250)
     private String reason;
 
@@ -39,4 +37,5 @@ public class UserStatus {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }

@@ -21,4 +21,5 @@ public class TurtleBattleHistory {
     @ManyToOne
     @JoinColumn(name = "loser_id")
     private Turtle loser;
+
 }

@@ -28,4 +28,5 @@ public class Care {
 
     @OneToMany(mappedBy = "care")
     private List<TurtleCare> turtleCareList;
+
 }
