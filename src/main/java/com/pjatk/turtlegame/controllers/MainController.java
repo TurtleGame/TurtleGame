@@ -32,7 +32,7 @@ public class MainController {
 
     @GetMapping(path = "/test")
     public String testIndex(Model model) {
-        return "pages/test";
+        return "main";
     }
 
     @GetMapping(path = "/error")

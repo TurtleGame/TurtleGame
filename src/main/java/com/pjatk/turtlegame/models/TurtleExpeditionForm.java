@@ -15,4 +15,7 @@ public class TurtleExpeditionForm {
     @NotNull
     @JoinColumn(name = "expedition_id")
     private Expedition expedition;
+
+    @NotNull
+    private int durationTime;
 }
