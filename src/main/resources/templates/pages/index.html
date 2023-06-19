@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>TurtleBlast</title>
+    <title th:text="${@environment.getProperty('app.name')}"></title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
@@ -10,7 +10,7 @@
 <header>
     <div class="header-left"></div>
     <div class="header-center">
-        <a href="#" class="title" th:text="${application.name}"></a>
+        <a href="#" class="title" th:text="${@environment.getProperty('app.name')}"></a>
     </div>
     <div class="header-right"></div>
 </header>

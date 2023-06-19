@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers("/css/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
+                    auth.requestMatchers("/logout").permitAll();
                     auth.requestMatchers("/api/turtles/**").permitAll();
                     auth.requestMatchers("/main/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/expeditions/**").hasAuthority("ADMIN");
