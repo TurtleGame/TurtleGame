@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,8 +22,9 @@ public class WebSecurityConfig {
     @Autowired
     private TurtleUserDetailsService turtleUserDetailsService;
 
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -34,9 +36,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers("/css/**").permitAll();
+                    auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers("/test/**").hasAuthority("ADMIN");
                 })
-                .formLogin(withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/test", true)
+                        .permitAll())
                 .httpBasic(withDefaults())
                 .build();
     }

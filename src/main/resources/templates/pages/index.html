@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,16 +12,16 @@
 
 <div class="login-panel">
     <h3>Zaloguj się</h3>
-    <form action="" method="post">
-        <p><input type="text" placeholder="Login"></p>
-        <p><input type="password" placeholder="Hasło"></p>
+    <form th:action="@{/login}" method="POST">
+        <p><input type="text" id="username" name="username" placeholder="Login" required></p>
+        <p><input type="password" id="password" name="password" placeholder="Hasło" required></p>
         <p>
             <label>
                 <input type="checkbox"/> Zapamiętaj mnie
             </label>
         </p>
         <a href="#">Nie pamiętam hasła</a>
-        <input type="button" value="Zaloguj"/>
+        <input type="submit" value="Zaloguj"/>
         <input type="button" value="Zarejestruj"/>
     </form>
 </div>
