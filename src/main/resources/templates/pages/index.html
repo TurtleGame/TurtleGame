@@ -2,13 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TurtleBlast</title>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-<div class="top-bar">
-    <a href="#" class="title">TurtleBlast</a>
-</div>
+
+<header>
+    <div class="header-left"></div>
+    <div class="header-center">
+        <a href="#" class="title" th:text="${application.name}"></a>
+    </div>
+    <div class="header-right"></div>
+</header>
 
 <div class="login-panel">
     <h3>Zaloguj się</h3>
@@ -21,8 +26,8 @@
             </label>
         </p>
         <a href="#">Nie pamiętam hasła</a>
-        <input type="submit" value="Zaloguj"/>
-        <input type="button" value="Zarejestruj"/>
+        <input type="submit" class="button" value="Zaloguj"/>
+        <input type="button" class="button" value="Zarejestruj"/>
     </form>
 </div>
 

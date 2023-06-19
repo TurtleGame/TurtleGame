@@ -38,13 +38,13 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/css/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers("/api/turtles/**").permitAll();
-                    auth.requestMatchers("/test/**").hasAuthority("ADMIN");
+                    auth.requestMatchers("/main/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/expeditions/**").hasAuthority("ADMIN");
                 })
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/test", true)
+                        .defaultSuccessUrl("/main", true)
                         .permitAll())
                 .httpBasic(withDefaults())
                 .build();

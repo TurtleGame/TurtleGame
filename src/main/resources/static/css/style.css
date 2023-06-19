@@ -30,22 +30,132 @@ a, a:active, a:focus {
     text-decoration: none;
 }
 
-.top-bar {
-    display: flex;
+.button {
+    border: 0;
+    border-radius: 50px;
+    background: var(--color-primary-green);
+    color: var(--color-primary-beige);
+    padding: 8px 12px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 0.9em;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
+    margin: 5px;
+    cursor: pointer;
+}
+.button:hover {
+    background: var(--color-primary-green-active);
+    color: var(--color-primary-beige-active);
+}
+
+header {
+    display: grid;
+    grid-template-columns: 280px 1fr auto;
     justify-content: center;
     align-items: center;
-    height: 125px;
+    height: 120px;
     background: var(--color-green-darker);
 }
-.top-bar .title {
+header .header-left {
+    text-align: center;
+}
+header .header-left .user-card {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    margin: 0 10px;
+    background: var(--color-green-light);
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+}
+header .header-left .user-card .user-card-avatar {
+    padding: 5px;
+}
+header .header-left .user-card .user-card-avatar img {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+}
+header .header-left .user-card .user-card-menu {
+    margin-left: 2px;
+    text-align: left;
+    font-size: 0.9em;
+    line-height: 1.25em;
+}
+header .header-left .user-card .user-card-menu .nickname {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+header .header-left .user-card .user-card-menu a {
+    color: var(--color-white);
+}
+header .header-center {
+    text-align: center;
+}
+header .header-center .title {
     font-style: italic;
     font-size: 3em;
     color: var(--color-primary-beige);
 }
+header .header-right {
+    text-align: right;
+    margin-right: 20px;
+}
 
-.content {
+.main {
+    display: flex;
+    min-height: calc(100vh - 200px);
+}
+.main .sidebar {
+    align-self: stretch;
+    background: var(--color-green-light);
+    min-width: 280px;
+    width: 280px;
+}
+.main .sidebar .sidebar-heading {
+    font-size: 1.75em;
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+}
+.main .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.main .sidebar ul li:hover {
+    background: var(--color-green-dark);
+}
+.main .sidebar ul li.active {
+    background: var(--color-green-medium);
+    box-shadow: inset 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+}
+.main .sidebar ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--color-white);
+}
+.main .content {
+    align-self: stretch;
+    width: 100%;
+    margin: 25px;
+    color: var(--color-black);
+}
+.main .content .card {
     position: relative;
-    min-height: calc(100vh - 250px);
+    background: var(--color-beige-light);
+    padding: 15px;
+}
+.main .content .card .card-title {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1.6em;
+    color: var(--color-primary-beige);
+    top: -18px;
+    -webkit-text-stroke: 1.1px var(--color-black);
+    font-style: italic;
 }
 
 .login-panel {
@@ -66,25 +176,6 @@ a, a:active, a:focus {
     border-radius: 50px;
     padding: 4px 8px;
     background: var(--color-beige-medium);
-}
-.login-panel form input[type=button],
-.login-panel form input[type=submit]{
-    border: 0;
-    border-radius: 50px;
-    background: var(--color-primary-green);
-    color: var(--color-primary-beige);
-    padding: 8px 12px;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 0.9em;
-    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
-    margin: 5px;
-    cursor: pointer;
-}
-.login-panel form input[type=button]:hover,
-.login-panel form input[type=submit]:hover{
-    background: var(--color-primary-green-active);
-    color: var(--color-primary-beige-active);
 }
 .login-panel form a, .login-panel form a:active, .login-panel form a:focus {
     color: var(--color-white);
@@ -124,7 +215,7 @@ a, a:active, a:focus {
     color: var(--color-white);
     font-style: italic;
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
-    min-height: calc(100vh - 495px);
+    min-height: calc(100vh - 490px);
 }
 
 footer {
@@ -134,16 +225,6 @@ footer {
     height: 80px;
     background: var(--color-green-darker);
     color: var(--color-white);
-}
-
-.menu-panel {
-    background: var(--color-green-light);
-    float: left;
-    width: 30%;
-}
-.right-content {
-    float: right;
-    width: 70%;
 }
 
 @media screen and (width >= 1000px) {
@@ -170,4 +251,3 @@ footer {
     }
 }
 
-/*# sourceMappingURL=app.css.map */

@@ -1,9 +1,11 @@
 package com.pjatk.turtlegame.controllers;
 
+import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,9 +32,10 @@ public class MainController {
         return "pages/index";
     }
 
-    @GetMapping(path = "/test")
-    public String testIndex(Model model) {
-        return "main";
+    @GetMapping(path = "/main")
+    public String testIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        model.addAttribute("nick", turtleUserDetails.getUsername());
+        return "pages/main";
     }
 
     @GetMapping(path = "/error")
@@ -49,7 +52,7 @@ public class MainController {
     public String processLogin(@RequestParam("username") String username, @RequestParam("password") String password) {
         User user = userRepository.findUserByUsername(username);
         if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            return "redirect:/test";
+            return "redirect:/main";
         }
         return "pages/error";
 
