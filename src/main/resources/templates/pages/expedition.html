@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<div class="top-bar">
+    <a href="#" class="title">TurtleBlast</a>
+</div>
+<div class="container">
+    <div class="menu-panel">
+        <a href="#">Wyprawy</a>
+    </div>
+    <div clas="right-content">
+        <form th:object="${turtleExpeditionForm}" method="post">
+            <label for="wyprawa">Wybierz wyprawę</label>
+            <select id="wyprawa" name="expedition" th:field="*{expedition}">
+                <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
+                        th:text="${expedition.getName()}"></option>
+            </select>
+
+            <label for="turtle">Wybierz żółwia</label>
+            <select id="turtle" name="turtle" th:field="*{turtle}">
+                <option th:each="turtle : ${turtles}" th:value="${turtle.getId()}" th:text="${turtle.getName()}"></option>
+            </select>
+
+            <label for="durationTime">Wybierz czas wyprawy</label>
+            <select name="durationTime" id="durationTime">
+                <option value="30">30 minut</option>
+                <option value="60">1 godz.</option>
+                <option value="120">2 godz.</option>
+                <option value="180">3 godz.</option>
+                <option value="240">4 godz.</option>
+                <option value="300">5 godz.</option>
+                <option value="360">6 godz.</option>
+            </select>
+            <button type="submit">Wyślij!</button>
+        </form>
+
+    </div>
+</div>
+
+<footer>
+    <span>TurtleBlast 2022</span>
+</footer>
+</body>
+</html>

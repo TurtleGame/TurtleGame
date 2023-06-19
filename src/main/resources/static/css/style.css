@@ -136,6 +136,16 @@ footer {
     color: var(--color-white);
 }
 
+.menu-panel {
+    background: var(--color-green-light);
+    float: left;
+    width: 30%;
+}
+.right-content {
+    float: right;
+    width: 70%;
+}
+
 @media screen and (width >= 1000px) {
     .login-panel {
         position: absolute;

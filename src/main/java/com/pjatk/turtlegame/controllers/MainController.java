@@ -51,7 +51,7 @@ public class MainController {
         if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return "redirect:/test";
         }
-        return "redirect:/error";
+        return "pages/error";
 
     }
 }

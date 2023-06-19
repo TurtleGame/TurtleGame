@@ -1,5 +1,6 @@
 package com.pjatk.turtlegame.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,9 +22,8 @@ public class Rarity {
     @NotNull
     @Size(min = 2, max = 50)
     private String name;
-
-
-    @OneToMany(mappedBy = "rarity")
+@JsonIgnore
+    @OneToMany(mappedBy = "rarity", fetch = FetchType.LAZY)
     private List<TurtleType> turtleTypeList;
 
 }

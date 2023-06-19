@@ -21,6 +21,10 @@ public class TurtleUserDetails implements UserDetails {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole().getName()));
     }
 
+    public int getId() {
+        return user.getId();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
