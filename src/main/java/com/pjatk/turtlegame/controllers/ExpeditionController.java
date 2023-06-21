@@ -70,6 +70,6 @@ public class ExpeditionController {
         turtleExpeditionHistoryRepository
                 .save(expeditionServices.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime()));
 
-        return "main";
+        return "redirect:/expeditions";
     }
 }

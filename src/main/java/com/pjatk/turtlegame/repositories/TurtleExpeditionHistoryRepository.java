@@ -13,4 +13,6 @@ public interface TurtleExpeditionHistoryRepository extends JpaRepository<TurtleE
     List<TurtleExpeditionHistory> findByEndAtAfter(LocalDateTime endTime);
 
     Boolean existsByTurtleAndEndAtAfter(Turtle turtle, LocalDateTime endTime);
+
+    Boolean existsByTurtleAndEndAtBefore(Turtle turtle, LocalDateTime endTime);
 }

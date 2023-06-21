@@ -109,6 +109,7 @@ CREATE TABLE turtle
     level             INT                NOT NULL,
     unassigned_points INT                NOT NULL,
     type_id           INT                NULL,
+    is_available      INT                NULL,
     CONSTRAINT pk_turtle PRIMARY KEY (id)
 );
 

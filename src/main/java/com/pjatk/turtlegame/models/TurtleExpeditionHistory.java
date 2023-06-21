@@ -30,4 +30,5 @@ public class TurtleExpeditionHistory {
     @ManyToOne
     @JoinColumn(name = "expedition_id")
     private Expedition expedition;
+
 }

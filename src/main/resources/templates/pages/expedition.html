@@ -51,31 +51,55 @@
         </ul>
     </nav>
     <div class="content">
+        <div class="card">
+            <div class="card-title">Wyprawy</div>
+            <div class="card-body">
 
-        <form th:object="${turtleExpeditionForm}" method="post">
-            <label for="wyprawa">Wybierz wyprawę</label>
-            <select id="wyprawa" name="expedition" th:field="*{expedition}">
-                <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
-                        th:text="${expedition.getName()}"></option>
-            </select>
+                <table class="table">
+                    <tr th:each="turtle : ${turtles}" th:if="${turtle.isAvailable()}">
+                        <td style="text-align: center;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/8334/8334151.png"
+                                 style="max-width: 80px; max-height: 80px"/>
+                        </td>
+                        <td th:text="${turtle.getName()}">
+                        </td>
+                        <td style="text-align: center;">
+                            <select id="wyprawa" name="expedition" th:form="${'expedition-' + turtle.getId()}">
+                                <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
+                                        th:text="${expedition.getName()}"></option>
+                            </select>
+                        </td>
+                        <td style="text-align: center;">
+                            <select name="durationTime" id="durationTime" th:form="${'expedition-' + turtle.getId()}">
+                                <option value="30">30 minut</option>
+                                <option value="60">1 godz.</option>
+                                <option value="120">2 godz.</option>
+                                <option value="180">3 godz.</option>
+                                <option value="240">4 godz.</option>
+                                <option value="300">5 godz.</option>
+                                <option value="360">6 godz.</option>
+                            </select>
+                        </td>
+                        <td style="text-align: center;">
+                            <form method="post" th:id="${'expedition-' + turtle.getId()}">
+                                <input type="hidden" th:value="${turtle.getId()}" name="turtle">
+                                <input type="submit" class="button" value="Wyślij">
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:each="turtle : ${turtles}" th:if="${!turtle.isAvailable()}">
+                        <td style="text-align: center;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/7750/7750903.png"
+                                 style="max-width: 80px; max-height: 80px"/>
+                        </td>
+                        <td th:text="${turtle.getName()}">
+                        </td>
+                        <td colspan="3" style="text-align: center;">Żółw niedostępny!</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-            <label for="turtle">Wybierz żółwia</label>
-            <select id="turtle" name="turtle" th:field="*{turtle}">
-                <option th:each="turtle : ${turtles}" th:value="${turtle.getId()}" th:text="${turtle.getName()}"></option>
-            </select>
-
-            <label for="durationTime">Wybierz czas wyprawy</label>
-            <select name="durationTime" id="durationTime">
-                <option value="30">30 minut</option>
-                <option value="60">1 godz.</option>
-                <option value="120">2 godz.</option>
-                <option value="180">3 godz.</option>
-                <option value="240">4 godz.</option>
-                <option value="300">5 godz.</option>
-                <option value="360">6 godz.</option>
-            </select>
-            <button type="submit">Wyślij!</button>
-        </form>
     </div>
 </div>
 
