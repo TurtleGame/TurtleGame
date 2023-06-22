@@ -38,7 +38,9 @@ public class MainController {
 
     @GetMapping(path = "/main")
     public String testIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("nick", turtleUserDetails.getUsername());
+        model.addAttribute("gold", user.getGold());
         return "pages/main";
     }
 

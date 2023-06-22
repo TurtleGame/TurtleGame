@@ -1,7 +1,9 @@
 package com.pjatk.turtlegame.config;
 
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
+import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.PrivateMessageService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +16,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final UserRepository userRepository;
     private final UserService userService;
-    TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
+    private final TurtleRepository turtleRepository;
+    private final TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
+    private final PrivateMessageService privateMessageService;
 
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyInterceptor(userRepository, userService, turtleExpeditionHistoryRepository))
+        registry.addInterceptor(new MyInterceptor(userRepository,
+                        userService,
+                        turtleRepository,
+                        turtleExpeditionHistoryRepository,
+                        privateMessageService
+                ))
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**")
                 .excludePathPatterns("/js/**")

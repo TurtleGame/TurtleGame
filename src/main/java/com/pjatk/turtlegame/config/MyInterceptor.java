@@ -1,8 +1,11 @@
 package com.pjatk.turtlegame.config;
 
+import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
+import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.PrivateMessageService;
 import com.pjatk.turtlegame.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,9 +21,12 @@ import java.util.List;
 @AllArgsConstructor
 public class MyInterceptor implements HandlerInterceptor {
 
+
     private final UserRepository userRepository;
     private final UserService userService;
+    private final TurtleRepository turtleRepository;
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
+    PrivateMessageService privateMessageService;
 
 
     @Override
@@ -41,9 +47,27 @@ public class MyInterceptor implements HandlerInterceptor {
         }
 
         List<Turtle> turtleList = userService.getTurtles(user);
-        for(Turtle turtle : turtleList){
-            if(!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())){
+        for (Turtle turtle : turtleList) {
+            if (turtle.isAvailable()) {
+                continue;
+            }
+
+            if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
                 turtle.setAvailable(true);
+                turtleRepository.save(turtle);
+            }
+        }
+
+        List<TurtleExpeditionHistory> turtleExpeditionHistoryList = turtleExpeditionHistoryRepository.findAll();
+
+        for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
+            if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
+                user.setGold((int) (user.getGold() + history.getExpedition().getGold()));
+                System.out.println("User" + user.getGold());
+                history.setWasRewarded(true);
+                userRepository.save(user);
+                turtleExpeditionHistoryRepository.save(history);
+                privateMessageService.sendReport(user.getId(), history.getTurtle().getId());
             }
         }
 

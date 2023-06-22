@@ -29,6 +29,10 @@ public class TurtleUserDetails implements UserDetails {
         return user;
     }
 
+    public double getGold(){
+        return user.getGold();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();

@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "raport")
+@Table(name = "report")
 @Setter
 @Getter
 public class Report {
@@ -17,6 +19,11 @@ public class Report {
 
     @NotNull
     private String content;
+
+    private LocalDateTime sentAt;
+
+    @NotNull
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

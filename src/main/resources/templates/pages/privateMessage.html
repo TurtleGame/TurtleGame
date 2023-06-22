@@ -41,21 +41,38 @@
     <nav class="sidebar">
         <div class="sidebar-heading">Menu</div>
         <ul>
-            <li class="active"><a href="#">Strona główna</a></li>
+            <li><a href="/main">Strona główna</a></li>
             <li><a href="#">Twoje żółwie</a></li>
             <li><a href="#">Katalog żółwi</a></li>
-            <li><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
+            <li class="active"><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
             <li><a href="#">Arena zółwi</a></li>
             <li><a href="#">Twoje przedmioty</a></li>
             <li><a href="#">Chatbox</a></li>
         </ul>
     </nav>
     <div class="content">
-
         <div class="card">
-            <div class="card-title">Ogłoszenia</div>
+            <div class="card-title">Prywatne wiadomości</div>
             <div class="card-body">
-                sd
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Temat</th>
+                        <th>Nadawca</th>
+                        <th>Data</th>
+                        <th>Treść</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+          <tr th:each="message : ${messages}">
+              <td th:text="${message.getTitle()}"></td>
+              <td>ADMIN</td>
+              <td th:text="${message.getSentAt()}"></td>
+              <td th:text="${message.getContent()}"></td>
+          </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

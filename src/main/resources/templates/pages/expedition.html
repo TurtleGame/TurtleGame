@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${@environment.getProperty('app.name')}"></title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/js/script.js" defer></script>
 </head>
 <body>
 
@@ -16,10 +17,10 @@
             <div class="user-card-menu">
                 <div class="nickname" th:text="${nick}"></div>
                 <div>
-                    Gold: 0
+                    Gold: <span th:text="${gold}"></span>
                 </div>
                 <div>
-                    <a href="#">Prywatne wiadomości: 0</a>
+                    <a href="/private-message">Prywatne wiadomości: 0</a>
                 </div>
                 <div>
                     <a href="#">Ustawienia konta</a>
@@ -54,7 +55,9 @@
         <div class="card">
             <div class="card-title">Wyprawy</div>
             <div class="card-body">
-
+                <div id="alertMessage" class="alert hidden">
+                    To jest alert!
+                </div>
                 <table class="table">
                     <tr th:each="turtle : ${turtles}" th:if="${turtle.isAvailable()}">
                         <td style="text-align: center;">
@@ -83,8 +86,10 @@
                         <td style="text-align: center;">
                             <form method="post" th:id="${'expedition-' + turtle.getId()}">
                                 <input type="hidden" th:value="${turtle.getId()}" name="turtle">
-                                <input type="submit" class="button" value="Wyślij">
+                                <input type="submit" onclick="showAlert()" class="button" value="Wyślij">
                             </form>
+                            <div class="error-message" th:if="${#fields.hasErrors('durationTime')}"
+                                 th:errors="${durationTime}"></div>
                         </td>
                     </tr>
                     <tr th:each="turtle : ${turtles}" th:if="${!turtle.isAvailable()}">

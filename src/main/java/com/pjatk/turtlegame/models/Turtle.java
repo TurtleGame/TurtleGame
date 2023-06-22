@@ -63,7 +63,8 @@ public class Turtle {
 
     @OneToMany(mappedBy = "turtle")
     private List<Report> reportList;
-@Column(name = "is_available", columnDefinition = "INT(1)")
+
+    @Column(name = "is_available", columnDefinition = "INT(1)")
     private boolean isAvailable;
 
 }

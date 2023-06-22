@@ -7,7 +7,7 @@ import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
-import com.pjatk.turtlegame.services.ExpeditionServices;
+import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,14 +31,16 @@ public class ExpeditionController {
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     TurtleOwnerHistoryRepository TurtleOwnerHistoryRepository;
     UserService userService;
-    ExpeditionServices expeditionServices;
+    ExpeditionService expeditionService;
 
     @GetMapping(path = "")
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("nick", turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", new TurtleExpeditionForm());
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
+        model.addAttribute("gold", user.getGold());
         return "pages/expedition";
     }
 
@@ -61,6 +63,11 @@ public class ExpeditionController {
         Turtle turtle = turtleRepository.findById(turtleId);
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
+        if(turtle.getLevel() < expedition.getMinLevel()){
+            bindingResult.rejectValue("durationTime", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
+
+            return "pages/expedition";
+        }
         if (turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
             bindingResult.rejectValue("durationTime", "Jest juz na wyprawie.");
 
@@ -68,7 +75,7 @@ public class ExpeditionController {
         }
 
         turtleExpeditionHistoryRepository
-                .save(expeditionServices.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime()));
+                .save(expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime()));
 
         return "redirect:/expeditions";
     }

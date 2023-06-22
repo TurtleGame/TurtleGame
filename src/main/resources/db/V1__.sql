@@ -64,13 +64,15 @@ CREATE TABLE private_message
     CONSTRAINT pk_private_message PRIMARY KEY (id)
 );
 
-CREATE TABLE raport
+CREATE TABLE report
 (
     id        INT AUTO_INCREMENT NOT NULL,
     content   VARCHAR(255)       NOT NULL,
+    sent_at   datetime           NOT NULL,
+    title     VARCHAR(255)       NOT NULL,
     user_id   INT                NULL,
     turtle_id INT                NULL,
-    CONSTRAINT pk_raport PRIMARY KEY (id)
+    CONSTRAINT pk_report PRIMARY KEY (id)
 );
 
 CREATE TABLE rarity
@@ -137,6 +139,7 @@ CREATE TABLE turtle_expedition_history
     end_at        datetime           NOT NULL,
     turtle_id     INT                NULL,
     expedition_id INT                NULL,
+    was_rewarded  INT DEFAULT 0      NOT NULL,
     CONSTRAINT pk_turtle_expedition_history PRIMARY KEY (id)
 );
 
@@ -254,10 +257,10 @@ ALTER TABLE private_message
 ALTER TABLE private_message
     ADD CONSTRAINT FK_PRIVATE_MESSAGE_ON_SENDER FOREIGN KEY (sender_id) REFERENCES user (id);
 
-ALTER TABLE raport
+ALTER TABLE report
     ADD CONSTRAINT FK_RAPORT_ON_TURTLE FOREIGN KEY (turtle_id) REFERENCES turtle (id);
 
-ALTER TABLE raport
+ALTER TABLE report
     ADD CONSTRAINT FK_RAPORT_ON_USER FOREIGN KEY (user_id) REFERENCES user (id);
 
 ALTER TABLE species_attack

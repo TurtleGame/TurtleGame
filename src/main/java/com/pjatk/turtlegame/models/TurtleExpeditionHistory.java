@@ -31,4 +31,8 @@ public class TurtleExpeditionHistory {
     @JoinColumn(name = "expedition_id")
     private Expedition expedition;
 
+    @NotNull
+    @Column(name = "wasRewarded", columnDefinition = "INT(1) DEFAULT 0")
+    private boolean wasRewarded;
+
 }

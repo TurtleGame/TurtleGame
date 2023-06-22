@@ -6,15 +6,13 @@ import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
-import org.springframework.validation.BindingResult;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ExpeditionServices {
+public class ExpeditionService {
 
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
 
@@ -26,7 +24,7 @@ public class ExpeditionServices {
         turtleExpedition.setTurtle(turtle);
         turtleExpedition.setExpedition(expedition);
         turtleExpedition.setStartAt(LocalDateTime.now());
-        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusMinutes(durationTime));
+        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusSeconds(durationTime));
         turtle.setAvailable(false);
 
 
