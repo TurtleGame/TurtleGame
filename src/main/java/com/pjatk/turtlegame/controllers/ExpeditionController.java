@@ -41,6 +41,7 @@ public class ExpeditionController {
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
         model.addAttribute("gold", user.getGold());
+
         return "pages/expedition";
     }
 
@@ -52,9 +53,12 @@ public class ExpeditionController {
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                        BindingResult bindingResult) {
 
+        User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
+        model.addAttribute("nick", turtleUserDetails.getUsername());
+        model.addAttribute("gold", user.getGold());
 
         if (bindingResult.hasErrors()) {
             return "pages/expedition";
@@ -64,12 +68,12 @@ public class ExpeditionController {
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
         if(turtle.getLevel() < expedition.getMinLevel()){
-            bindingResult.rejectValue("durationTime", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
+            bindingResult.rejectValue("durationTime","error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
 
             return "pages/expedition";
         }
         if (turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
-            bindingResult.rejectValue("durationTime", "Jest juz na wyprawie.");
+            bindingResult.rejectValue("durationTime", "error.alreadyOnExpedition", "Jest juz na wyprawie.");
 
             return "pages/expedition";
         }

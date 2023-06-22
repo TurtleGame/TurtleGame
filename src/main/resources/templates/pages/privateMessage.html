@@ -44,7 +44,7 @@
             <li><a href="/main">Strona główna</a></li>
             <li><a href="#">Twoje żółwie</a></li>
             <li><a href="#">Katalog żółwi</a></li>
-            <li class="active"><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
+            <li><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
             <li><a href="#">Arena zółwi</a></li>
             <li><a href="#">Twoje przedmioty</a></li>
             <li><a href="#">Chatbox</a></li>
@@ -54,23 +54,22 @@
         <div class="card">
             <div class="card-title">Prywatne wiadomości</div>
             <div class="card-body">
-
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Temat</th>
-                        <th>Nadawca</th>
                         <th>Data</th>
+                        <th>Nadawca</th>
+                        <th>Temat</th>
                         <th>Treść</th>
                     </tr>
                     </thead>
                     <tbody>
-          <tr th:each="message : ${messages}">
-              <td th:text="${message.getTitle()}"></td>
-              <td>ADMIN</td>
-              <td th:text="${message.getSentAt()}"></td>
-              <td th:text="${message.getContent()}"></td>
-          </tr>
+                    <tr th:each="message : ${messages}">
+                        <td style="text-align: center;" th:text="${message.getSentAtDateTime()}"></td>
+                        <td style="text-align: center;">System</td>
+                        <td th:text="${message.getTitle()}"></td>
+                        <td th:text="${message.getContent()}"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
