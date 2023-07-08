@@ -1,69 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${@environment.getProperty('app.name')}"></title>
-    <link rel="stylesheet" href="/css/style.css"/>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
 
-<header>
-    <div class="header-left">
-        <div class="user-card">
-            <div class="user-card-avatar">
-                <img src="https://www.webinarleads4you.com/wp-content/uploads/2017/02/no-avatar-350x350-300x300.jpg"/>
-            </div>
-            <div class="user-card-menu">
-                <div class="nickname" th:text="${nick}"></div>
-                <div>
-                    Gold: <span th:text="${gold}"></span>
-                </div>
-                <div>
-                    <a href="/private-message">Prywatne wiadomości: 0</a>
-                </div>
-                <div>
-                    <a href="#">Ustawienia konta</a>
-                </div>
-            </div>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-title">Ogłoszenia</div>
+        <div class="card-body">
+            sd
         </div>
-    </div>
-    <div class="header-center">
-        <a href="#" class="title" th:text="${@environment.getProperty('app.name')}"></a>
-    </div>
-    <div class="header-right">
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="button">Wyloguj</button>
-        </form>
-    </div>
-</header>
-
-<div class="main">
-    <nav class="sidebar">
-        <div class="sidebar-heading">Menu</div>
-        <ul>
-            <li class="active"><a href="#">Strona główna</a></li>
-            <li><a href="#">Twoje żółwie</a></li>
-            <li><a href="#">Katalog żółwi</a></li>
-            <li><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
-            <li><a href="#">Arena zółwi</a></li>
-            <li><a href="#">Twoje przedmioty</a></li>
-            <li><a href="#">Chatbox</a></li>
-        </ul>
-    </nav>
-    <div class="content">
-
-        <div class="card">
-            <div class="card-title">Ogłoszenia</div>
-            <div class="card-body">
-                sd
-            </div>
-        </div>
-
     </div>
 </div>
-
-<footer>
-    <span>TurtleBlast 2022</span>
-</footer>
-</body>
-</html>

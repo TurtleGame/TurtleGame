@@ -1,115 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${@environment.getProperty('app.name')}"></title>
-    <link rel="stylesheet" href="/css/style.css"/>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
 
-<header>
-    <div class="header-left">
-        <div class="user-card">
-            <div class="user-card-avatar">
-                <img src="https://www.webinarleads4you.com/wp-content/uploads/2017/02/no-avatar-350x350-300x300.jpg"/>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-title">Wyprawy</div>
+        <div class="card-body">
+            <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" style="background: #660000; color: gold; padding: 15px; border-radius: 10px;">
+                <strong>Nie udało się wykonać tej akcji</strong>
+                <ul>
+                    <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}" />
+                </ul>
             </div>
-            <div class="user-card-menu">
-                <div class="nickname" th:text="${nick}"></div>
-                <div>
-                    Gold: <span th:text="${gold}"></span>
-                </div>
-                <div>
-                    <a href="/private-message">Prywatne wiadomości: 0</a>
-                </div>
-                <div>
-                    <a href="#">Ustawienia konta</a>
-                </div>
-            </div>
+            <table class="table">
+                <tr th:each="turtle : ${turtles}" th:if="${turtle.isAvailable()}">
+                    <td style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/8334/8334151.png"
+                             style="max-width: 80px; max-height: 80px"/>
+                    </td>
+                    <td th:text="${turtle.getName()}">
+                    </td>
+                    <td style="text-align: center;">
+                        <select id="wyprawa" name="expedition" th:form="${'expedition-' + turtle.getId()}">
+                            <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
+                                    th:text="${expedition.getName()}"></option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;">
+                        <select name="durationTime" id="durationTime" th:form="${'expedition-' + turtle.getId()}">
+                            <option value="30">30 minut</option>
+                            <option value="60">1 godz.</option>
+                            <option value="120">2 godz.</option>
+                            <option value="180">3 godz.</option>
+                            <option value="240">4 godz.</option>
+                            <option value="300">5 godz.</option>
+                            <option value="360">6 godz.</option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;">
+                        <form method="post" th:id="${'expedition-' + turtle.getId()}">
+                            <input type="hidden" th:value="${turtle.getId()}" name="turtle">
+                            <input type="submit" class="button" value="Wyślij">
+                        </form>
+                    </td>
+                </tr>
+                <tr th:each="turtle : ${turtles}" th:if="${!turtle.isAvailable()}">
+                    <td style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7750/7750903.png"
+                             style="max-width: 80px; max-height: 80px"/>
+                    </td>
+                    <td th:text="${turtle.getName()}">
+                    </td>
+                    <td colspan="3" style="text-align: center;">Żółw niedostępny!</td>
+                </tr>
+            </table>
         </div>
-    </div>
-    <div class="header-center">
-        <a href="#" class="title" th:text="${@environment.getProperty('app.name')}"></a>
-    </div>
-    <div class="header-right">
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="button">Wyloguj</button>
-        </form>
-    </div>
-</header>
-
-<div class="main">
-    <nav class="sidebar">
-        <div class="sidebar-heading">Menu</div>
-        <ul>
-            <li><a href="/main">Strona główna</a></li>
-            <li><a href="#">Twoje żółwie</a></li>
-            <li><a href="#">Katalog żółwi</a></li>
-            <li class="active"><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
-            <li><a href="#">Arena zółwi</a></li>
-            <li><a href="#">Twoje przedmioty</a></li>
-            <li><a href="#">Chatbox</a></li>
-        </ul>
-    </nav>
-    <div class="content">
-        <div class="card">
-            <div class="card-title">Wyprawy</div>
-            <div class="card-body">
-                <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" style="background: #660000; color: gold; padding: 15px; border-radius: 10px;">
-                    <strong>Nie udało się wykonać tej akcji</strong>
-                    <ul>
-                        <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}" />
-                    </ul>
-                </div>
-                <table class="table">
-                    <tr th:each="turtle : ${turtles}" th:if="${turtle.isAvailable()}">
-                        <td style="text-align: center;">
-                            <img src="https://cdn-icons-png.flaticon.com/512/8334/8334151.png"
-                                 style="max-width: 80px; max-height: 80px"/>
-                        </td>
-                        <td th:text="${turtle.getName()}">
-                        </td>
-                        <td style="text-align: center;">
-                            <select id="wyprawa" name="expedition" th:form="${'expedition-' + turtle.getId()}">
-                                <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
-                                        th:text="${expedition.getName()}"></option>
-                            </select>
-                        </td>
-                        <td style="text-align: center;">
-                            <select name="durationTime" id="durationTime" th:form="${'expedition-' + turtle.getId()}">
-                                <option value="30">30 minut</option>
-                                <option value="60">1 godz.</option>
-                                <option value="120">2 godz.</option>
-                                <option value="180">3 godz.</option>
-                                <option value="240">4 godz.</option>
-                                <option value="300">5 godz.</option>
-                                <option value="360">6 godz.</option>
-                            </select>
-                        </td>
-                        <td style="text-align: center;">
-                            <form method="post" th:id="${'expedition-' + turtle.getId()}">
-                                <input type="hidden" th:value="${turtle.getId()}" name="turtle">
-                                <input type="submit" class="button" value="Wyślij">
-                            </form>
-                        </td>
-                    </tr>
-                    <tr th:each="turtle : ${turtles}" th:if="${!turtle.isAvailable()}">
-                        <td style="text-align: center;">
-                            <img src="https://cdn-icons-png.flaticon.com/512/7750/7750903.png"
-                                 style="max-width: 80px; max-height: 80px"/>
-                        </td>
-                        <td th:text="${turtle.getName()}">
-                        </td>
-                        <td colspan="3" style="text-align: center;">Żółw niedostępny!</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
     </div>
 </div>
-
-<footer>
-    <span>TurtleBlast 2022</span>
-</footer>
-</body>
-</html>

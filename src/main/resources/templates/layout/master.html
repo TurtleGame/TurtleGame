@@ -1,0 +1,22 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${@environment.getProperty('app.name')}"></title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+
+<header th:replace="~{layout/header :: header}"></header>
+
+<div class="main">
+    <nav th:replace="~{layout/sidebar :: sidebar}"></nav>
+    <div class="content" layout:fragment="content">
+
+    </div>
+</div>
+
+</body>
+<footer>
+    <span>TurtleBlast 2022</span>
+</footer>

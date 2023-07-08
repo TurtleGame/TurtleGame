@@ -1,0 +1,31 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<header th:fragment="header" layout:fragment="header">
+  <div class="header-left">
+    <div class="user-card">
+      <div class="user-card-avatar">
+        <img src="https://www.webinarleads4you.com/wp-content/uploads/2017/02/no-avatar-350x350-300x300.jpg"/>
+      </div>
+      <div class="user-card-menu">
+        <div class="nickname" th:text="${nick}"></div>
+        <div>
+          Gold: <span th:text="${gold}"></span>
+        </div>
+        <div>
+          <a href="/private-message">Prywatne wiadomości: 0</a>
+        </div>
+        <div>
+          <a href="#">Ustawienia konta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-center">
+    <a href="#" class="title" th:text="${@environment.getProperty('app.name')}"></a>
+  </div>
+  <div class="header-right">
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="button">Wyloguj</button>
+    </form>
+  </div>
+</header>
+</html>
