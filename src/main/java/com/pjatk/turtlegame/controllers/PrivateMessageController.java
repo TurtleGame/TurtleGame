@@ -20,11 +20,9 @@ public class PrivateMessageController {
     UserService userService;
 
     @GetMapping(path = "")
-    public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails){
+    public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
-        model.addAttribute("nick", turtleUserDetails.getUsername());
-        model.addAttribute("gold", user.getGold());
-        model.addAttribute("messages", user.getReportList() );
+        model.addAttribute("messages", user.getReportList());
         return "pages/privateMessage";
     }
 }

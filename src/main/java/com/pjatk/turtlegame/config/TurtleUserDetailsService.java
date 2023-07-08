@@ -2,6 +2,7 @@ package com.pjatk.turtlegame.config;
 
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,8 +14,7 @@ import org.springframework.stereotype.Service;
 public class TurtleUserDetailsService implements UserDetailsService {
 
     public UserRepository userRepository;
-
-
+    public HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -22,6 +22,8 @@ public class TurtleUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
+
+        request.getSession().setAttribute("user", user);
 
         return new TurtleUserDetails(user);
     }

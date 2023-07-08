@@ -75,7 +75,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatEntry> chatEntryList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Report> reportList;
 
     @OneToMany(mappedBy = "sender")

@@ -6,9 +6,9 @@
         <img src="https://www.webinarleads4you.com/wp-content/uploads/2017/02/no-avatar-350x350-300x300.jpg"/>
       </div>
       <div class="user-card-menu">
-        <div class="nickname" th:text="${nick}"></div>
+        <div class="nickname" th:text="${user.username}"></div>
         <div>
-          Gold: <span th:text="${gold}"></span>
+          Gold: <span th:text="${user.gold}"></span>
         </div>
         <div>
           <a href="/private-message">Prywatne wiadomości: 0</a>

@@ -29,7 +29,7 @@ public class TurtleUserDetails implements UserDetails {
         return user;
     }
 
-    public double getGold(){
+    public double getGold() {
         return user.getGold();
     }
 

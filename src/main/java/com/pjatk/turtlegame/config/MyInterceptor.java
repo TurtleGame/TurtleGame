@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.pjatk.turtlegame.models.Turtle;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,7 +64,6 @@ public class MyInterceptor implements HandlerInterceptor {
         for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
                 user.setGold((int) (user.getGold() + history.getExpedition().getGold()));
-                System.out.println("User" + user.getGold());
                 history.setWasRewarded(true);
                 userRepository.save(user);
                 turtleExpeditionHistoryRepository.save(history);
@@ -73,4 +73,21 @@ public class MyInterceptor implements HandlerInterceptor {
 
         return true;
     }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return;
+        }
+
+        User user = this.userRepository.findUserByUsername(authentication.getName());
+        if (user == null) {
+            return;
+        }
+
+        modelAndView.addObject("user", user);
+    }
 }
+

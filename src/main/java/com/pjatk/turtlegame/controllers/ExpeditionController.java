@@ -36,11 +36,9 @@ public class ExpeditionController {
     @GetMapping(path = "")
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
-        model.addAttribute("nick", turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", new TurtleExpeditionForm());
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
-        model.addAttribute("gold", user.getGold());
 
         return "pages/expedition";
     }
@@ -53,12 +51,9 @@ public class ExpeditionController {
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                        BindingResult bindingResult) {
 
-        User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
-        model.addAttribute("nick", turtleUserDetails.getUsername());
-        model.addAttribute("gold", user.getGold());
 
         if (bindingResult.hasErrors()) {
             return "pages/expedition";
