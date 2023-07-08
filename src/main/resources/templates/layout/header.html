@@ -11,7 +11,7 @@
           Gold: <span th:text="${user.gold}"></span>
         </div>
         <div>
-          <a href="/private-message">Prywatne wiadomości: 0</a>
+          <a href="/private-message">Prywatne wiadomości: <span th:text="${user.reportList.size()}"></span></a>
         </div>
         <div>
           <a href="#">Ustawienia konta</a>
