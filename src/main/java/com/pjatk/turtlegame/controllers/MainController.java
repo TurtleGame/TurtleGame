@@ -24,6 +24,7 @@ public class MainController {
 
     @GetMapping(path = "/main")
     public String mainPage(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        model.addAttribute("context", "home");
         return "pages/main";
     }
 

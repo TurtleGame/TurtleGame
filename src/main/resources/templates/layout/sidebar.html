@@ -2,12 +2,12 @@
 <nav class="sidebar" th:fragment="sidebar" layout:fragment="sidebar">
     <div class="sidebar-heading">Menu</div>
     <ul>
-        <li class="active"><a href="#">Strona główna</a></li>
-        <li><a href="#">Twoje żółwie</a></li>
-        <li><a href="#">Katalog żółwi</a></li>
-        <li><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
-        <li><a href="#">Arena zółwi</a></li>
-        <li><a href="#">Twoje przedmioty</a></li>
-        <li><a href="#">Chatbox</a></li>
+        <li th:classappend="${context == 'home' ? 'active' : ''}"><a href="/main">Strona główna</a></li>
+        <li th:classappend="${context == 'yourTurtles' ? 'active' : ''}"><a href="#">Twoje żółwie</a></li>
+        <li th:classappend="${context == 'catalog' ? 'active' : ''}"><a href="#">Katalog żółwi</a></li>
+        <li th:classappend="${context == 'expeditions' ? 'active' : ''}"><a href="/expeditions">Wyślij żółwia na wyprawę</a></li>
+        <li th:classappend="${context == 'arena' ? 'active' : ''}"><a href="#">Arena zółwi</a></li>
+        <li th:classappend="${context == 'items' ? 'active' : ''}"><a href="#">Twoje przedmioty</a></li>
+        <li th:classappend="${context == 'chatbox' ? 'active' : ''}"><a href="#">Chatbox</a></li>
     </ul>
 </nav>

@@ -35,6 +35,7 @@ public class ExpeditionController {
 
     @GetMapping(path = "")
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        model.addAttribute("context", "expeditions");
         User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", new TurtleExpeditionForm());
         model.addAttribute("expeditions", expeditionRepository.findAll());

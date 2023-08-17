@@ -24,7 +24,7 @@ public class ExpeditionService {
         turtleExpedition.setTurtle(turtle);
         turtleExpedition.setExpedition(expedition);
         turtleExpedition.setStartAt(LocalDateTime.now());
-        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusSeconds(durationTime));
+        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusMinutes(durationTime));
         turtle.setAvailable(false);
 
 
