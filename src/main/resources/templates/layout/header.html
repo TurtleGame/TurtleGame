@@ -17,7 +17,7 @@
                             th:text="${user.reportList.size()}"></span></a>
                 </div>
                 <div>
-                    <a href="#">Ustawienia konta</a>
+                    <a th:href="@{/user/{id}/edit(id=${user.id})}">Ustawienia konta</a>
                 </div>
             </div>
         </div>
