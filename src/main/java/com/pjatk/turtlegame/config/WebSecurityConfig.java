@@ -43,6 +43,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/main/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/expeditions/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/assets/**").permitAll();
+                    auth.requestMatchers("/turtles").hasAnyAuthority("ADMIN", "USER");
                 })
                 .formLogin(form -> form
                         .loginPage("/login")
