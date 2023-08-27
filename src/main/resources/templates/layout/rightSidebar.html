@@ -4,19 +4,14 @@
 
         <div class="turtle-widgets-container">
 
-            <a href="#" class="turtle-widget">
+            <a href="#" class="turtle-widget" th:each="turtle : ${user.getTurtles()}">
                 <img src="/assets/images/turtles/fire.png"/>
                 <div class="turtle-data">
-                    <div class="turtle-name">Nemnes</div>
-                    <div class="turtle-activity">Wróci o 23:51</div>
-                </div>
-            </a>
-
-            <a href="#" class="turtle-widget">
-                <img src="/assets/images/turtles/electro.png"/>
-                <div class="turtle-data">
-                    <div class="turtle-name">Electro</div>
-                    <div class="turtle-activity">Odpoczywa</div>
+                    <div class="turtle-name" th:text="${turtle.getName}">Nemnes</div>
+                    <div class="turtle-activity">
+                        <span th:text="${turtle.isAvailable() ? 'Odpoczywa' :
+                        'Wróci o ' + #temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
+                    </div>
                 </div>
             </a>
 
