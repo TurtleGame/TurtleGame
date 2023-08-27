@@ -26,5 +26,15 @@ public class UserService {
         return turtles;
     }
 
+    public List<Integer> getTurtlesIds(User user){
+        List<TurtleOwnerHistory> turtleOwnerHistoryList = turtleOwnerHistoryRepository.findByUserAndEndAtIsNull(user);
+        List<Integer> turtlesId = new ArrayList<>();
+        for (TurtleOwnerHistory item : turtleOwnerHistoryList) {
+            turtlesId.add(item.getTurtle().getId());
+        }
+
+        return turtlesId;
+    }
+
 
 }

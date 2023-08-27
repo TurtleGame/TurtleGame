@@ -14,6 +14,7 @@ import java.util.List;
 public interface TurtleExpeditionHistoryRepository extends JpaRepository<TurtleExpeditionHistory, Integer> {
     List<TurtleExpeditionHistory> findByEndAtAfter(LocalDateTime endTime);
 
+    List<TurtleExpeditionHistory> findByEndAtBefore(LocalDateTime endTime);
     Boolean existsByTurtleAndEndAtAfter(Turtle turtle, LocalDateTime endTime);
 
     Boolean existsByTurtleAndEndAtBefore(Turtle turtle, LocalDateTime endTime);

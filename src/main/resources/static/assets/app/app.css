@@ -1,0 +1,454 @@
+:root {
+  --text-default: #DFDDDC;
+  --text-muted: rgba(140, 155, 168, 0.75);
+  --text-primary: #1C84AC;
+  --text-bright: #f8f5f2;
+  --text-light: #BBD6E0C4;
+  --bg-default: #161c26;
+  --bg-light: #242d3d;
+  --bg-transparent: #0e162178;
+  --bg-active: #ffffff08;
+  --border-default: #D2CFCD19;
+  --border-active: #d2cfcd40;
+}
+
+.card {
+  background: var(--bg-default);
+  border: 1px solid var(--border-default);
+  padding: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-disabled {
+  color: var(--text-disabled);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-sm {
+  font-size: 0.75rem;
+}
+
+.text-2xl {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+.text-xl {
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+
+.text-sm {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.size-wide {
+  width: 100%;
+}
+
+.bg-light {
+  background: var(--bg-light) !important;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.m-1 {
+  margin: 0.25rem;
+}
+
+.m-2 {
+  margin: 0.5rem;
+}
+
+.m-3 {
+  margin: 0.75rem;
+}
+
+.m-4 {
+  margin: 1rem;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.me-0 {
+  margin-right: 0;
+}
+
+.me-1 {
+  margin-right: 0.25rem;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.me-3 {
+  margin-right: 0.75rem;
+}
+
+.me-4 {
+  margin-right: 1rem;
+}
+
+.p-0 {
+  padding: 0rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-middle {
+  align-self: center;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.button {
+  width: 100%;
+  height: 38px;
+  border: 2px solid var(--text-primary);
+  color: var(--text-primary);
+  background: transparent;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.button:hover {
+  background: var(--text-primary);
+  color: rgba(0, 0, 0, 0.6666666667);
+}
+.button[disabled] {
+  opacity: 0.5;
+  border: 2px solid var(--border-default);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.select {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.0666666667);
+  color: #fff;
+  padding-left: 10px;
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.select option {
+  color: #000;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background-image: url("../images/bg-1.png");
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-default);
+  font-family: "Nunito", sans-serif;
+  font-size: 0.9rem;
+}
+
+main {
+  width: 60rem;
+  height: 100vh;
+  margin: auto;
+}
+main h1 {
+  text-align: center;
+  color: var(--text-bright);
+  text-shadow: 1px 1px 5px #000000;
+  margin: 2.5rem 0;
+}
+main .content {
+  background: var(--bg-transparent);
+  min-height: 100%;
+  padding: 2rem;
+  backdrop-filter: blur(3px);
+  border-radius: 1.25rem 1.25rem 0 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-transparent);
+  backdrop-filter: blur(3px);
+  padding: 2rem;
+}
+.sidebar.sidebar-left {
+  left: 0;
+}
+.sidebar.sidebar-right {
+  right: 0;
+}
+
+.user-data {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 20px;
+  grid-row-gap: 10px;
+  background: rgba(1, 4, 16, 0.25);
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+.user-data .credentials-container {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+}
+.user-data .credentials-container:hover .username {
+  color: var(--text-bright);
+}
+.user-data .credentials-container .avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-image: linear-gradient(to right bottom, rgb(29, 38, 52), rgb(16, 23, 36));
+  border: 2px solid rgb(29, 38, 52);
+  border-radius: 3px;
+}
+.user-data .credentials-container .username {
+  margin-bottom: 0.2rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  transition: all 150ms;
+}
+.user-data .credentials-container .rank {
+  color: var(--text-default);
+  font-size: 0.75rem;
+}
+.user-data .credits-container {
+  display: inline-flex;
+}
+.user-data .credits-container .credits {
+  display: flex;
+  align-items: center;
+}
+.user-data .credits-container .credits img {
+  margin-right: 0.25rem;
+}
+.user-data .credits-container .credits span {
+  margin-right: 1rem;
+}
+
+.menu {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  overflow: auto;
+  height: calc(100% - 100px);
+}
+.menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menu ul li {
+  margin-bottom: 1rem;
+}
+.menu ul li:first-child {
+  margin-top: 0.75rem;
+}
+.menu ul li:last-child {
+  margin-bottom: 1.25rem;
+}
+.menu ul li a {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  color: var(--text-light);
+  text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  transition: all 150ms;
+}
+.menu ul li a:hover, .menu ul li a.active {
+  color: var(--text-bright);
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+}
+.menu ul li a i {
+  width: 1.25rem;
+  height: 1rem;
+  margin-right: 0.75rem;
+  text-align: center;
+}
+
+.turtle-widgets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+.turtle-widgets-container .turtle-widget {
+  display: block;
+  position: relative;
+  height: 60px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
+  border-radius: 3px;
+  overflow: clip;
+  transition: all 150ms;
+  opacity: 0.85;
+}
+.turtle-widgets-container .turtle-widget:hover, .turtle-widgets-container .turtle-widget.active {
+  opacity: 1;
+  border: 1px solid var(--border-active);
+  background: var(--bg-active);
+}
+.turtle-widgets-container .turtle-widget:hover .turtle-data, .turtle-widgets-container .turtle-widget.active .turtle-data {
+  background: linear-gradient(90deg, rgba(22, 28, 38, 0) 0%, rgba(22, 28, 38, 0.5) 50%);
+}
+.turtle-widgets-container .turtle-widget:hover .turtle-data .turtle-name, .turtle-widgets-container .turtle-widget.active .turtle-data .turtle-name {
+  color: var(--text-bright);
+}
+.turtle-widgets-container .turtle-widget:hover .turtle-data .turtle-activity, .turtle-widgets-container .turtle-widget.active .turtle-data .turtle-activity {
+  color: var(--text-light);
+}
+.turtle-widgets-container .turtle-widget img {
+  margin: 0.4rem;
+  height: 75px;
+  transform: rotate(8deg);
+}
+.turtle-widgets-container .turtle-widget .turtle-data {
+  display: grid;
+  align-items: center;
+  justify-content: end;
+  text-align: end;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(22, 28, 38, 0) 0%, rgb(22, 28, 38) 50%);
+  padding: 0.5rem 1rem 0.5rem;
+}
+.turtle-widgets-container .turtle-widget .turtle-data .turtle-name {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.turtle-widgets-container .turtle-widget .turtle-data .turtle-activity {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.achievement-locked,
+.achievement-unlocked {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+.achievement-locked img,
+.achievement-unlocked img {
+  width: 40px;
+}
+.achievement-locked .achievement-title,
+.achievement-unlocked .achievement-title {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.achievement-unlocked .achievement-title {
+  color: var(--text-primary);
+}
+
+.achievement-locked {
+  opacity: 0.75;
+}
+.achievement-locked img {
+  opacity: 0.25;
+  filter: grayscale(0.5);
+}
+.achievement-locked .achievement-title {
+  color: var(--text-muted);
+}
+
+/*# sourceMappingURL=app.css.map */

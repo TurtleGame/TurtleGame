@@ -1,22 +1,30 @@
-<!doctype html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="eng">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${@environment.getProperty('app.name')}"></title>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/assets/app/app.css" />
+    <link href="/assets/fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="/assets/fontawesome/css/brands.css" rel="stylesheet">
+    <link href="/assets/fontawesome/css/solid.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <title>TurtleBlast</title>
 </head>
 <body>
+<!-- left sidebar-->
+<nav th:replace="~{layout/leftSidebar :: leftSidebar}"></nav>
+<!-- end left sidebar-->
 
-<header th:replace="~{layout/header :: header}"></header>
-
-<div class="main">
-    <nav th:replace="~{layout/sidebar :: sidebar}"></nav>
-    <div class="content" layout:fragment="content">
-
+<!-- main content container-->
+<main>
+    <h1 layout:fragment="header">Strona główna</h1>
+    <div class="content">
+        <div layout:fragment="content"></div>
     </div>
-</div>
+</main>
+<!-- end main content container-->
+
+<!-- right sidebar-->
+<nav th:replace="~{layout/rightSidebar :: rightSidebar}"></nav>
+<!-- end right sidebar-->
 
 </body>
-<footer>
-    <span>TurtleBlast 2022</span>
-</footer>

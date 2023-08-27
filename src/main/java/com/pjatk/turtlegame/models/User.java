@@ -95,4 +95,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<TurtleOwnerHistory> ownerHistoryList;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Turtle> turtles;
+
 }

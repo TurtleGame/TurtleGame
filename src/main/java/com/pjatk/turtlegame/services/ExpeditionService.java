@@ -27,7 +27,6 @@ public class ExpeditionService {
         turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusMinutes(durationTime));
         turtle.setAvailable(false);
 
-
         return turtleExpedition;
     }
 }

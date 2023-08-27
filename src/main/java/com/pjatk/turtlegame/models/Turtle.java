@@ -8,7 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "turtle")
@@ -66,5 +69,18 @@ public class Turtle {
 
     @Column(name = "is_available", columnDefinition = "INT(1)")
     private boolean isAvailable;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    public TurtleExpeditionHistory getCurrentExpedition()
+    {
+        return getTurtleExpeditionHistoryList()
+                .stream()
+                .filter(history -> history.getEndAt().isAfter(LocalDateTime.now()))
+                .findFirst()
+                .orElse(null);
+    }
 
 }

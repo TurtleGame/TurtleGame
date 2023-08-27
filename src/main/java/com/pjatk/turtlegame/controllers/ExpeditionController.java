@@ -7,6 +7,7 @@ import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.ExpeditionHistoryService;
 import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.UserService;
 import jakarta.validation.Valid;
@@ -32,14 +33,13 @@ public class ExpeditionController {
     TurtleOwnerHistoryRepository TurtleOwnerHistoryRepository;
     UserService userService;
     ExpeditionService expeditionService;
+    ExpeditionHistoryService expeditionHistoryService;
 
     @GetMapping(path = "")
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("context", "expeditions");
-        User user = userRepository.findUserByUsername(turtleUserDetails.getUsername());
         model.addAttribute("turtleExpeditionForm", new TurtleExpeditionForm());
         model.addAttribute("expeditions", expeditionRepository.findAll());
-        model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
 
         return "pages/expedition";
     }
@@ -55,6 +55,7 @@ public class ExpeditionController {
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
+        model.addAttribute("context", "expeditions");
 
         if (bindingResult.hasErrors()) {
             return "pages/expedition";

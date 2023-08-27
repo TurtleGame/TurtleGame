@@ -1,0 +1,39 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<nav class="leftSidebar" th:fragment="leftSidebar" layout:fragment="leftSidebar">
+    <div class="sidebar sidebar-left">
+
+        <div class="user-data">
+
+            <a href="#" class="credentials-container">
+                <div class="avatar"></div>
+                <div>
+                    <div class="username" th:text="${user.username}"></div>
+                    <div class="rank">{rank}</div>
+                </div>
+            </a>
+
+            <div class="credits-container">
+                <div class="credits">
+                    <img src="/assets/images/gold.png" width="20" height="20">
+                    <span th:text="${user.gold}"></span>
+                </div>
+                <div class="credits">
+                    <img src="/assets/images/shell.png" width="20" height="18">
+                    <span class="text-sm">{shells}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu">
+            <ul>
+                <li><a href="#"><i class="fa fa-turtle"></i>Żółwie</a></li>
+                <li><a href="#"><i class="fa fa-treasure-chest"></i>Ekwipunek</a></li>
+                <li><a href="#"><i class="fa fa-trophy"></i>Osiągnięcia</a></li>
+                <li><a href="#"><i class="fa fa-swords"></i>Arena</a></li>
+                <li><a href="#"><i class="fa fa-university"></i>Akademia</a></li>
+                <li><a href="/expeditions" th:classappend="${context == 'expeditions' ? 'active' : ''}"><i class="fa fa-clouds"></i>Wyprawy</a></li>
+                <li><a href="#"><i class="fa fa-shield-halved"></i>Strażnicy</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

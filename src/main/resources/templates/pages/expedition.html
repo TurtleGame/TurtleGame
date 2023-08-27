@@ -2,58 +2,75 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
+<h1 layout:fragment="header">Wyprawy</h1>
+
 <div layout:fragment="content">
-    <div class="card">
-        <div class="card-title">Wyprawy</div>
-        <div class="card-body">
-            <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" style="background: #660000; color: gold; padding: 15px; border-radius: 10px;">
-                <strong>Nie udało się wykonać tej akcji</strong>
-                <ul>
-                    <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}" />
-                </ul>
+
+    <!-- aktywne wyprawy -->
+    <div class="card mb-2">
+        <h3 class="m-0 mb-3">Aktywne</h3>
+
+        <!-- aktywna wyprawa -->
+        <div class="card bg-light flex flex-row gap-4 p-3 mb-2" th:each="turtle : ${user.getTurtles()}" th:if="${turtle.getCurrentExpedition()}">
+            <div class="flex flex-center flex-middle">
+                <img src="/assets/images/magic-cave.jpg" style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
             </div>
-            <table class="table">
-                <tr th:each="turtle : ${turtles}" th:if="${turtle.isAvailable()}">
-                    <td style="text-align: center;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/8334/8334151.png"
-                             style="max-width: 80px; max-height: 80px"/>
-                    </td>
-                    <td th:text="${turtle.getName()}">
-                    </td>
-                    <td style="text-align: center;">
-                        <select id="wyprawa" name="expedition" th:form="${'expedition-' + turtle.getId()}">
-                            <option th:each="expedition : ${expeditions}" th:value="${expedition.getId()}"
-                                    th:text="${expedition.getName()}"></option>
-                        </select>
-                    </td>
-                    <td style="text-align: center;">
-                        <select name="durationTime" id="durationTime" th:form="${'expedition-' + turtle.getId()}">
-                            <option value="30">30 minut</option>
-                            <option value="60">1 godz.</option>
-                            <option value="120">2 godz.</option>
-                            <option value="180">3 godz.</option>
-                            <option value="240">4 godz.</option>
-                            <option value="300">5 godz.</option>
-                            <option value="360">6 godz.</option>
-                        </select>
-                    </td>
-                    <td style="text-align: center;">
-                        <form method="post" th:id="${'expedition-' + turtle.getId()}">
-                            <input type="hidden" th:value="${turtle.getId()}" name="turtle">
-                            <input type="submit" class="button" value="Wyślij">
-                        </form>
-                    </td>
-                </tr>
-                <tr th:each="turtle : ${turtles}" th:if="${!turtle.isAvailable()}">
-                    <td style="text-align: center;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/7750/7750903.png"
-                             style="max-width: 80px; max-height: 80px"/>
-                    </td>
-                    <td th:text="${turtle.getName()}">
-                    </td>
-                    <td colspan="3" style="text-align: center;">Żółw niedostępny!</td>
-                </tr>
-            </table>
+            <div class="flex flex-column flex-center flex-middle size-wide">
+                <strong><a href="#" class="text-primary text-xl" th:text="${turtle.getName()}">Electra</a></strong>
+                <div th:text="${turtle.getCurrentExpedition().getExpedition().getName()}"></div>
+            </div>
+            <div class="flex flex-column flex-center flex-middle text-center" style="width: 120px;">
+                <div class="text-primary">01:03:12</div>
+                <div class="text-sm">
+                    Powrót o <span th:text="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
+                </div>
+            </div>
         </div>
+        <!-- end of wyprawa -->
+
     </div>
+    <!-- end of aktywne wyprawy -->
+
+
+
+    <!-- wyprawa -->
+    <form action="" method="post" th:each="expedition : ${expeditions}">
+
+        <div class="card mb-2">
+            <div class="flex flex-row mb-4 gap-4">
+                <div class="flex">
+                    <img src="assets/images/magic-cave.jpg" style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
+                </div>
+                <div>
+                    <h2 style="margin-top: 0;" th:text="${expedition.getName()}"></h2>
+                   <div th:text="${expedition.getDescription()}"></div>
+                </div>
+            </div>
+            <div class="flex flex-row gap-4">
+                <div class="flex flex-row gap-4 size-wide">
+                    <select class="select" name="turtle">
+                        <option disabled selected>Wybierz żółwia</option>
+                        <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
+                                th:text="${turtle.getName()}"  th:if="${turtle.getCurrentExpedition() == null}"></option>
+                    </select>
+                </div>
+                <div class="flex flex-row gap-4" style="width: 220px;">
+                    <select class="select" name="durationTime">
+                        <option value="30">30 minut</option>
+                        <option value="60">1 godz.</option>
+                        <option value="120">2 godz.</option>
+                        <option value="180">3 godz.</option>
+                        <option value="240">4 godz.</option>
+                        <option value="300">5 godz.</option>
+                        <option value="360">6 godz.</option>
+                    </select>
+                </div>
+                <div class="flex flex-row" style="width: 220px;">
+                    <input type="hidden" name="expedition" th:value="${expedition.id}" />
+                    <input class="button" type="submit" value="Wyślij" />
+                </div>
+            </div>
+        </div>
+
+    </form>
 </div>

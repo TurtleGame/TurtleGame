@@ -87,7 +87,9 @@ public class MyInterceptor implements HandlerInterceptor {
             return;
         }
 
-        modelAndView.addObject("user", user);
+        if (modelAndView != null) {
+            modelAndView.addObject("user", user);
+        }
     }
 }
 
