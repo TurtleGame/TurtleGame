@@ -47,8 +47,8 @@ public class MyInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        List<Turtle> turtleList = userService.getTurtles(user);
-        for (Turtle turtle : turtleList) {
+
+        for (Turtle turtle : user.getTurtles()) {
             if (turtle.isAvailable()) {
                 continue;
             }

@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "user")
@@ -96,7 +97,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<TurtleOwnerHistory> ownerHistoryList;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     private List<Turtle> turtles;
 
+    @OneToMany(mappedBy = "user")
+    private List<AchievementsEarned> achievementsEarnedList;
+
+    public AchievementsEarned getAchievementEarned(int id) {
+        return achievementsEarnedList.stream()
+                .filter(achievement -> achievement.getAchievement().getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 }

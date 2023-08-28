@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
+
+<h1 layout:fragment="header">Osiagnięcia</h1>
+
+<div layout:fragment="content">
+    <div th:each="achievement : ${achievements}">
+        <div th:class="${user.getAchievementEarned(achievement.id) != null ? 'card achievement-unlocked' : 'card achievement-locked'}">
+            <div class="flex flex-row gap-4">
+                <div class="flex flex-center flex-middle">
+                    <img th:src="@{${'/assets/images/achievement-' + achievement.getId() + '.png'}}" alt="Osiągnięcie">
+                </div>
+                <div>
+                    <div class="mb-1">
+                        <span class="achievement-title" th:text="${achievement.getName()}"></span>
+                        <span class="text-muted text-sm" th:text="${user.getAchievementEarned(achievement.id) != null ? 'Data zdobycia: ' + #temporals.format(user.getAchievementEarned(achievement.id).getWonAt(), 'dd.MM.YYY') : ''}"></span>
+                    </div>
+                    <span th:text="${achievement.getDescription()}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of achievement zdobyty -->
+
+</div>

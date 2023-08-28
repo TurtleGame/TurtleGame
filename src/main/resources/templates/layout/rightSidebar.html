@@ -9,8 +9,8 @@
                 <div class="turtle-data">
                     <div class="turtle-name" th:text="${turtle.getName}">Nemnes</div>
                     <div class="turtle-activity">
-                        <span th:text="${turtle.isAvailable() ? 'Odpoczywa' :
-                        'Wróci o ' + #temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
+                        <span th:text="${turtle.isAvailable() ? 'Odpoczywa' : 'Wróci o ' + #temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
+
                     </div>
                 </div>
             </a>

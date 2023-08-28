@@ -64,8 +64,8 @@ public class ExpeditionController {
         Turtle turtle = turtleRepository.findById(turtleId);
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
-        if(turtle.getLevel() < expedition.getMinLevel()){
-            bindingResult.rejectValue("durationTime","error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
+        if (turtle.getLevel() < expedition.getMinLevel()) {
+            bindingResult.rejectValue("durationTime", "error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
 
             return "pages/expedition";
         }
@@ -74,7 +74,8 @@ public class ExpeditionController {
 
             return "pages/expedition";
         }
-
+        turtle.setAvailable(false);
+        turtleRepository.save(turtle);
         turtleExpeditionHistoryRepository
                 .save(expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime()));
 
