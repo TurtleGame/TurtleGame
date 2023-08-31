@@ -2,29 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
+<h1 layout:fragment="header">Twoje żółwie</h1>
+
 <div layout:fragment="content">
-    <div class="user-card-avatar">
-        <img src="https://www.webinarleads4you.com/wp-content/uploads/2017/02/no-avatar-350x350-300x300.jpg"/>
-    </div>
-    <div class="nickname" th:text="${user.username}"></div>
 
-    <div>
-        Gold: <span th:text="${user.gold}"></span>
-    </div>
-    <div>
-        Miasto: <span th:text="${user.city}"></span>
-    </div>
-    <div>
-        Data urodzenia:    <span th:text="${#temporals.format(user.birthdate, 'dd-MM-yyyy')}"></span>
-    </div>
-    <div>
-        O mnie: <span th:text="${user.about}"></span>
-    </div>
+    <!-- profile avatar & description -->
+    <div class="flex flex-row gap-4 mb-2">
+        <div class="card" style="width: 25%">
+            <img src="https://mistwood.pl/_next/image?url=https%3A%2F%2Fmistwood.s3.eu-central-1.amazonaws.com%2Favatar%2F2585%2Fd2795228-e4f4-40b5-ba1d-fe8cb13dd200.png&w=256&q=75" class="card size-wide p-0">
+            <h2 class="text-primary mb-0" th:text="${user.getUsername()}"></h2>
+            <div>Hodowca</div>
+            <h5>Status: <span class="text-success">Online</span><span class="text-danger">Offline</span></h5>
+            <span class="text-muted text-sm">W grze od 22 sierpnia 2023</span>
+        </div>
+        <div class="card" style="width: 75%" th:text="${user.getAbout()}">
 
-    <div>Lista żółwi:</div>
-    <ul>
-        <li th:each="turtle : ${turtles}">
-            <span th:text="${turtle.name}"></span>
-        </li>
-    </ul>
+        </div>
+    </div>
+    <!-- end of profile avatar & description -->
+
+
+    <!-- profile turtles -->
+    <div class="card size-wide mb-2">
+        <h4 class="text-primary m-0 mb-4">Żółwie</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 140px);">
+
+            <!-- turtle -->
+            <div class="card p-3 m-1 text-center" th:each="turtle : ${user.getTurtles()}">
+                <img src="/assets/images/turtles/fire.png" style="height: 80px;"/>
+                <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
+                <h5 class="m-0">Poziom <span th:text="${turtle.getLevel()}"></span></h5>
+            </div>
+            <!-- end of turtle -->
+
+        </div>
+    </div>
+    <!-- end of profile turtles -->
+
+
+    <!-- profile achievements -->
+    <div class="card size-wide">
+        <h4 class="text-primary m-0 mb-4">Osiągnięcia</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
+
+            <!-- achievement -->
+            <div class="card p-3 m-1" th:each="achievement : ${user.getAchievementsEarnedList()}">
+                <div class="flex flex-row gap-4">
+                    <div class="flex flex-center flex-middle">
+                        <img th:src="@{${'/assets/images/achievement-' + achievement.getId() + '.png'}}" style="width: 36px;"/>
+                    </div>
+                    <div>
+                        <div class="mb-1" th:text="${user.getAchievementEarned(achievement.getId()).getAchievement().getName()}"></div>
+                        <div class="text-muted text-sm" th:text="${#temporals.format(user.getAchievementEarned(achievement.id).getWonAt(), 'dd.MM.YYY')}"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end of achievement -->
+
+        </div>
+    </div>
+    <!-- end of profile achievements -->
+
 </div>

@@ -4,10 +4,11 @@
 
         <div class="user-data">
 
-            <a href="#" class="credentials-container">
+            <a th:href="@{/user/{id}(id=${user.id})}" class="credentials-container">
                 <div class="avatar"></div>
                 <div>
-                    <div class="username" th:text="${user.username}"></div>
+                    <div class="username" th:text="${user.username}">
+                    </div>
                     <div class="rank">{rank}</div>
                 </div>
             </a>
@@ -26,12 +27,14 @@
 
         <div class="menu">
             <ul>
-                <li><a href="/turtles" th:classappend="${context == 'turtles' ? 'active' : ''}"><i class="fa fa-turtle"></i>Żółwie</a></li>
+                <li><a href="/turtles" th:classappend="${context == 'turtles' ? 'active' : ''}"><i
+                        class="fa fa-turtle"></i>Żółwie</a></li>
                 <li><a href="#"><i class="fa fa-treasure-chest"></i>Ekwipunek</a></li>
                 <li><a href="/achievements"><i class="fa fa-trophy"></i>Osiągnięcia</a></li>
                 <li><a href="#"><i class="fa fa-swords"></i>Arena</a></li>
                 <li><a href="#"><i class="fa fa-university"></i>Akademia</a></li>
-                <li><a href="/expeditions" th:classappend="${context == 'expeditions' ? 'active' : ''}"><i class="fa fa-clouds"></i>Wyprawy</a></li>
+                <li><a href="/expeditions" th:classappend="${context == 'expeditions' ? 'active' : ''}"><i
+                        class="fa fa-clouds"></i>Wyprawy</a></li>
                 <li><a href="#"><i class="fa fa-shield-halved"></i>Strażnicy</a></li>
             </ul>
         </div>
