@@ -7,7 +7,7 @@
             <a href="#" class="turtle-widget" th:each="turtle : ${user.getTurtles()}">
                 <img src="/assets/images/turtles/fire.png"/>
                 <div class="turtle-data">
-                    <div class="turtle-name" th:text="${turtle.getName}">Nemnes</div>
+                    <div class="turtle-name" th:text="${turtle.getName}"></div>
                     <div class="turtle-activity">
                         <span th:text="${turtle.isAvailable() ? 'Odpoczywa' : 'Wróci o ' + #temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
 

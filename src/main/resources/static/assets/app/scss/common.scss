@@ -2,6 +2,8 @@
   --text-default: #DFDDDC;
   --text-muted: rgba(140, 155, 168, 0.75);
   --text-primary: #1C84AC;
+  --text-success: #15912e;
+  --text-danger: #911515;
   --text-bright: #f8f5f2;
   --text-light: #BBD6E0C4;
   --bg-default: #161c26;
@@ -29,6 +31,14 @@ a {
 
 .text-primary {
   color: var(--text-primary);
+}
+
+.text-success {
+  color: var(--text-success);
+}
+
+.text-danger {
+  color: var(--text-danger);
 }
 
 .text-disabled {
@@ -208,6 +218,16 @@ a {
     color: var(--text-muted);
     pointer-events: none;
   }
+}
+
+.input {
+  width: 100%;
+  height: 38px;
+  background: #fff1;
+  color: #fff;
+  padding-left: 10px;
+  border: 0;
+  border-radius: 0.25rem;
 }
 
 .select {

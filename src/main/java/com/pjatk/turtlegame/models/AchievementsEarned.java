@@ -21,7 +21,7 @@ public class AchievementsEarned {
     @Column(name = "id", nullable = false)
     private int id;
 
-    private LocalDateTime wonAt;
+    private LocalDateTime achievedAt;
 
     @ManyToOne
     private User user;

@@ -2,6 +2,7 @@ package com.pjatk.turtlegame.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,8 +41,8 @@ public class User {
     @Size(min = 2, max = 64)
     private String password;
 
-    @NotNull
-    @Size(min = 2, max = 50)
+
+    @Column(unique = true)
     private String email;
 
     @NotNull

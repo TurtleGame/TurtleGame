@@ -1,0 +1,68 @@
+.register {
+  background-image: url('static/assets/images/bg-4.png') !important;
+  letter-spacing: 1px;
+  font-variant: all-small-caps;
+
+  .logo {
+    text-align: center;
+    padding-top: 2rem;
+
+    img {
+      width: max(35%, 350px);
+    }
+  }
+
+  h2 {
+    margin-bottom: -0.25rem;
+  }
+
+  .separator {
+    background: linear-gradient(90deg,hsla(11,13%,47%,0) .93%, hsla(0, 0%, 100%, 0.5) 49.73%,hsla(11,13%,47%,0));
+    height: 2px;
+    margin: 1.75rem 0;
+  }
+
+  .form {
+    position: relative;
+    left: 50%;
+    width: 420px;
+    margin: 4% 0 100px -210px;
+    background: #0f202b63;
+    border: 0;
+    border-radius: 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .button {
+    color: #fff;
+    background: #842e50;
+    border: 0;
+    padding: 0.75rem;
+    height: auto;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-variant: all-small-caps;
+
+    &:hover {
+      background: #9a4e6c;
+    }
+  }
+
+  .link {
+    font-weight: bold;
+    color: #bbb;
+
+    &:hover {
+      color: #ddd;
+    }
+  }
+
+  .input {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .error-message {
+    color: #FF0000;
+  }
+}

@@ -14,7 +14,7 @@
                 <div>
                     <div class="mb-1">
                         <span class="achievement-title" th:text="${achievement.getName()}"></span>
-                        <span class="text-muted text-sm" th:text="${user.getAchievementEarned(achievement.id) != null ? 'Data zdobycia: ' + #temporals.format(user.getAchievementEarned(achievement.id).getWonAt(), 'dd.MM.YYY') : ''}"></span>
+                        <span class="text-muted text-sm" th:text="${user.getAchievementEarned(achievement.id) != null ? 'Data zdobycia: ' + #temporals.format(user.getAchievementEarned(achievement.id).getAchievedAt(), 'dd.MM.YYY') : ''}"></span>
                     </div>
                     <span th:text="${achievement.getDescription()}"></span>
                 </div>

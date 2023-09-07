@@ -1,88 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/app/app.css"/>
+    <script type="application/javascript" src="/js/script.js"></script>
+    <link href="/assets/fontawesome/css/fontawesome.css" rel="stylesheet">
+    <link href="/assets/fontawesome/css/brands.css" rel="stylesheet">
+    <link href="/assets/fontawesome/css/solid.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
     <title th:text="${@environment.getProperty('app.name')}"></title>
-    <link rel="stylesheet" href="/css/style.css"/>
 </head>
-<body>
+<body class="register">
 
-<header>
-    <div class="header-left"></div>
-    <div class="header-center">
-        <a href="#" class="title" th:text="${@environment.getProperty('app.name')}"></a>
-    </div>
-    <div class="header-right"></div>
-</header>
+<div class="logo">
+    <img src="/assets/images/logo.png"/>
+</div>
 
-<div class="login-panel">
-    <h3>Zaloguj się</h3>
-    <form th:action="@{/login}" method="POST">
-        <p><input type="text" id="username" name="username" placeholder="Login" required></p>
-        <p><input type="password" id="password" name="password" placeholder="Hasło" required></p>
-        <p>
-            <label>
-                <input type="checkbox"/> Zapamiętaj mnie
-            </label>
-        </p>
-        <a href="#">Nie pamiętam hasła</a>
-        <input type="submit" class="button" value="Zaloguj"/>
-        <input type="button" class="button" value="Zarejestruj"/>
+<div class="form card">
+    <h2 class="text-center m-0" id="form-header">Zaloguj</h2>
+
+
+    <div class="separator"></div>
+    <form th:action="@{/login}" method="POST" id="login-form">
+        <div th:if="${errorMessage}">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div class="m-2">
+            <div class="mb-4">
+                <label>
+                    Nazwa użytkownika
+                    <input class="input" id="login-username" name="username"/>
+                </label>
+            </div>
+
+            <div class="mb-4">
+                <label>
+                    Hasło
+                    <input class="input" type="password" id="login-password" name="password"/>
+                </label>
+            </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="m-2">
+            <div class="text-center mb-4">
+                <input type="submit" class="button" value="Zaloguj"/>
+            </div>
+            <div class="text-center">
+                <a href="#" class="link" onclick="switchForms(); return false;">Załóż konto</a>
+            </div>
+        </div>
+    </form>
+
+    <form th:action="@{/registration}" method="POST" th:object="${userDTO}" style="display: none;"
+          id="registration-form">
+        <div  th:if="${#fields.hasErrors()}">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div class="m-2">
+
+            <div class="mb-4">
+                <label>
+                    E-mail
+                    <input class="input" type="text" id="email" name="email" th:field="${userDTO.email}" required/>
+                </label>
+            </div>
+
+            <div class="mb-4">
+                <label>
+                    Nazwa użytkownika
+                    <input class="input" type="text" id="username" name="username" th:field="${userDTO.username}"
+                           autocomplete="off" required/>
+                </label>
+            </div>
+
+            <div class="mb-4">
+                <label>
+                    Hasło
+                    <input class="input" type="password" id="password" name="password" th:field="${userDTO.password}"
+                           autocomplete="off" required/>
+                </label>
+            </div>
+
+        </div>
+        <div th:if="${#fields.hasErrors('email')}" class="text-danger" role="alert">
+            <span th:errors="*{email}"></span>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="m-2">
+            <div class="text-center mb-4">
+                <input type="submit" class="button" value="Zarejestruj"/>
+            </div>
+            <div class="text-center">
+                <a href="#" class="link" onclick="switchForms(); return false;">Wróć do logowania</a>
+            </div>
+        </div>
     </form>
 </div>
 
-<div class="info-panel">
-    <div>
-        <p>TurtleBlast</p>
-        <p>Gra w której wcielasz się w hodowcę żółwi :)</p>
-    </div>
-    <div class="info-panel-stats">
-        <p>Liczba graczy: 1000</p>
-        <p>Liczba żółwi: 1000</p>
-    </div>
-</div>
-
-<div class="news">Aktualizacje i ogłoszenia</div>
-
-<div class="rank-panel">
-    <div>
-        Ranking graczy
-    </div>
-    <div>
-        Ranking żółwi
-    </div>
-    <div>
-        <ol>
-            <li>ProudTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-        </ol>
-    </div>
-    <div>
-        <ol>
-            <li>ProudTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-            <li>SadTurtle</li>
-        </ol>
-    </div>
-</div>
-
-<footer>
-    <span>TurtleBlast 2022</span>
-</footer>
 </body>
 </html>

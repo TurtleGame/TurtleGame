@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/assets/**").permitAll();
                     auth.requestMatchers("/turtles").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/achievements").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/registration").permitAll();
                 })
                 .formLogin(form -> form
                         .loginPage("/login")

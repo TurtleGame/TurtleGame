@@ -2,6 +2,8 @@
   --text-default: #DFDDDC;
   --text-muted: rgba(140, 155, 168, 0.75);
   --text-primary: #1C84AC;
+  --text-success: #15912e;
+  --text-danger: #911515;
   --text-bright: #f8f5f2;
   --text-light: #BBD6E0C4;
   --bg-default: #161c26;
@@ -29,6 +31,14 @@ a {
 
 .text-primary {
   color: var(--text-primary);
+}
+
+.text-success {
+  color: var(--text-success);
+}
+
+.text-danger {
+  color: var(--text-danger);
 }
 
 .text-disabled {
@@ -205,6 +215,16 @@ a {
   border: 2px solid var(--border-default);
   color: var(--text-muted);
   pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.0666666667);
+  color: #fff;
+  padding-left: 10px;
+  border: 0;
+  border-radius: 0.25rem;
 }
 
 .select {
@@ -449,6 +469,61 @@ main .content {
 }
 .achievement-locked .achievement-title {
   color: var(--text-muted);
+}
+
+.register {
+  background-image: url("../images/bg-4.png") !important;
+  letter-spacing: 1px;
+  font-variant: all-small-caps;
+}
+.register .logo {
+  text-align: center;
+  padding-top: 2rem;
+}
+.register .logo img {
+  width: max(35%, 350px);
+}
+.register h2 {
+  margin-bottom: -0.25rem;
+}
+.register .separator {
+  background: linear-gradient(90deg, hsla(11, 13%, 47%, 0) 0.93%, hsla(0, 0%, 100%, 0.5) 49.73%, hsla(11, 13%, 47%, 0));
+  height: 2px;
+  margin: 1.75rem 0;
+}
+.register .form {
+  position: relative;
+  left: 50%;
+  width: 420px;
+  margin: 4% 0 100px -210px;
+  background: rgba(15, 32, 43, 0.3882352941);
+  border: 0;
+  border-radius: 0;
+  backdrop-filter: blur(10px);
+}
+.register .button {
+  color: #fff;
+  background: #842e50;
+  border: 0;
+  padding: 0.75rem;
+  height: auto;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  font-variant: all-small-caps;
+}
+.register .button:hover {
+  background: #9a4e6c;
+}
+.register .link {
+  font-weight: bold;
+  color: #bbb;
+}
+.register .link:hover {
+  color: #ddd;
+}
+.register .input {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /*# sourceMappingURL=app.css.map */
