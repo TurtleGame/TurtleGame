@@ -196,6 +196,10 @@ a {
   justify-content: center;
 }
 
+.hidden {
+  display: none;
+}
+
 .button {
   width: 100%;
   height: 38px;
@@ -524,6 +528,12 @@ main .content {
 }
 .register .input {
   background: rgba(0, 0, 0, 0.2);
+}
+.register .text-danger {
+  color: #FF0000;
+}
+.register .text-success {
+  color: #38e85b;
 }
 
 /*# sourceMappingURL=app.css.map */

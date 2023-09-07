@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/assets/app/app.css"/>
-    <script type="application/javascript" src="/js/script.js"></script>
+    <script type="application/javascript" src="/assets/app/app.js"></script>
     <link href="/assets/fontawesome/css/fontawesome.css" rel="stylesheet">
     <link href="/assets/fontawesome/css/brands.css" rel="stylesheet">
     <link href="/assets/fontawesome/css/solid.css" rel="stylesheet">
@@ -16,28 +16,29 @@
     <img src="/assets/images/logo.png"/>
 </div>
 
-<div class="form card">
-    <h2 class="text-center m-0" id="form-header">Zaloguj</h2>
-
-
+<div class="form card" id="login-form" th:classappend="${context == 'login' ? '' : 'hidden'}">
+    <h2 class="text-center m-0">Zaloguj</h2>
     <div class="separator"></div>
-    <form th:action="@{/login}" method="POST" id="login-form">
-        <div th:if="${errorMessage}">
-            <p th:text="${errorMessage}"></p>
-        </div>
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" class="text-danger"></p>
+    </div>
+    <div th:if="${registrationSuccessMessage}" class="text-success" role="alert">
+        <span th:text="${registrationSuccessMessage}"></span>
+    </div>
+    <form th:action="@{/login}" method="POST">
 
         <div class="m-2">
             <div class="mb-4">
                 <label>
                     Nazwa użytkownika
-                    <input class="input" id="login-username" name="username"/>
+                    <input class="input" name="username"/>
                 </label>
             </div>
 
             <div class="mb-4">
                 <label>
                     Hasło
-                    <input class="input" type="password" id="login-password" name="password"/>
+                    <input class="input" type="password" name="password"/>
                 </label>
             </div>
         </div>
@@ -53,41 +54,49 @@
             </div>
         </div>
     </form>
+</div>
 
-    <form th:action="@{/registration}" method="POST" th:object="${userDTO}" style="display: none;"
-          id="registration-form">
-        <div  th:if="${#fields.hasErrors()}">
-            <p th:text="${errorMessage}"></p>
-        </div>
+<div class="form card" id="registration-form" th:classappend="${context == 'register' ? '' : 'hidden'}">
+    <h2 class="text-center m-0">Zarejestruj</h2>
+
+    <div class="separator"></div>
+
+    <form th:action="@{/registration}" method="POST" th:object="${userDTO}">
 
         <div class="m-2">
 
             <div class="mb-4">
                 <label>
                     E-mail
-                    <input class="input" type="text" id="email" name="email" th:field="${userDTO.email}" required/>
+                    <input class="input" type="text" id="email" name="email" th:field="*{email}" required/>
                 </label>
+                <div th:if="${#fields.hasErrors('email')}" class="text-danger" role="alert">
+                    <span th:errors="*{email}"></span>
+                </div>
             </div>
 
             <div class="mb-4">
                 <label>
                     Nazwa użytkownika
-                    <input class="input" type="text" id="username" name="username" th:field="${userDTO.username}"
+                    <input class="input" type="text" id="username" name="username" th:field="*{username}"
                            autocomplete="off" required/>
                 </label>
+                <div th:if="${#fields.hasErrors('username')}" class="text-danger" role="alert">
+                    <span th:errors="*{username}"></span>
+                </div>
             </div>
 
             <div class="mb-4">
                 <label>
                     Hasło
-                    <input class="input" type="password" id="password" name="password" th:field="${userDTO.password}"
+                    <input class="input" type="password" id="password" name="password" th:field="*{password}"
                            autocomplete="off" required/>
                 </label>
+                <div th:if="${#fields.hasErrors('password')}" class="text-danger" role="alert">
+                    <span th:errors="*{password}"></span>
+                </div>
             </div>
 
-        </div>
-        <div th:if="${#fields.hasErrors('email')}" class="text-danger" role="alert">
-            <span th:errors="*{email}"></span>
         </div>
 
         <div class="separator"></div>

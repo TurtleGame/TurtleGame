@@ -46,10 +46,20 @@ public class UserService {
     public void addNewUser(UserDTO userDTO) {
         User user = new User();
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setEmail(userDTO.getEmail());
-        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail().trim());
+        user.setUsername(userDTO.getUsername().trim());
         user.setGold(0);
         userRepository.save(user);
+    }
+
+    public boolean isUsernameAlreadyTaken(String username){
+        User existingUser = userRepository.findUserByUsername(username);
+        return existingUser !=null;
+    }
+
+    public boolean isEmailAlreadyTaken(String email){
+        User existingUser = userRepository.findUserByEmail(email);
+        return existingUser != null;
     }
 
 }
