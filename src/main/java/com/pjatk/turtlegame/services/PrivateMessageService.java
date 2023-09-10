@@ -22,10 +22,10 @@ public class PrivateMessageService {
 
     ReportRepository reportRepository;
 
-    public Report sendReport(int recipientId, int turtleId){
+    public Report sendReport(int recipientId, int turtleId) throws Exception {
 
 
-        Turtle turtle = turtleRepository.findById(turtleId);
+        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() ->new Exception("Turtle not found"));
         TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtleId);
 
         Report report = new Report();

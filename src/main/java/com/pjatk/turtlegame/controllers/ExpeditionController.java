@@ -50,7 +50,7 @@ public class ExpeditionController {
                        @RequestParam("turtle") int turtleId,
                        @RequestParam("expedition") int expeditionId,
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                       BindingResult bindingResult) {
+                       BindingResult bindingResult) throws Exception {
 
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
@@ -61,7 +61,7 @@ public class ExpeditionController {
             return "pages/expedition";
         }
 
-        Turtle turtle = turtleRepository.findById(turtleId);
+        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() ->new Exception("Turtle not found"));
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
         if (turtle.getLevel() < expedition.getMinLevel()) {

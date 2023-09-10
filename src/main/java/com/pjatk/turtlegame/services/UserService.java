@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class UserService {
         user.setEmail(userDTO.getEmail().trim());
         user.setUsername(userDTO.getUsername().trim());
         user.setGold(0);
+        user.setRegistrationDate(LocalDateTime.now());
         userRepository.save(user);
     }
 

@@ -27,6 +27,8 @@ public class Turtle {
     @Size(min = 2, max = 50)
     private String name;
 
+    private int gender;
+
     @NotNull
     private int level;
 

@@ -6,36 +6,46 @@
 
 <div layout:fragment="content">
 
- <div class="card mb-2" th:each="turtle : ${user.getTurtles()}">
+    <div class="card mb-2" th:each="turtle : ${user.getTurtles()}">
         <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
         <div class="flex flex-row gap-4">
-          <div class="flex flex-middle flex-center">
-            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
-          </div>
-          <table class="size-wide">
-            <tr>
-              <td style="width: 30%; vertical-align: top;">
-                <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span></div>
-                <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
-                <br/>
-                <div class="mb-1">HP: <span class="text-primary">109</span></div>
-                <div class="mb-1">Energia: <span class="text-primary">20</span></div>
-              </td>
-              <td style="width: 30%; vertical-align: top;">
-                <div class="mb-1">Siła: <span class="text-primary">0</span></div>
-                <div class="mb-1">Kondycja: <span class="text-primary">0</span></div>
-                <div class="mb-1">Zręczność: <span class="text-primary">0</span></div>
-                <div class="mb-1">Inteligencja: <span class="text-primary">0</span></div>
-                <div class="mb-1">Szczęście: <span class="text-primary">0</span></div>
-              </td>
-              <td style="width: 40%;">
-                <a href="#"><button class="button mb-2">Szczegóły</button></a>
-                <a href="#"><button class="button mb-2">Historia walk</button></a>
-                <a href="#"><button class="button mb-2">Porzuć żółwia</button></a>
-              </td>
-            </tr>
-          </table>
+            <div class="flex flex-middle flex-center">
+                <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+            </div>
+            <table class="size-wide">
+                <tr>
+                    <td style="width: 30%; vertical-align: top;">
+                        <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
+                        </div>
+                        <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
+                        <br/>
+                        <div class="mb-1">HP: <span class="text-primary">109</span></div>
+                        <div class="mb-1">Energia: <span class="text-primary">20</span></div>
+                    </td>
+                    <td style="width: 30%; vertical-align: top;">
+                        <div class="mb-1">Siła: <span class="text-primary">0</span></div>
+                        <div class="mb-1">Kondycja: <span class="text-primary">0</span></div>
+                        <div class="mb-1">Zręczność: <span class="text-primary">0</span></div>
+                        <div class="mb-1">Inteligencja: <span class="text-primary">0</span></div>
+                        <div class="mb-1">Szczęście: <span class="text-primary">0</span></div>
+                    </td>
+                    <td style="width: 40%;">
+                        <a href="#">
+                            <button class="button mb-2">Szczegóły</button>
+                        </a>
+                        <a href="#">
+                            <button class="button mb-2">Historia walk</button>
+                        </a>
+                        <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
+                            <button type="submit" class="button mb-2">Porzuć żółwia</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
         </div>
-      </div>
+    </div>
+    <div th:classappend="${user.getTurtles().size == 5 ? 'hidden' : ''}"><a href="#">
+        <button class="button mb-2">Zaadoptuj żółwia</button>
+    </a></div>
 
 </div>

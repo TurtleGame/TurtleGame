@@ -61,6 +61,8 @@ public class User {
     @Size(max = 50)
     private String city;
 
+    private LocalDateTime registrationDate;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
