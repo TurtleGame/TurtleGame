@@ -2,6 +2,7 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.TurtleOwnerHistory;
+import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
@@ -17,22 +18,24 @@ public class TurtleService {
     TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     UserRepository userRepository;
 
-    public void abandonTurtle(int id) throws Exception {
-        Turtle turtle = turtleRepository.findById(id)
-                .orElseThrow(() -> new Exception("Turtle not found"));
+    public void abandonTurtle(int turtleId, int ownerId) {
 
         LocalDateTime now = LocalDateTime.now();
 
-        turtle.getTurtleOwnerHistoryList().stream()
-                .filter(history -> history.getEndAt() == null)
-                .forEach(history -> {
-                    history.setEndAt(now);
-                    turtleOwnerHistoryRepository.save(history);
-                });
+        User user = userRepository.findById(ownerId);
+        for (Turtle turtle : user.getTurtles()) {
+            if (turtle.getId() == turtleId) {
 
-        turtle.setOwner(null);
-        turtleRepository.save(turtle);
+                turtle.getTurtleOwnerHistoryList().stream()
+                        .filter(history -> history.getEndAt() == null)
+                        .forEach(history -> {
+                            history.setEndAt(now);
+                            turtleOwnerHistoryRepository.save(history);
+                        });
+                turtle.setOwner(null);
+                turtleRepository.save(turtle);
+            }
+        }
     }
-
 
 }

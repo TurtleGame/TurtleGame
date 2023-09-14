@@ -30,15 +30,9 @@ public class TurtleController {
 
     @PostMapping("/{id}/delete")
     public String abandonTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws Exception {
-        Optional<Turtle> optionalTurtle = turtleRepository.findById(id);
 
-        if (optionalTurtle.isPresent()) {
-            Turtle turtle = optionalTurtle.get();
 
-            if (turtle.getOwner().getId() == turtleUserDetails.getId()) {
-                turtleService.abandonTurtle(id);
-            }
-        }
+                turtleService.abandonTurtle(id, turtleUserDetails.getId());
 
         return "redirect:/main";
     }
