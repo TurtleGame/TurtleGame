@@ -13,7 +13,7 @@
         <!-- aktywna wyprawa -->
         <div class="card bg-light flex flex-row gap-4 p-3 mb-2" th:each="turtle : ${user.getTurtles()}" th:if="${turtle.getCurrentExpedition()}">
             <div class="flex flex-center flex-middle">
-                <img src="/assets/images/magic-cave.jpg" style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
+                <img th:src="@{${'/assets/images/expedition/' + turtle.getCurrentExpedition().getExpedition().id + '.png'}}" style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
             </div>
             <div class="flex flex-column flex-center flex-middle size-wide">
                 <strong><a href="#" class="text-primary text-xl" th:text="${turtle.getName()}"></a></strong>
@@ -39,7 +39,7 @@
         <div class="card mb-2">
             <div class="flex flex-row mb-4 gap-4">
                 <div class="flex">
-                    <img src="assets/images/magic-cave.jpg" style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
+                    <img th:src="@{${'/assets/images/expedition/' + expedition.id + '.png'}}" style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
                 </div>
                 <div>
                     <h2 style="margin-top: 0;" th:text="${expedition.getName()}"></h2>
