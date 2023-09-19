@@ -33,7 +33,7 @@ public class Expedition {
     private int minLevel;
 
     @OneToMany(mappedBy = "expedition")
-    private List<ExpeditionEquipment> expeditionEquipmentList;
+    private List<ExpeditionItem> expeditionItemList;
 
     @OneToMany(mappedBy = "expedition")
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;

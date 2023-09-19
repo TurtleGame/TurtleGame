@@ -1,6 +1,5 @@
 package com.pjatk.turtlegame.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,22 +8,23 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Table(name = "rarity")
 @Entity
+@Table(name = "item_statistic")
 @Setter
 @Getter
-public class Rarity {
+public class ItemStatistic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
-    @NotNull
-    @Size(min = 2, max = 50)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "statistic_id")
+    private Statistic statistic;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "rarity", fetch = FetchType.LAZY)
-    private List<TurtleType> turtleTypeList;
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
 
+    private int value;
 }

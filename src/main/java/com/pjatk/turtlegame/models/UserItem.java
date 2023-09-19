@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class UserEquipmentHistory {
+public class UserItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,13 +22,15 @@ public class UserEquipmentHistory {
 
     private LocalDateTime endAt;
 
+    private int quantity;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "equipment_id")
-    private Equipment equipment;
+    private Item item;
 
     @ManyToOne
     @JoinColumn(name = "turtle_id")

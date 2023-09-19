@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "private_message")
@@ -20,7 +21,7 @@ public class PrivateMessage {
 
     @NotNull
     @Size(min = 2, max = 250)
-    private String subject;
+    private String title;
 
     @NotNull
     private String content;
@@ -35,4 +36,21 @@ public class PrivateMessage {
     @ManyToOne
     @JoinColumn(name = "recipient_id")
     private User recipient;
+
+    @ManyToOne
+    @JoinColumn(name = "turtle_id")
+    private Turtle turtle;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+
+    public String getSentAtDateTime()
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        return sentAt.format(formatter);
+    }
+
 }

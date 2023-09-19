@@ -6,12 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "turtle")
@@ -61,13 +58,10 @@ public class Turtle {
     private List<TurtleCare> turtleCareList;
 
     @OneToMany(mappedBy = "turtle")
-    private List<UserEquipmentHistory> equipmentHistoryList;
+    private List<UserItem> equipmentHistoryList;
 
     @OneToMany(mappedBy = "turtle")
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
-
-    @OneToMany(mappedBy = "turtle")
-    private List<Report> reportList;
 
     @Column(name = "is_available", columnDefinition = "INT(1)")
     private boolean isAvailable;

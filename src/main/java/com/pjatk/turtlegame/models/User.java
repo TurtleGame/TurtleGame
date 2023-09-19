@@ -2,7 +2,6 @@ package com.pjatk.turtlegame.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "user")
@@ -79,9 +77,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatEntry> chatEntryList;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Report> reportList;
-
     @OneToMany(mappedBy = "sender")
     private List<PrivateMessage> sendPrivateMessageList;
 
@@ -89,7 +84,7 @@ public class User {
     private List<PrivateMessage> recipientPrivateMessageList;
 
     @OneToMany(mappedBy = "user")
-    private List<UserEquipmentHistory> userEquipmentHistoryList;
+    private List<UserItem> userItemList;
 
     @OneToMany(mappedBy = "pastOwner")
     private List<TurtleTransationHistory> pastOwnerHistoryList;

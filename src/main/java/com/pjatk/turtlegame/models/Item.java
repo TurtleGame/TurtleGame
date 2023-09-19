@@ -9,10 +9,10 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "equipment")
+@Table(name = "item")
 @Setter
 @Getter
-public class Equipment {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -25,15 +25,20 @@ public class Equipment {
     private String description;
 
     @Enumerated(EnumType.STRING)
+
     private EquipmentSlot slot;
 
-    private Integer attack;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private ItemType itemType;
 
-    private Integer defence;
+    @ManyToOne
+    @JoinColumn(name = "rarity_id")
+    private Rarity rarity;
 
-    @OneToMany(mappedBy = "equipment")
-    private List<UserEquipmentHistory> userEquipmentHistoryList;
+    @OneToMany(mappedBy = "item")
+    private List<UserItem> userItemList;
 
-    @OneToMany(mappedBy = "equipment")
-    private List<ExpeditionEquipment> expeditionEquipmentList;
+    @OneToMany(mappedBy = "item")
+    private List<ExpeditionItem> expeditionItemList;
 }
