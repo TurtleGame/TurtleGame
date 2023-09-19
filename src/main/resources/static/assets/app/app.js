@@ -7,10 +7,11 @@ function switchForms() {
 }
 
 function abandonTurtleConfirm(buttonElement) {
-    document.getElementById("deleteTurtleForm").addEventListener("submit", function(event) {
+    var form = buttonElement.closest("form");
+    if (form) {
         var confirmation = confirm("Czy na pewno chcesz porzucić tego żółwia?");
         if (!confirmation) {
             event.preventDefault();
         }
-    });
+    }
 }

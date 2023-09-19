@@ -32,10 +32,9 @@ public class TurtleController {
     }
 
     @PostMapping("/{id}/delete")
-    public String abandonTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id, RedirectAttributes redirectAttributes) throws Exception {
+    public String abandonTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws Exception {
 
         turtleService.abandonTurtle(id, turtleUserDetails.getId());
-        redirectAttributes.addFlashAttribute("message", "Żółw został porzucony pomyślnie.");
         return "pages/main";
     }
 
