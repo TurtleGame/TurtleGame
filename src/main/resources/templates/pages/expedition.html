@@ -31,11 +31,15 @@
     </div>
     <!-- end of aktywne wyprawy -->
 
-
+    <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" class="expeditionError mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}" />
+        </ul>
+    </div>
 
     <!-- wyprawa -->
     <form action="" method="post" th:each="expedition : ${expeditions}">
-
         <div class="card mb-2">
             <div class="flex flex-row mb-4 gap-4">
                 <div class="flex">

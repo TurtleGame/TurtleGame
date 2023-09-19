@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/assets/**").permitAll();
                     auth.requestMatchers("/turtles/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/nest/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/items").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/achievements").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/registration").permitAll();
                 })

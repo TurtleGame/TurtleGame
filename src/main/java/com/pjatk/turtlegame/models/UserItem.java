@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Table(name = "user_equipment_history")
+@Table(name = "user_items")
 @Entity
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class UserItem {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "equipment_id")
+    @JoinColumn(name = "item_id")
     private Item item;
 
     @ManyToOne

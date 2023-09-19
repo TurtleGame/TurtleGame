@@ -1,9 +1,7 @@
 package com.pjatk.turtlegame.services;
 
+import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleOwnerHistory;
-import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -34,16 +32,6 @@ public class UserService {
         return turtles;
     }
 
-    public List<Integer> getTurtlesIds(User user) {
-        List<TurtleOwnerHistory> turtleOwnerHistoryList = turtleOwnerHistoryRepository.findByUserAndEndAtIsNull(user);
-        List<Integer> turtlesId = new ArrayList<>();
-        for (TurtleOwnerHistory item : turtleOwnerHistoryList) {
-            turtlesId.add(item.getTurtle().getId());
-        }
-
-        return turtlesId;
-    }
-
     public void addNewUser(UserDTO userDTO) {
         User user = new User();
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -54,14 +42,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean isUsernameAlreadyTaken(String username){
+    public boolean isUsernameAlreadyTaken(String username) {
         User existingUser = userRepository.findUserByUsername(username);
-        return existingUser !=null;
+        return existingUser != null;
     }
 
-    public boolean isEmailAlreadyTaken(String email){
+    public boolean isEmailAlreadyTaken(String email) {
         User existingUser = userRepository.findUserByEmail(email);
         return existingUser != null;
     }
+
 
 }

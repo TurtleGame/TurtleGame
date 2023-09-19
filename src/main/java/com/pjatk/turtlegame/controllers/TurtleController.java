@@ -5,6 +5,7 @@ import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
+import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;
@@ -20,9 +21,8 @@ import java.util.Optional;
 @RequestMapping(path = "/turtles")
 @AllArgsConstructor
 public class TurtleController {
-    TurtleRepository turtleRepository;
-    UserService userService;
-    TurtleService turtleService;
+    private final TurtleService turtleService;
+    private final ItemService itemService;
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -42,6 +42,7 @@ public class TurtleController {
     public String turtleDetail(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
 
         model.addAttribute("turtle", turtleService.getTurtleDetails(id, turtleUserDetails.getId()));
+        model.addAttribute("foods", itemService.getFood(turtleUserDetails.getId()));
 
         return "pages/turtleDetails";
     }

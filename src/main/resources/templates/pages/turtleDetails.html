@@ -14,14 +14,9 @@
                     <div>
                         <h2 style="margin-top: 0;">Nakarm żółwia</h2>
                         <ul>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
-                            <li>Zwierzęce mięso - +1 do ataku</li>
+                            <li th:each="food : ${foods}">
+                                <span th:text="${food.getItem().getName()}"></span> - +1 do ataku
+                            </li>
                         </ul>
 
                     </div>

@@ -276,6 +276,12 @@ main .content {
   backdrop-filter: blur(3px);
   border-radius: 1.25rem 1.25rem 0 0;
 }
+main .expeditionError {
+  background: #660000;
+  color: gold;
+  padding: 15px;
+  border-radius: 10px;
+}
 
 .sidebar {
   position: fixed;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
+
+<h1 layout:fragment="header">Ekwipunek</h1>
+
+<div layout:fragment="content">
+    <!-- items -->
+    <div class="card size-wide mb-2">
+        <h4 class="text-primary m-0 mb-4">Ekwipunek</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
+
+            <!-- item -->
+            <div th:each="item : ${items}">
+                <div class="card p-3 m-1">
+                    <div class="flex flex-row gap-4">
+                        <div class="flex flex-center flex-middle">
+                            <img src="assets/images/items/scroll.png"/>
+                        </div>
+                        <div class="size-wide">
+                            <div class="mb-1" th:text="${item.getItem().getName()}"></div>
+                            <div class="text-muted text-sm"  th:text="${item.getItem().getItemType().getName()}"></div>
+                        </div>
+                        <div class="flex flex-right flex-middle">
+                            <strong class="text-primary" th:text="${item.getQuantity()}"></strong>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of item -->
+            </div>
+        </div>
+    </div>
+    <!-- end of items -->
+
+</div>
