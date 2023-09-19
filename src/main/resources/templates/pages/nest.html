@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
+
+<h1 layout:fragment="header">Legowisko</h1>
+
+<div layout:fragment="content">
+
+    <!-- inkubacja -->
+    <div class="card mb-2">
+        <h3 class="m-0 mb-3">Inkubator</h3>
+
+        <!-- aktywna inkubacja -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
+            <!-- egg -->
+            <div class="card p-3 m-1 text-center">
+                <img src="/assets/images/eggs/smoke.png" style="height: 120px;"/>
+                <h4 class="text-primary m-1">żółw</h4>
+                <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
+            </div>
+            <!-- end of egg -->
+        </div>
+        <!-- end of inkubacja -->
+
+    </div>
+    <!-- end of inkubacja -->
+
+    <!-- adopcja -->
+    <div class="card mb-2">
+        <h3 class="m-0 mb-3">Żółwie do adopcji</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
+            <!-- egg -->
+            <div class="card p-3 m-1 text-center" th:each="turtle : ${user.getTurtles()}">
+                <img src="/assets/images/eggs/smoke.png" style="height: 120px;"/>
+                <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
+                <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
+            </div>
+            <!-- end of egg -->
+
+        </div>
+
+    </div>
+    <!-- end of adopcja -->
+
+</div>
