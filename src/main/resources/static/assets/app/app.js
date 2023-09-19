@@ -7,8 +7,10 @@ function switchForms() {
 }
 
 function abandonTurtleConfirm(buttonElement) {
-    var turtleId = buttonElement.getAttribute("data-turtle-id");
-    if (confirm("Czy na pewno chcesz porzucić żółwia?")) {
-        window.location.href = "/turtles/" + turtleId + "/delete";
-    }
+    document.getElementById("deleteTurtleForm").addEventListener("submit", function(event) {
+        var confirmation = confirm("Czy na pewno chcesz porzucić tego żółwia?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    });
 }

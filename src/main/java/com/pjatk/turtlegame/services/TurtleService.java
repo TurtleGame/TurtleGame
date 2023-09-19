@@ -1,5 +1,7 @@
 package com.pjatk.turtlegame.services;
 
+import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
+import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.TurtleOwnerHistory;
 import com.pjatk.turtlegame.models.User;
@@ -38,4 +40,10 @@ public class TurtleService {
         }
     }
 
+    public Turtle getTurtleDetails(int turtleId, int ownerId) throws TurtleNotFoundException, UnauthorizedAccessException {
+
+        return turtleRepository.findByIdAndOwnerId(turtleId, ownerId)
+                .orElseThrow(() -> new TurtleNotFoundException("Turtle not found"));
+
+    }
 }

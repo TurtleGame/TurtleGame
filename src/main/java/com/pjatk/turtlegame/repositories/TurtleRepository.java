@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TurtleRepository extends JpaRepository<Turtle, Integer> {
     Optional<Turtle> findById(int id);
+
+    Optional<Turtle> findByIdAndOwnerId(int turtleId, int ownerId);
 }

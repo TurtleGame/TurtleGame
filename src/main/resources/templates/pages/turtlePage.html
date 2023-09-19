@@ -12,6 +12,9 @@
             <div class="flex flex-middle flex-center">
                 <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
             </div>
+            <div th:if="${message}" class="text-success">
+                <p th:text="${message}"></p>
+            </div>
             <table class="size-wide">
                 <tr>
                     <td style="width: 30%; vertical-align: top;">
@@ -30,14 +33,14 @@
                         <div class="mb-1">Szczęście: <span class="text-primary">0</span></div>
                     </td>
                     <td style="width: 40%;">
-                        <a href="#">
+                        <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}">
                             <button class="button mb-2">Szczegóły</button>
                         </a>
                         <a href="#">
                             <button class="button mb-2">Historia walk</button>
                         </a>
-                        <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
-                            <button type="submit" class="button mb-2">Porzuć żółwia</button>
+                        <form id="deleteTurtleForm" th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
+                            <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm()">Porzuć żółwia</button>
                         </form>
                     </td>
                 </tr>
