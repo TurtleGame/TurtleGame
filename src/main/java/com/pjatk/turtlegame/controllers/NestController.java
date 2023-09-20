@@ -1,8 +1,9 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
+import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;
@@ -11,13 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping(path = "/nest")
 @AllArgsConstructor
-public class AdoptionController {
-    TurtleRepository turtleRepository;
+public class NestController {
+    UserRepository userRepository;
     UserService userService;
     TurtleService turtleService;
 

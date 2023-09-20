@@ -98,6 +98,9 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
     private List<Turtle> turtles;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<TurtleEgg> eggs;
+
     @OneToMany(mappedBy = "user")
     private List<AchievementsEarned> achievementsEarnedList;
 

@@ -13,10 +13,11 @@
         <!-- aktywna inkubacja -->
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
             <!-- egg -->
-            <div class="card p-3 m-1 text-center">
-                <img src="/assets/images/eggs/smoke.png" style="height: 120px;"/>
-                <h4 class="text-primary m-1">żółw</h4>
+            <div class="card p-3 m-1 text-center" th:each="egg : ${user.getEggs()}">
+                <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
+                <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
+                <button class="button mb-2">Ogrzej</button>
             </div>
             <!-- end of egg -->
         </div>
@@ -35,6 +36,8 @@
                 <img src="/assets/images/eggs/smoke.png" style="height: 120px;"/>
                 <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
+                <button class="button mb-2">Adoptuj</button>
+                <button class="button mb-2">Porzuć</button>
             </div>
             <!-- end of egg -->
 
