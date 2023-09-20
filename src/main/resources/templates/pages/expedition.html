@@ -11,9 +11,11 @@
         <h3 class="m-0 mb-3">Aktywne</h3>
 
         <!-- aktywna wyprawa -->
-        <div class="card bg-light flex flex-row gap-4 p-3 mb-2" th:each="turtle : ${user.getTurtles()}" th:if="${turtle.getCurrentExpedition()}">
+        <div class="card bg-light flex flex-row gap-4 p-3 mb-2" th:each="turtle : ${user.getTurtles()}"
+             th:if="${turtle.getCurrentExpedition()}">
             <div class="flex flex-center flex-middle">
-                <img th:src="@{${'/assets/images/expedition/' + turtle.getCurrentExpedition().getExpedition().id + '.png'}}" style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
+                <img th:src="@{${'/assets/images/expedition/' + turtle.getCurrentExpedition().getExpedition().id + '.png'}}"
+                     style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
             </div>
             <div class="flex flex-column flex-center flex-middle size-wide">
                 <strong><a href="#" class="text-primary text-xl" th:text="${turtle.getName()}"></a></strong>
@@ -22,7 +24,8 @@
             <div class="flex flex-column flex-center flex-middle text-center" style="width: 120px;">
                 <div class="text-primary">01:03:12</div>
                 <div class="text-sm">
-                    Powrót o <span th:text="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
+                    Powrót o <span
+                        th:text="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
                 </div>
             </div>
         </div>
@@ -34,7 +37,7 @@
     <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" class="expeditionError mb-2">
         <strong>Nie udało się wykonać tej akcji</strong>
         <ul>
-            <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}" />
+            <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}"/>
         </ul>
     </div>
 
@@ -43,11 +46,12 @@
         <div class="card mb-2">
             <div class="flex flex-row mb-4 gap-4">
                 <div class="flex">
-                    <img th:src="@{${'/assets/images/expedition/' + expedition.id + '.png'}}" style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
+                    <img th:src="@{${'/assets/images/expedition/' + expedition.id + '.png'}}"
+                         style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
                 </div>
                 <div>
                     <h2 style="margin-top: 0;" th:text="${expedition.getName()}"></h2>
-                   <div th:text="${expedition.getDescription()}"></div>
+                    <div th:text="${expedition.getDescription()}"></div>
                 </div>
             </div>
             <div class="flex flex-row gap-4">
@@ -55,7 +59,7 @@
                     <select class="select" name="turtle">
                         <option disabled selected>Wybierz żółwia</option>
                         <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
-                                th:text="${turtle.getName()}"  th:if="${turtle.isAvailable()}"></option>
+                                th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
                     </select>
                 </div>
                 <div class="flex flex-row gap-4" style="width: 220px;">
@@ -70,8 +74,8 @@
                     </select>
                 </div>
                 <div class="flex flex-row" style="width: 220px;">
-                    <input type="hidden" name="expedition" th:value="${expedition.id}" />
-                    <input class="button" type="submit" value="Wyślij" />
+                    <input type="hidden" name="expedition" th:value="${expedition.id}"/>
+                    <input class="button" type="submit" value="Wyślij"/>
                 </div>
             </div>
         </div>

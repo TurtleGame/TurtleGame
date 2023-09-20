@@ -15,7 +15,8 @@
                         <h2 style="margin-top: 0;">Nakarm żółwia</h2>
                         <ul>
                             <li th:each="food : ${foods}">
-                                <span th:text="${food.getItem().getName()}"></span> - +1 do ataku
+                                <img src="/assets/images/items/scroll.png"/>
+                                <span th:text="${food.getName()}"></span> dodaje <span th:text="${food.getItemStatistic(food.getId()).getValue()}"></span>  punkt do umiejętności: <span th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
                             </li>
                         </ul>
 
@@ -24,12 +25,12 @@
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-row gap-4 size-wide">
                         <select class="select">
-                            <option>a</option>
-                            <option>b</option>
+                            <option th:each="item : ${foods}" th:value="${item}" th:text="${item.getName()}"></option>
+
                         </select>
                     </div>
                     <div class="flex flex-row" style="width: 220px;">
-                        <input class="button" type="submit" value="Wyślij"/>
+                        <input class="button" type="submit" value="Nakarm"/>
                     </div>
                 </div>
             </div>

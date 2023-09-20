@@ -23,11 +23,9 @@
                         <div class="mb-1">Energia: <span class="text-primary">20</span></div>
                     </td>
                     <td style="width: 30%; vertical-align: top;">
-                        <div class="mb-1">Siła: <span class="text-primary">0</span></div>
-                        <div class="mb-1">Kondycja: <span class="text-primary">0</span></div>
-                        <div class="mb-1">Zręczność: <span class="text-primary">0</span></div>
-                        <div class="mb-1">Inteligencja: <span class="text-primary">0</span></div>
-                        <div class="mb-1">Szczęście: <span class="text-primary">0</span></div>
+                        <div th:each="stat : ${turtle.getTurtleStatisticList()}">
+                            <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
+                        </div>
                     </td>
                     <td style="width: 40%;">
                         <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}">
@@ -37,7 +35,9 @@
                             <button class="button mb-2">Historia walk</button>
                         </a>
                         <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
-                            <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
+                            <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć
+                                żółwia
+                            </button>
                         </form>
                     </td>
                 </tr>

@@ -61,7 +61,7 @@ public class ExpeditionController {
             return "pages/expedition";
         }
 
-        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() ->new Exception("Turtle not found"));
+        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() -> new Exception("Turtle not found"));
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
         if (turtle.getLevel() < expedition.getMinLevel()) {
@@ -70,7 +70,7 @@ public class ExpeditionController {
             return "pages/expedition";
         }
         if (turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
-            bindingResult.rejectValue("durationTime", "error.alreadyOnExpedition", "Jest juz na wyprawie.");
+            bindingResult.rejectValue("durationTime", "error.alreadyOnExpedition", "Żółw jest juz na wyprawie.");
 
             return "pages/expedition";
         }
