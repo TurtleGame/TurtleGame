@@ -1,6 +1,7 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
+import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.ExpeditionRepository;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
@@ -46,8 +47,8 @@ public class ExpeditionController {
 
     @PostMapping(path = "")
     public String send(Model model,
-                       @Valid @ModelAttribute("turtleExpeditionForm") TurtleExpeditionForm turtleExpeditionForm,
-                       @RequestParam("turtle") int turtleId,
+                       @ModelAttribute("turtleExpeditionForm") TurtleExpeditionForm turtleExpeditionForm,
+                       @RequestParam(value = "turtle", required = false) Integer turtleId,
                        @RequestParam("expedition") int expeditionId,
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                        BindingResult bindingResult) throws Exception {
@@ -57,15 +58,25 @@ public class ExpeditionController {
         model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
         model.addAttribute("context", "expeditions");
 
+        if (turtleId == null) {
+            bindingResult.rejectValue("turtle", "error.nullTurtle", "Musisz wybrać żółwia");
+            return "pages/expedition";
+        }
+
         if (bindingResult.hasErrors()) {
             return "pages/expedition";
         }
 
-        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() -> new Exception("Turtle not found"));
+        User user = userRepository.findById(turtleUserDetails.getId());
+        Turtle turtle = user.getTurtles()
+                .stream()
+                .filter(turtle1 -> turtle1.getId() == turtleId).findFirst()
+                .orElseThrow(() -> new TurtleNotFoundException("Turtle not found"));
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
+
         if (turtle.getLevel() < expedition.getMinLevel()) {
-            bindingResult.rejectValue("durationTime", "error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
+            bindingResult.rejectValue("expedition", "error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
 
             return "pages/expedition";
         }

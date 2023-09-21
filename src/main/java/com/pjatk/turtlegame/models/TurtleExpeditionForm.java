@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class TurtleExpeditionForm {
+
     @NotNull
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
