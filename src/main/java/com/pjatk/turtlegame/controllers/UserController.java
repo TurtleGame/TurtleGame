@@ -17,14 +17,14 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(path = "/{id}")
-    public String getUserPage(Model model, @PathVariable int id){
+    public String getUserPage(Model model, @PathVariable int id) {
         model.addAttribute("user", userRepository.findById(id));
         model.addAttribute("turtles", userService.getTurtles(userRepository.findById(id)));
         return "pages/userPage";
     }
 
     @GetMapping(path = "/{id}/edit")
-    public String getEditPage(Model model, @PathVariable int id){
+    public String getEditPage(Model model, @PathVariable int id) {
         model.addAttribute("user", userRepository.findById(id));
         return "pages/editPage";
     }

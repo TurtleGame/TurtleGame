@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Controller
 @RequestMapping(path = "/")
@@ -60,11 +58,11 @@ public class MainController {
 
         model.addAttribute("context", "register");
 
-        if(userService.isUsernameAlreadyTaken(userDTO.getUsername())){
+        if (userService.isUsernameAlreadyTaken(userDTO.getUsername())) {
             bindingResult.rejectValue("username", "error.userDTO", "Nazwa użytkownika jest już zajęta!");
         }
 
-        if(userService.isEmailAlreadyTaken(userDTO.getEmail())){
+        if (userService.isEmailAlreadyTaken(userDTO.getEmail())) {
             bindingResult.rejectValue("email", "error.userDTO", "Email jest już zajęty!");
         }
 

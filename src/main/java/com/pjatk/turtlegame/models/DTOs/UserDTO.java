@@ -1,6 +1,5 @@
 package com.pjatk.turtlegame.models.DTOs;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

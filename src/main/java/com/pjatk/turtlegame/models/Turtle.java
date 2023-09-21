@@ -9,9 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "turtle")
@@ -66,9 +64,6 @@ public class Turtle {
     private List<TurtleStatistic> turtleStatisticList;
 
     @OneToMany(mappedBy = "turtle")
-    private List<TurtleCare> turtleCareList;
-
-    @OneToMany(mappedBy = "turtle")
     private List<UserItem> equipmentHistoryList;
 
     @OneToMany(mappedBy = "turtle")
@@ -78,8 +73,7 @@ public class Turtle {
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    public TurtleExpeditionHistory getCurrentExpedition()
-    {
+    public TurtleExpeditionHistory getCurrentExpedition() {
         return getTurtleExpeditionHistoryList()
                 .stream()
                 .filter(history -> history.getEndAt().isAfter(LocalDateTime.now()))

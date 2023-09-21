@@ -4,7 +4,6 @@ import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
-import com.pjatk.turtlegame.models.DTOs.TurtleExpeditionForm;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.StatisticService;
 import com.pjatk.turtlegame.services.TurtleService;

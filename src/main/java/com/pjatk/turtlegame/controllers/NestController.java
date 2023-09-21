@@ -1,9 +1,7 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
-import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;

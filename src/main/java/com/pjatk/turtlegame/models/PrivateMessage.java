@@ -46,8 +46,7 @@ public class PrivateMessage {
     private Item item;
 
 
-    public String getSentAtDateTime()
-    {
+    public String getSentAtDateTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         return sentAt.format(formatter);

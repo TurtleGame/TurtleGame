@@ -1,7 +1,6 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.TurtleExpeditionForm;
 import com.pjatk.turtlegame.repositories.ExpeditionRepository;

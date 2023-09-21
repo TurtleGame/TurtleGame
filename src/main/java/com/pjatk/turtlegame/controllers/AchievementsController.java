@@ -16,7 +16,7 @@ public class AchievementsController {
     private final AchievementsRepoistory achievementsRepoistory;
 
     @GetMapping
-    public String achievementIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails){
+    public String achievementIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("achievements", achievementsRepoistory.findAll());
         model.addAttribute("context", "achievements");
         return "pages/achievements";
