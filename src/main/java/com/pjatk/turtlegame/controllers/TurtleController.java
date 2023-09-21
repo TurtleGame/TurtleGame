@@ -60,6 +60,14 @@ public class TurtleController {
             bindingResult.rejectValue("foodId", "error.notFood", "Brak wybranego pokarmu");
         }
 
+        if (!bindingResult.hasErrors()) {
+            try {
+                turtleService.feedTurtle(feedTurtleDTO.getFoodId(), turtleUserDetails.getId(), feedTurtleDTO.getTurtleId());
+            } catch (Exception e) {
+                bindingResult.rejectValue("foodId", "error.notFood", e.getMessage());
+            }
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("turtle", turtleService.getTurtleDetails(id, turtleUserDetails.getId()));
             model.addAttribute("foods", itemService.getFood(turtleUserDetails.getId()));
@@ -67,7 +75,6 @@ public class TurtleController {
 
             return "pages/turtleDetails";
         }
-        turtleService.feedTurtle(feedTurtleDTO.getFoodId(), turtleUserDetails.getId(), feedTurtleDTO.getTurtleId());
 
         return "redirect:/turtles/{id}/details";
     }

@@ -6,50 +6,48 @@
 
 <div layout:fragment="content">
 
-    <div class>
-        <!-- karmienie -->
-        <form action="" method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details'}">
-            <div class="card mb-2">
-                <div class="flex flex-row mb-4 gap-4">
-                    <div>
-                        <h2 style="margin-top: 0;">Nakarm żółwia</h2>
-                        <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="expeditionError mb-2">
-                            <strong>Nie udało się wykonać tej akcji</strong>
-                            <ul>
-                                <li th:each="err : ${#fields.errors('feedTurtleDTO.*')}" th:text="${err}"/>
-                            </ul>
-                        </div>
-                        <div th:if="${!foods.isEmpty()}">
-                            <ul>
-                                <li th:each="food : ${foods}">
-                                    <img src="/assets/images/items/scroll.png"/>
-                                    <span th:text="${food.getName()}"></span> dodaje <span
-                                        th:text="${food.getItemStatistic(food.getId()).getValue()}"></span> punkt do
-                                    umiejętności: <span
-                                        th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div th:if="${foods.isEmpty()}">Brak pokarmu dla żółwi. Wyślij swojego żółwia na <a
-                                href="/expeditions">wyprawę</a> albo kup pokarm w sklepie!
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
-                    <div class="flex flex-row gap-4 size-wide">
-                        <select class="select" name="foodId" required>
-                            <option disabled selected>Wybierz pokarm</option>
-                            <option th:each="food : ${foods}" th:value="${food.getId()}"
-                                    th:text="${food.getName()}"></option>
-                        </select>
-                    </div>
-                    <div class="flex flex-row" style="width: 220px;">
-                        <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
-                        <input class="button" type="submit" value="Nakarm"/>
-                    </div>
-                </div>
-                <div th:if="${turtle.isFed()}">Żółw jest najedzony. Wróć jutro.</div>
-            </div>
-        </form>
+    <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="expeditionError mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('feedTurtleDTO.*')}" th:text="${err}"/>
+        </ul>
     </div>
+
+    <!-- karmienie -->
+    <form action="" method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details'}">
+        <div class="card mb-2">
+            <h2 style="margin-top: 0;">Nakarm żółwia</h2>
+
+            <div class="flex flex-row mb-4 gap-4">
+                <div th:if="${!foods.isEmpty()}">
+                    <ul>
+                        <li th:each="food : ${foods}">
+                            <img src="/assets/images/items/scroll.png"/>
+                            <span th:text="${food.getName()}"></span> dodaje <span
+                                th:text="${food.getItemStatistic(food.getId()).getValue()}"></span> punkt do
+                            umiejętności: <span
+                                th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${foods.isEmpty()}">Brak pokarmu dla żółwi. Wyślij swojego żółwia na <a
+                        href="/expeditions">wyprawę</a> albo kup pokarm w sklepie!
+                </div>
+            </div>
+            <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
+                <div class="flex flex-row gap-4 size-wide">
+                    <select class="select" name="foodId" required>
+                        <option disabled selected>Wybierz pokarm</option>
+                        <option th:each="food : ${foods}" th:value="${food.getId()}"
+                                th:text="${food.getName()}"></option>
+                    </select>
+                </div>
+                <div class="flex flex-row" style="width: 220px;">
+                    <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
+                    <input class="button" type="submit" value="Nakarm"/>
+                </div>
+            </div>
+            <div th:if="${turtle.isFed()}">Żółw jest najedzony. Wróć jutro.</div>
+        </div>
+    </form>
 </div>

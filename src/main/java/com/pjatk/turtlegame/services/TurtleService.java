@@ -54,10 +54,14 @@ public class TurtleService {
     @Transactional
     public void feedTurtle(Integer foodId, Integer userId, Integer turtleId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć użytkownika o podanym ID"));
+        Turtle turtle = user.getTurtle(turtleId);
+
+        if (turtle.isFed()) {
+            throw new IllegalArgumentException("Zółw jest już nakarmiony.");
+        }
 
         itemService.removeItem(userId, foodId, 1);
 
-        Turtle turtle = user.getTurtle(turtleId);
         turtle.setLevel(turtle.getLevel() + 1);
         turtle.setEnergy(100);
         turtle.setFed(true);
@@ -74,7 +78,5 @@ public class TurtleService {
                 turtleStaticsRepository.save(statisticToImprove.get());
             }
         }
-
-
     }
 }
