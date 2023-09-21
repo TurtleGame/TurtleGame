@@ -19,8 +19,8 @@
                         </div>
                         <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
                         <br/>
-                        <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
-                        <div class="mb-1">Energia: <span class="text-primary">20</span></div>
+                        <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getHP()}"></span></div>
+                        <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
                     </td>
                     <td style="width: 30%; vertical-align: top;">
                         <div th:each="stat : ${turtle.getTurtleStatisticList()}">

@@ -10,8 +10,11 @@ import com.pjatk.turtlegame.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.pjatk.turtlegame.models.Turtle;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
+@Component
 public class MyInterceptor implements HandlerInterceptor {
 
 
@@ -29,7 +33,14 @@ public class MyInterceptor implements HandlerInterceptor {
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     PrivateMessageService privateMessageService;
 
-
+    @Scheduled(fixedRate = 2 * 60 * 1000) // Uruchamia się codziennie o północy
+    public void resetFedFlag() {
+        List<Turtle> allTurtles = turtleRepository.findAll();
+        for(Turtle turtle : allTurtles){
+            turtle.setFed(false);
+            turtleRepository.save(turtle);
+        }
+    }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 

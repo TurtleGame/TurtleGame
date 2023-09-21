@@ -9,6 +9,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "turtle")
@@ -82,6 +85,15 @@ public class Turtle {
                 .filter(history -> history.getEndAt().isAfter(LocalDateTime.now()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public int getHP() {
+        OptionalInt hpValue = turtleStatisticList.stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getName().equals("HP"))
+                .mapToInt(turtleStatistic -> turtleStatistic.getValue() * 4)
+                .findFirst();
+
+        return hpValue.orElse(0);
     }
 
 }
