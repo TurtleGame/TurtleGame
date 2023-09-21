@@ -13,8 +13,11 @@
                 <div class="flex flex-row mb-4 gap-4">
                     <div>
                         <h2 style="margin-top: 0;">Nakarm żółwia</h2>
-                        <div th:if="${feedSuccessMessage}" class="text-success" role="alert">
-                            <span th:text="${feedSuccessMessage}"></span>
+                        <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="expeditionError mb-2">
+                            <strong>Nie udało się wykonać tej akcji</strong>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('feedTurtleDTO.*')}" th:text="${err}"/>
+                            </ul>
                         </div>
                         <div th:if="${!foods.isEmpty()}">
                             <ul>
@@ -34,14 +37,14 @@
                 </div>
                 <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
                     <div class="flex flex-row gap-4 size-wide">
-                        <select class="select" name="food">
+                        <select class="select" name="foodId" required>
                             <option disabled selected>Wybierz pokarm</option>
                             <option th:each="food : ${foods}" th:value="${food.getId()}"
                                     th:text="${food.getName()}"></option>
                         </select>
                     </div>
                     <div class="flex flex-row" style="width: 220px;">
-                        <input type="hidden" name="turtle" th:value="${turtle.id}"/>
+                        <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
                         <input class="button" type="submit" value="Nakarm"/>
                     </div>
                 </div>

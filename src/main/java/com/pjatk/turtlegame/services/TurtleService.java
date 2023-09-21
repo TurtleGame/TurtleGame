@@ -5,10 +5,12 @@ import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,8 +20,9 @@ public class TurtleService {
     private final TurtleRepository turtleRepository;
     private final TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     private final UserRepository userRepository;
-    private final UserItemRepository userItemRepository;
+    private final ItemService itemService;
     private final TurtleStaticsRepository turtleStaticsRepository;
+    private final ItemStatisticRepository itemStatisticRepository;
 
 
     public void abandonTurtle(int turtleId, int ownerId) {
@@ -49,39 +52,28 @@ public class TurtleService {
 
     }
 
+    @Transactional
     public void feedTurtle(Integer foodId, Integer userId, Integer turtleId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć użytkownika o podanym ID"));
 
+        itemService.removeItem(userId, foodId, 1);
 
-        UserItem item = user.getUserItemList()
-                .stream()
-                .filter(userItem -> userItem.getItem().getId() == foodId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć przedmiotu użytkownika o podanym ID"));
-
-
-        item.setQuantity(item.getQuantity() - 1);
-        userItemRepository.save(item);
-
-        Turtle turtle = user.getTurtles()
-                .stream()
-                .filter(turtle1 -> turtle1.getId() == turtleId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
-
+        Turtle turtle = user.getTurtle(turtleId);
         turtle.setLevel(turtle.getLevel() + 1);
         turtle.setEnergy(100);
         turtle.setFed(true);
 
-        ItemStatistic itemStatistic = item.getItem().getItemStatistic(item.getItem().getId());
-        Optional<TurtleStatistic> statisticToImprove = turtle.getTurtleStatisticList()
-                .stream()
-                .filter(stat -> stat.getStatistic().getId() == itemStatistic.getStatistic().getId())
-                .findFirst();
+        List<ItemStatistic> itemStatistics = itemStatisticRepository.findAllByItemId(foodId);
+        for (ItemStatistic itemStatistic : itemStatistics) {
+            Optional<TurtleStatistic> statisticToImprove = turtle.getTurtleStatisticList()
+                    .stream()
+                    .filter(stat -> stat.getStatistic().getId() == itemStatistic.getStatistic().getId())
+                    .findFirst();
 
-        if (statisticToImprove.isPresent()) {
-            statisticToImprove.get().setValue(statisticToImprove.get().getValue() + itemStatistic.getValue());
-            turtleStaticsRepository.save(statisticToImprove.get());
+            if (statisticToImprove.isPresent()) {
+                statisticToImprove.get().setValue(statisticToImprove.get().getValue() + itemStatistic.getValue());
+                turtleStaticsRepository.save(statisticToImprove.get());
+            }
         }
 
 

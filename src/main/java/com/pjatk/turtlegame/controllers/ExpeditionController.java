@@ -3,6 +3,7 @@ package com.pjatk.turtlegame.controllers;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.models.*;
+import com.pjatk.turtlegame.models.DTOs.TurtleExpeditionForm;
 import com.pjatk.turtlegame.repositories.ExpeditionRepository;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
@@ -11,7 +12,6 @@ import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ExpeditionHistoryService;
 import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.UserService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -60,7 +60,6 @@ public class ExpeditionController {
 
         if (turtleId == null) {
             bindingResult.rejectValue("turtle", "error.nullTurtle", "Musisz wybrać żółwia");
-            return "pages/expedition";
         }
 
         if (bindingResult.hasErrors()) {

@@ -1,5 +1,7 @@
-package com.pjatk.turtlegame.models;
+package com.pjatk.turtlegame.models.DTOs;
 
+import com.pjatk.turtlegame.models.Expedition;
+import com.pjatk.turtlegame.models.Turtle;
 import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

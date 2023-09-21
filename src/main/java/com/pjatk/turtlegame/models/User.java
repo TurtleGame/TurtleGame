@@ -110,4 +110,12 @@ public class User {
                 .findFirst()
                 .orElse(null);
     }
+
+    public Turtle getTurtle(int turtleId) {
+        return getTurtles()
+                .stream()
+                .filter(turtle1 -> turtle1.getId() == turtleId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
+    }
 }
