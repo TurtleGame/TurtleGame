@@ -111,7 +111,7 @@ public class User {
                 .orElse(null);
     }
 
-    public Turtle getTurtle(int turtleId) {
+    public Turtle getTurtle(Integer turtleId) {
         return getTurtles()
                 .stream()
                 .filter(turtle1 -> turtle1.getId() == turtleId)

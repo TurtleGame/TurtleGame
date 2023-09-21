@@ -67,10 +67,7 @@ public class ExpeditionController {
         }
 
         User user = userRepository.findById(turtleUserDetails.getId());
-        Turtle turtle = user.getTurtles()
-                .stream()
-                .filter(turtle1 -> turtle1.getId() == turtleId).findFirst()
-                .orElseThrow(() -> new TurtleNotFoundException("Turtle not found"));
+        Turtle turtle = user.getTurtle(turtleId);
         Expedition expedition = expeditionRepository.findById(expeditionId);
 
 

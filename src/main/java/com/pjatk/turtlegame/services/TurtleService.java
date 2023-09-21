@@ -30,19 +30,18 @@ public class TurtleService {
         LocalDateTime now = LocalDateTime.now();
 
         User user = userRepository.findById(ownerId);
-        for (Turtle turtle : user.getTurtles()) {
-            if (turtle.getId() == turtleId) {
 
-                turtle.getTurtleOwnerHistoryList().stream()
-                        .filter(history -> history.getEndAt() == null)
-                        .forEach(history -> {
-                            history.setEndAt(now);
-                            turtleOwnerHistoryRepository.save(history);
-                        });
-                turtle.setOwner(null);
-                turtleRepository.save(turtle);
-            }
-        }
+        Turtle turtle = user.getTurtle(turtleId);
+
+        turtle.getTurtleOwnerHistoryList().stream()
+                .filter(history -> history.getEndAt() == null)
+                .forEach(history -> {
+                    history.setEndAt(now);
+                    turtleOwnerHistoryRepository.save(history);
+                });
+        turtle.setOwner(null);
+        turtleRepository.save(turtle);
+
     }
 
     public Turtle getTurtleDetails(int turtleId, int ownerId) throws TurtleNotFoundException, UnauthorizedAccessException {
