@@ -27,6 +27,7 @@
 
         <div class="menu">
             <ul>
+                <li><a href="/main" th:classappend="${context == 'home' ? 'active' : ''}"><i class="fa-solid fa-house"></i>Strona główna</a></li>
                 <li><a href="/turtles" th:classappend="${context == 'turtles' ? 'active' : ''}"><i
                         class="fa fa-turtle"></i>Żółwie</a></li>
                 <li><a href="/nest" th:classappend="${context == 'nest' ? 'active' : ''}"><i class="fa fa-hand-holding-heart"></i>Legowisko</a></li>
