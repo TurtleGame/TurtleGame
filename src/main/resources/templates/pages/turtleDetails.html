@@ -7,12 +7,15 @@
 <div layout:fragment="content">
 
     <div class>
-        <!-- wyprawa -->
-        <form action="" method="post">
+        <!-- karmienie -->
+        <form action="" method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details'}">
             <div class="card mb-2">
                 <div class="flex flex-row mb-4 gap-4">
                     <div>
                         <h2 style="margin-top: 0;">Nakarm żółwia</h2>
+                        <div th:if="${feedSuccessMessage}" class="text-success" role="alert">
+                            <span th:text="${feedSuccessMessage}"></span>
+                        </div>
                         <div th:if="${!foods.isEmpty()}">
                             <ul>
                                 <li th:each="food : ${foods}">
@@ -30,19 +33,22 @@
                     </div>
                 </div>
                 <div class="flex flex-row gap-4">
-                    <div class="flex flex-row gap-4 size-wide">
-                        <select class="select">
-                            <option disabled selected>Wybierz pokarm</option>
-                            <option th:each="item : ${foods}" th:value="${item}" th:text="${item.getName()}"></option>
 
+                    <div class="flex flex-row gap-4 size-wide">
+                        <select class="select" name="food">
+                            <option disabled selected>Wybierz pokarm</option>
+                            <option th:each="food : ${foods}" th:value="${food.getId()}"
+                                    th:text="${food.getName()}"></option>
                         </select>
                     </div>
                     <div class="flex flex-row" style="width: 220px;">
+                        <input type="hidden" name="turtle" th:value="${turtle.id}"/>
                         <input class="button" type="submit" value="Nakarm"/>
                     </div>
-                </div>
-            </div>
         </form>
     </div>
+</div>
+</form>
+</div>
 
 </div>

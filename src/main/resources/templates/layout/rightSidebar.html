@@ -4,7 +4,8 @@
 
         <div class="turtle-widgets-container">
 
-            <a href="#" class="turtle-widget" th:each="turtle : ${user.getTurtles()}">
+            <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}" class="turtle-widget"
+               th:each="turtle : ${user.getTurtles()}">
                 <img src="/assets/images/turtles/fire.png"/>
                 <div class="turtle-data">
                     <div class="turtle-name" th:text="${turtle.getName}"></div>

@@ -3,6 +3,8 @@ package com.pjatk.turtlegame.controllers;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
+import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
+import com.pjatk.turtlegame.models.TurtleExpeditionForm;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.StatisticService;
 import com.pjatk.turtlegame.services.TurtleService;
@@ -10,8 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 
 
 @Controller
@@ -46,5 +48,17 @@ public class TurtleController {
         return "pages/turtleDetails";
     }
 
+    @PostMapping("/{id}/details")
+    public String feedTurtle(@ModelAttribute("turtle") Integer turtleId,
+                             @RequestParam("food") Integer foodId,
+                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                             BindingResult bindingResult,
+                             Model model) {
+
+
+
+        turtleService.feedTurtle(foodId, turtleUserDetails.getId(), turtleId);
+        return "redirect:/turtles/{id}/details";
+    }
 
 }

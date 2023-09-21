@@ -31,6 +31,14 @@ public class Turtle {
 
     private int unassignedPoints;
 
+    @Column(name = "is_available", columnDefinition = "INT(1)")
+    private boolean isAvailable;
+
+    @Column(name = "is_fed", columnDefinition = "INT(0)")
+    private boolean isFed;
+
+    private int energy;
+
     @ManyToOne
     @JoinColumn(name = "type_id")
     private TurtleType turtleType;
@@ -62,9 +70,6 @@ public class Turtle {
 
     @OneToMany(mappedBy = "turtle")
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
-
-    @Column(name = "is_available", columnDefinition = "INT(1)")
-    private boolean isAvailable;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

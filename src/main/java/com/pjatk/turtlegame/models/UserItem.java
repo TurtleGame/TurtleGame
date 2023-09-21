@@ -36,4 +36,8 @@ public class UserItem {
     @ManyToOne
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
