@@ -6,27 +6,6 @@ function switchForms() {
     registerForm.classList.toggle('hidden');
 }
 
-function switchFormsMessage() {
-    const receivedHeader = document.getElementById('received-header');
-    const sentHeader = document.getElementById('sent-header');
-    const receivedMessage = document.getElementById('received-message');
-    const sentMessage = document.getElementById('sent-message');
-
-    receivedHeader.addEventListener('click', function () {
-        receivedMessage.style.display = 'block';
-        sentMessage.style.display = 'none';
-        receivedHeader.classList.add('active-header');
-        sentHeader.classList.remove('active-header');
-    });
-
-    sentHeader.addEventListener('click', function () {
-        receivedMessage.style.display = 'none';
-        sentMessage.style.display = 'block';
-        sentHeader.classList.add('active-header');
-        receivedHeader.classList.remove('active-header');
-    });
-}
-
 function abandonTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
@@ -56,6 +35,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 .classList
                 .toggle('hidden');
         });
+    });
+
+
+    const receivedHeader = document.getElementById('received-header');
+    const sentHeader = document.getElementById('sent-header');
+    const receivedMessage = document.getElementById('received-message');
+    const sentMessage = document.getElementById('sent-message');
+
+    receivedHeader.addEventListener('click', function () {
+        receivedMessage.style.display = 'block';
+        sentMessage.style.display = 'none';
+        receivedHeader.classList.add('active-header');
+        sentHeader.classList.remove('active-header');
+    });
+    sentHeader.addEventListener('click', function () {
+        receivedMessage.style.display = 'none';
+        sentMessage.style.display = 'block';
+        sentHeader.classList.add('active-header');
+        receivedHeader.classList.remove('active-header');
     });
 
 });

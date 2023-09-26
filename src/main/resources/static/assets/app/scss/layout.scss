@@ -272,7 +272,7 @@ main {
 .setting-container {
   a {
     width: 100%;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     color: var(--text-light);
     text-shadow: 0 0 0 #ffffff00;
     transition: all 150ms;
@@ -305,7 +305,7 @@ main {
     color: var(--text-muted);
 
     &:hover {
-      color: var(--text-primary);
+      color: var(--text-light);
 
     }
 

@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user")
@@ -103,6 +105,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<AchievementsEarned> achievementsEarnedList;
+
+    public List<PrivateMessage> getRecipientPrivateMessageList() {
+        return recipientPrivateMessageList.stream()
+                .sorted(Comparator.comparing(PrivateMessage::getSentAt).reversed())
+                .collect(Collectors.toList());
+    }
 
     public AchievementsEarned getAchievementEarned(int id) {
         return achievementsEarnedList.stream()

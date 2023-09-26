@@ -12,28 +12,28 @@
 
         <!-- aktywna wyprawa -->
         <div class="private-message-header">
-            <h2 id="received-header" class="active-header" onclick="switchFormsMessage(); return false">Odebrane</h2>
-            <h2 id="sent-header" onclick="switchFormsMessage(); return false">Wysłane</h2>
+            <h2 id="received-header" class="active-header">Odebrane</h2>
+            <h2 id="sent-header">Wysłane</h2>
         </div>
         <div id="received-message">
             <div class="card p-3 m-1 message-container message-unread" th:each="message : ${messages}">
                 <div class="flex flex-row gap-4 message-title">
                     <div class="size-wide">
-                        <strong><span
-                                th:text="${message.getSender() != null ? message.getSender().getUsername() : 'System'}"></span>:
-                            <span
-                                    th:text="${message.getTitle()}"></span></strong>
+                        <strong>
+                            <span th:text="${message.getSender() != null ? message.getSender().getUsername() : 'System'}"></span>:
+                            <span th:text="${message.getTitle()}"></span>
+                        </strong>
                     </div>
-                    <div class="flex flex-right flex-middle">
-                        <div class="message-date"
-                             th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
-                    </div>
+                    <div class="flex flex-right flex-middle message-date"
+                         th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
                 </div>
                 <div class="message-content hidden" style="margin-top: 1rem;">
                     <div class="card bg-light mb-1" th:text="${message.getContent()}">
 
                     </div>
-                    <div class="text-primary mb-2">Załączniki:</div>
+                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or message.getAttachment() != null}"><i
+                            class="fa-solid fa-paperclip"></i> Załączniki:
+                    </div>
                     <div th:if="${message.getGold()}">
                         <img src="assets/images/gold.png" width="20" height="20">
                         <span th:text="${message.getGold()}"></span>
@@ -41,7 +41,8 @@
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
                             <img src="assets/images/items/scroll.png" width="20" height="20">
-                            <span th:text="${attachment.getItem().getName()}"></span>: <span th:text="${attachment.getQuantity()}"></span>
+                            <span th:text="${attachment.getItem().getName()}"></span>: <span
+                                th:text="${attachment.getQuantity()}"></span>
                         </div>
                     </div>
                     <div class="buttons">
