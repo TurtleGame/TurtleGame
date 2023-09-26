@@ -1,20 +1,12 @@
 package com.pjatk.turtlegame.services;
 
-import com.pjatk.turtlegame.models.Item;
-import com.pjatk.turtlegame.models.ItemStatistic;
-import com.pjatk.turtlegame.models.User;
-import com.pjatk.turtlegame.models.UserItem;
-import com.pjatk.turtlegame.repositories.ItemRepository;
-import com.pjatk.turtlegame.repositories.ItemStatisticRepository;
-import com.pjatk.turtlegame.repositories.UserItemRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.models.*;
+import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,21 +15,21 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemStatisticRepository itemStatisticRepository;
     private final UserItemRepository userItemRepository;
+    private final TurtleEggRepository turtleEggRepository;
+    private final TurtleTypeRepository turtleTypeRepository;
 
 
-    public List<UserItem> getItems(int userId) {
-        User user = userRepository.findById(userId);
+    public List<UserItem> getItems(int id) {
+        User user = userRepository.findById(id);
         return user.getUserItemList();
     }
 
-    public List<Item> getFood(int userId) {
-        User user = userRepository.findById(userId);
+    public List<Item> getFood(int id) {
+        User user = userRepository.findById(id);
         return user.getUserItemList().stream()
                 .map(UserItem::getItem)
                 .filter(item -> "Jedzenie".equals(item.getItemType().getName()))
                 .toList();
-
-
     }
 
     public void removeItem(int userId, int itemId, int quantity) {
@@ -63,7 +55,59 @@ public class ItemService {
 
     }
 
-    public List<ItemStatistic> getItemsStatistics() {
+    public List<ItemStatistic> getItemsStatistics(){
         return itemStatisticRepository.findAll();
+    }
+
+    public List<Item> getEggs(int id) {
+        User user = userRepository.findById(id);
+        return user.getUserItemList().stream()
+                .filter(history -> history.getEndAt() == null)
+                .map(UserItem::getItem)
+                .filter(item -> "Jajko".equals(item.getItemType().getName()))
+                .toList();
+    }
+
+    public void abandonEgg(int userId, int eggId) {
+        LocalDateTime now = LocalDateTime.now();
+        User user = userRepository.findById(userId);
+
+        user.getUserItemList()
+                .stream()
+                .filter(entry -> entry.getItem().getId() == eggId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć jajka o podanym ID"));
+
+        user.getUserItemList()
+                .stream()
+                .filter(history -> history.getEndAt() == null)
+                .filter(entry -> entry.getItem().getId() == eggId)
+                .forEach(history -> {
+                    history.setEndAt(now);
+                    userItemRepository.save(history);
+                });
+    }
+
+    public void adoptEgg(int userId, int eggId, String name) {
+        User user = userRepository.findById(userId);
+
+        UserItem userItem = user.getUserItemList()
+                .stream()
+                .filter(entry -> entry.getItem().getId() == eggId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć jajka o podanym ID"));
+
+        TurtleType turtleType = turtleTypeRepository.findById(userItem.getItem().getItemType().getId());
+
+        TurtleEgg egg = new TurtleEgg();
+        egg.setHatchingAt(LocalDateTime.of(2024, 12, 12, 12, 12));
+        egg.setName(name);
+        egg.setWarming(2);
+        egg.setTurtleType(turtleType);
+        egg.setUser(user);
+        turtleEggRepository.save(egg);
+
+        userItemRepository.deleteById(userItem.getId());
+        itemRepository.deleteById(eggId);
     }
 }

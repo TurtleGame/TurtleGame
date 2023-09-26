@@ -1,5 +1,6 @@
 package com.pjatk.turtlegame.config;
 
+import com.pjatk.turtlegame.repositories.TurtleEggRepository;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
@@ -17,6 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final UserRepository userRepository;
     private final UserService userService;
     private final TurtleRepository turtleRepository;
+    private final TurtleEggRepository turtleEggRepository;
     private final TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     private final PrivateMessageService privateMessageService;
 
@@ -26,6 +28,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MyInterceptor(userRepository,
                         userService,
                         turtleRepository,
+                        turtleEggRepository,
                         turtleExpeditionHistoryRepository,
                         privateMessageService
                 ))

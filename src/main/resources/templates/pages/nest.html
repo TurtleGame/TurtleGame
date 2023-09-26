@@ -17,7 +17,12 @@
                 <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
-                <button class="button mb-2">Ogrzej</button>
+                <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany.</div>
+                <div th:if="${egg.getWarming() != 0}">
+                    <form th:action="@{'/nest/' + ${egg.getId()} + '/warm'}" method="post">
+                        <button type="submit" class="button mb-2">Ogrzej</button>
+                    </form>
+                </div>
             </div>
             <!-- end of egg -->
         </div>
@@ -32,13 +37,25 @@
 
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
             <!-- egg -->
-            <div class="card p-3 m-1 text-center" th:each="turtle : ${user.getTurtles()}">
-                <img src="/assets/images/eggs/smoke.png" style="height: 120px;"/>
-                <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
+            <div class="card p-3 m-1 text-center" th:each="egg : ${eggs}">
+                <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
+                <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
-                <button class="button mb-2">Adoptuj</button>
-                <button class="button mb-2">Porzuć</button>
+                <button class="button mb-2" onclick="openForm()">Adoptuj</button>
+                <form th:action="@{'/nest/' + ${egg.getId()} + '/delete'}" method="post">
+                    <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć</button>
+                </form>
+                <div class="form-popup" id="myForm">
+                    <h1>Nadaj imię</h1>
+                    <form th:action="@{'/nest/' + ${egg.getId()} + '/adopt'}" method="post">
+                        <label for="Name"><b>Imię</b></label>
+                        <input class="input" type="text" id="Name" name="Name" required>
+                        <button type="submit" class="button mb-2" onclick="adoptEggConfirm(this)">Adoptuj</button>
+                    </form>
+                    <button type="submit" class="button mb-3" onclick="closeForm()">Wyjdź</button>
+                </div>
             </div>
+
             <!-- end of egg -->
 
         </div>

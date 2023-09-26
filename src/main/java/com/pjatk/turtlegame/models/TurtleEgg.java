@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,9 @@ public class TurtleEgg {
 
     @NotNull
     private LocalDateTime hatchingAt;
+
+    @Value("2")
+    private int warming;
 
     @ManyToOne
     @JoinColumn(name = "type_id")

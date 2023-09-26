@@ -15,3 +15,21 @@ function abandonTurtleConfirm(buttonElement) {
         }
     }
 }
+
+function adoptEggConfirm(buttonElement) {
+    var form = buttonElement.closest("form");
+    if (form) {
+        var confirmation = confirm("Czy na pewno chcesz zaadoptować to jajko?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
+function openForm() {
+    document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+}
