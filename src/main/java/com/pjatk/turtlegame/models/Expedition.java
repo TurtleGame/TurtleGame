@@ -27,7 +27,7 @@ public class Expedition {
     private String description;
 
     @NotNull
-    private double gold;
+    private int maxGold;
 
     @NotNull
     private int minLevel;

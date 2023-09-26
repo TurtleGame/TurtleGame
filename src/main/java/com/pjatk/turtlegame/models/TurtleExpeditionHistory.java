@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "turtle_expedition_history")
@@ -15,13 +16,18 @@ public class TurtleExpeditionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @NotNull
     private LocalDateTime startAt;
 
     @NotNull
     private LocalDateTime endAt;
+
+    private int goldGained;
+
+    @OneToMany(mappedBy = "turtleExpeditionHistory")
+    private List<PrivateMessageAttachment> privateMessageAttachments;
 
     @ManyToOne
     @JoinColumn(name = "turtle_id")

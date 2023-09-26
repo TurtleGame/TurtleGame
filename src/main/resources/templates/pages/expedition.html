@@ -6,6 +6,13 @@
 
 <div layout:fragment="content">
 
+    <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" class="expeditionError mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}"/>
+        </ul>
+    </div>
+
     <!-- aktywne wyprawy -->
     <div class="card mb-2">
         <h3 class="m-0 mb-3">Aktywne</h3>
@@ -33,13 +40,6 @@
 
     </div>
     <!-- end of aktywne wyprawy -->
-
-    <div th:if="${#fields.hasErrors('turtleExpeditionForm.*')}" class="expeditionError mb-2">
-        <strong>Nie udało się wykonać tej akcji</strong>
-        <ul>
-            <li th:each="err : ${#fields.errors('turtleExpeditionForm.*')}" th:text="${err}"/>
-        </ul>
-    </div>
 
     <!-- wyprawa -->
     <form action="" method="post" th:each="expedition : ${expeditions}">

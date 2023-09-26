@@ -204,6 +204,7 @@ a {
 .button {
   width: 100%;
   height: 38px;
+  padding: 0 15px;
   border: 2px solid var(--text-primary);
   color: var(--text-primary);
   background: transparent;
@@ -222,7 +223,18 @@ a {
     color: var(--text-muted);
     pointer-events: none;
   }
+
+  &.button-danger {
+    background: var(--text-danger);
+    border: 0;
+    color: var(--text-bright);
+
+    &:hover {
+      color: #000000aa;
+    }
+  }
 }
+
 
 .input {
   width: 100%;

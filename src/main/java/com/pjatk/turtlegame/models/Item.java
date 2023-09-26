@@ -24,6 +24,10 @@ public class Item {
     @Size(min = 2, max = 100)
     private String description;
 
+    private int minQuantity;
+
+    private int maxQuantity;
+
     @Enumerated(EnumType.STRING)
     private EquipmentSlot slot;
 

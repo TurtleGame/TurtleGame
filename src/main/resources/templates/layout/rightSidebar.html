@@ -2,6 +2,10 @@
 <nav class="rightSidebar" th:fragment="rightSidebar" layout:fragment="rightSidebar">
     <div class="sidebar sidebar-right">
 
+        <div class="setting-container">
+            <a href="/private-message"><i class="fa-solid fa-envelope"></i></a>
+            <a href="#"><i class="fa-solid fa-wrench"></i></a>
+        </div>
         <div class="turtle-widgets-container">
 
             <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}" class="turtle-widget"
@@ -11,7 +15,6 @@
                     <div class="turtle-name" th:text="${turtle.getName}"></div>
                     <div class="turtle-activity">
                         <span th:text="${turtle.isAvailable() ? 'Odpoczywa' : 'Wróci o ' + #temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
-
                     </div>
                 </div>
             </a>

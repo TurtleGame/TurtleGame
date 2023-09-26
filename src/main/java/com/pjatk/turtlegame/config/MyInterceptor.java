@@ -86,7 +86,7 @@ public class MyInterceptor implements HandlerInterceptor {
 
         for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
-                user.setGold((int) (user.getGold() + history.getExpedition().getGold()));
+                user.setGold((user.getGold() + history.getGoldGained()));
                 history.setWasRewarded(true);
                 userRepository.save(user);
                 turtleExpeditionHistoryRepository.save(history);

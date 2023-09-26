@@ -17,7 +17,6 @@ public class UserItem {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @NotNull
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
@@ -36,7 +35,5 @@ public class UserItem {
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+
 }

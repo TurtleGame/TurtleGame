@@ -2,28 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
+<h1 layout:fragment="header">Prywatne wiadomości</h1>
+
 <div layout:fragment="content">
-    <div class="card">
-        <div class="card-title">Prywatne wiadomości</div>
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Nadawca</th>
-                    <th>Temat</th>
-                    <th>Treść</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="message : ${messages}">
-                    <td style="text-align: center;" th:text="${message.getSentAtDateTime()}"></td>
-                    <td style="text-align: center;">System</td>
-                    <td th:text="${message.getTitle()}"></td>
-                    <td th:text="${message.getContent()}"></td>
-                </tr>
-                </tbody>
-            </table>
+
+
+    <div class="card mb-2">
+
+
+        <!-- aktywna wyprawa -->
+        <div class="private-message-header">
+            <h2 id="received-header" class="active-header" onclick="switchFormsMessage(); return false">Odebrane</h2>
+            <h2 id="sent-header" onclick="switchFormsMessage(); return false">Wysłane</h2>
         </div>
+        <div id="received-message">
+            <div class="card p-3 m-1 message-container message-unread" th:each="message : ${messages}">
+                <div class="flex flex-row gap-4 message-title">
+                    <div class="size-wide">
+                        <strong><span
+                                th:text="${message.getSender() != null ? message.getSender().getUsername() : 'System'}"></span>:
+                            <span
+                                    th:text="${message.getTitle()}"></span></strong>
+                    </div>
+                    <div class="flex flex-right flex-middle">
+                        <div class="message-date"
+                             th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
+                    </div>
+                </div>
+                <div class="message-content hidden" style="margin-top: 1rem;">
+                    <div class="card bg-light mb-1" th:text="${message.getContent()}">
+
+                    </div>
+                    <div class="text-primary mb-2">Załączniki:</div>
+                    <div th:if="${message.getGold()}">
+                        <img src="assets/images/gold.png" width="20" height="20">
+                        <span th:text="${message.getGold()}"></span>
+                    </div>
+                    <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
+                        <div>
+                            <img src="assets/images/items/scroll.png" width="20" height="20">
+                            <span th:text="${attachment.getItem().getName()}"></span>: <span th:text="${attachment.getQuantity()}"></span>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <a href="#" th:if="${message.getSender()}">
+                            <button class="button mb-2">Odpowiedz</button>
+                        </a>
+                        <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
+                            <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-3 m-1 message-container message-unread hidden" id="sent-message">
+            hej
+        </div>
+
     </div>
+
 </div>

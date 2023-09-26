@@ -80,10 +80,7 @@ public class ExpeditionController {
 
             return "pages/expedition";
         }
-        turtle.setAvailable(false);
-        turtleRepository.save(turtle);
-        turtleExpeditionHistoryRepository
-                .save(expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime()));
+        expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime());
 
         return "redirect:/expeditions";
     }

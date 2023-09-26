@@ -1,8 +1,7 @@
 package com.pjatk.turtlegame.services;
 
-import com.pjatk.turtlegame.models.Expedition;
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
+import com.pjatk.turtlegame.models.*;
+import com.pjatk.turtlegame.repositories.PrivateMessageAttachmentRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,9 @@ import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -17,16 +19,69 @@ public class ExpeditionService {
 
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     TurtleRepository turtleRepository;
+    PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
 
 
-    public TurtleExpeditionHistory turtleExpedition(Turtle turtle, Expedition expedition, int durationTime) {
+    public void turtleExpedition(Turtle turtle, Expedition expedition, int durationTime) {
 
+        turtle.setAvailable(false);
+        turtleRepository.save(turtle);
 
         TurtleExpeditionHistory turtleExpedition = new TurtleExpeditionHistory();
         turtleExpedition.setTurtle(turtle);
         turtleExpedition.setExpedition(expedition);
+        turtleExpedition.setGoldGained(getGoldFromExpedition(expedition, durationTime));
         turtleExpedition.setStartAt(LocalDateTime.now());
-        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusMinutes(durationTime));
-        return turtleExpedition;
+        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusSeconds(durationTime));
+        turtleExpeditionHistoryRepository.save(turtleExpedition);
+
+        for (PrivateMessageAttachment attachment : getItemsFromExpedition(expedition, durationTime)) {
+            attachment.setTurtleExpeditionHistory(turtleExpedition);
+            privateMessageAttachmentRepository.save(attachment);
+        }
     }
+
+    public int getGoldFromExpedition(Expedition expedition, int durationTime) {
+        int gold = 0;
+        Random random = new Random();
+        for (int i = 30; i <= durationTime; i += 30) {
+            gold += random.nextInt(expedition.getMaxGold()) + 1;
+        }
+        return gold;
+    }
+
+    public List<PrivateMessageAttachment> getItemsFromExpedition(Expedition expedition, int durationTime) {
+        List<PrivateMessageAttachment> privateMessageAttachments = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 30; i <= durationTime; i += 30) {
+            for (ExpeditionItem expeditionItem : expedition.getExpeditionItemList()) {
+                int randomNumber = random.nextInt(100) + 1;
+
+                if (randomNumber <= expeditionItem.getChance()) {
+                    int randomQuantity = random.nextInt(expeditionItem.getItem().getMaxQuantity() - expeditionItem.getItem().getMinQuantity() + 1) + expeditionItem.getItem().getMinQuantity();
+                    boolean rewardFound = false;
+
+                    for (PrivateMessageAttachment privateMessageAttachment : privateMessageAttachments) {
+                        if (privateMessageAttachment.getItem().equals(expeditionItem.getItem())) {
+                            privateMessageAttachment.setQuantity(privateMessageAttachment.getQuantity() + randomQuantity);
+                            rewardFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!rewardFound) {
+                        PrivateMessageAttachment privateMessageAttachment1 = new PrivateMessageAttachment();
+                        privateMessageAttachment1.setItem(expeditionItem.getItem());
+                        privateMessageAttachment1.setQuantity(randomQuantity);
+                        privateMessageAttachments.add(privateMessageAttachment1);
+                    }
+                }
+            }
+        }
+
+        return privateMessageAttachments;
+    }
+
+
 }

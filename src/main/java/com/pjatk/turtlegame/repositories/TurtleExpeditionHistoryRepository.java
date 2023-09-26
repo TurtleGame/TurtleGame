@@ -1,9 +1,6 @@
 package com.pjatk.turtlegame.repositories;
 
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
-import com.pjatk.turtlegame.models.TurtleOwnerHistory;
-import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +12,7 @@ public interface TurtleExpeditionHistoryRepository extends JpaRepository<TurtleE
     List<TurtleExpeditionHistory> findByEndAtAfter(LocalDateTime endTime);
 
     List<TurtleExpeditionHistory> findByEndAtBefore(LocalDateTime endTime);
+
     Boolean existsByTurtleAndEndAtAfter(Turtle turtle, LocalDateTime endTime);
 
     Boolean existsByTurtleAndEndAtBefore(Turtle turtle, LocalDateTime endTime);

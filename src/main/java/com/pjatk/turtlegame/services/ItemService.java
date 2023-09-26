@@ -55,6 +55,26 @@ public class ItemService {
 
     }
 
+    public void addItem(User user, Item item, int quantity){
+
+
+        UserItem userItem = user.getUserItemList()
+                .stream()
+                .filter(entry -> entry.getItem().equals(item))
+                .findFirst().orElse(null);
+
+        if(userItem == null){
+            userItem = new UserItem();
+            userItem.setItem(item);
+            userItem.setUser(user);
+            userItem.setQuantity(quantity);
+        } else {
+            userItem.setQuantity(userItem.getQuantity()+quantity);
+        }
+
+        userItemRepository.save(userItem);
+    }
+
     public List<ItemStatistic> getItemsStatistics(){
         return itemStatisticRepository.findAll();
     }

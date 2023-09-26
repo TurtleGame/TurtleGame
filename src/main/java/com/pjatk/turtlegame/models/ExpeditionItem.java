@@ -16,13 +16,13 @@ public class ExpeditionItem {
     private int id;
 
     @NotNull
-    private int chance;
+    private double chance;
 
     @ManyToOne
-    @JoinColumn(name = "equipment")
+    @JoinColumn(name = "equipment_id")
     private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "expedition")
+    @JoinColumn(name = "expedition_id")
     private Expedition expedition;
 }
