@@ -6,6 +6,13 @@
 
 <div layout:fragment="content">
 
+    <div th:if="${#fields.hasErrors('eggsForm.*')}" class="expeditionError mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('eggsForm.*')}" th:text="${err}"/>
+        </ul>
+    </div>
+
     <!-- inkubacja -->
     <div class="card mb-2">
         <h3 class="m-0 mb-3">Inkubator</h3>
@@ -41,7 +48,9 @@
                 <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
-                <button class="button mb-2" onclick="openForm()">Adoptuj</button>
+                <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
+                    <button class="button mb-2" onclick="openForm()">Adoptuj</button>
+                </div>
                 <form th:action="@{'/nest/' + ${egg.getId()} + '/delete'}" method="post">
                     <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć</button>
                 </form>
