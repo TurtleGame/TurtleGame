@@ -126,4 +126,8 @@ public class User {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
     }
+
+    public boolean isUserHaveUnreadMessage(){
+        return recipientPrivateMessageList.stream().anyMatch(message -> !message.isRead());
+    }
 }

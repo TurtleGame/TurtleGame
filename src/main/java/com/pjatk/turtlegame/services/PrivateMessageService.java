@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +30,7 @@ public class PrivateMessageService {
 
         PrivateMessage report = new PrivateMessage();
         report.setTurtle(turtle);
+        report.setRead(false);
         report.setRecipient(user);
         report.setSender(null);
         report.setSentAt(LocalDateTime.now());
@@ -57,5 +59,18 @@ public class PrivateMessageService {
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć wiadomości"));
 
         privateMessageRepository.delete(userPrivateMessage);
+    }
+
+    public void markMessageAsRead(User user, int messageId) {
+        Optional<PrivateMessage> messageOptional = user
+                .getRecipientPrivateMessageList()
+                .stream()
+                .filter(privateMessage -> privateMessage.getId() == messageId)
+                .findFirst();
+
+        messageOptional.ifPresent(privateMessage -> {
+            privateMessage.setRead(true);
+            privateMessageRepository.save(privateMessage);
+        });
     }
 }

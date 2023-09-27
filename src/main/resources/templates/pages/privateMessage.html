@@ -16,7 +16,9 @@
             <h2 id="sent-header">Wysłane</h2>
         </div>
         <div id="received-message">
-            <div class="card p-3 m-1 message-container message-unread" th:each="message : ${messages}">
+            <div class="card p-3 m-1 message-container" th:each="message : ${messages}"
+                 th:classappend="${message.isRead} ? 'message-read' : 'message-unread'"
+                 th:data-message-id="${message.getId()}" onclick="readMessage(this)">
                 <div class="flex flex-row gap-4 message-title">
                     <div class="size-wide">
                         <strong>
@@ -31,8 +33,9 @@
                     <div class="card bg-light mb-1" th:text="${message.getContent()}">
 
                     </div>
-                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or message.getAttachment() != null}"><i
-                            class="fa-solid fa-paperclip"></i> Załączniki:
+                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or message.getAttachment() != null}">
+                        <i
+                                class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
                         <img src="assets/images/gold.png" width="20" height="20">

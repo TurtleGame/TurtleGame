@@ -35,8 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 .classList
                 .toggle('hidden');
         });
-    });
 
+
+    });
 
     const receivedHeader = document.getElementById('received-header');
     const sentHeader = document.getElementById('sent-header');
@@ -56,7 +57,22 @@ document.addEventListener("DOMContentLoaded", () => {
         receivedHeader.classList.remove('active-header');
     });
 
+
 });
+
+
+async function readMessage(element) {
+    const messageId = element.getAttribute('data-message-id');
+    const response = await fetch(`/private-message/${messageId}/read`, {
+            method: "POST"
+        }
+    );
+
+    if (response.status === 204) {
+        element.classList.remove('message-unread');
+        element.classList.add('message-read');
+    }
+}
 
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");

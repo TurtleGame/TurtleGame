@@ -6,6 +6,7 @@ import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.PrivateMessageService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,5 +34,11 @@ public class PrivateMessageController {
 
         privateMessageService.deleteMessage(turtleUserDetails.getId(), id);
         return "redirect:/private-message";
+    }
+
+    @PostMapping("/{messageId}/read")
+    public ResponseEntity<Void> markMessageAsRead(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int messageId){
+        privateMessageService.markMessageAsRead(userRepository.findById(turtleUserDetails.getId()), messageId);
+        return ResponseEntity.noContent().build();
     }
 }

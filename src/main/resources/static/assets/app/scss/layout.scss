@@ -367,3 +367,19 @@ main {
     }
   }
 }
+
+.form-popup {
+  display: none;
+  position: absolute;
+  bottom: 50%;
+  background: var(--bg-light) !important;
+
+  .button {
+    width: 50%;
+  }
+
+  .input {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+}

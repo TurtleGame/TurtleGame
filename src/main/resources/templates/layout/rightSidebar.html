@@ -3,7 +3,12 @@
     <div class="sidebar sidebar-right">
 
         <div class="setting-container">
-            <a href="/private-message"><i class="fa-solid fa-envelope"></i></a>
+            <a href="/private-message">
+                <i class="fa-solid fa-envelope"
+                   th:classappend="${user.isUserHaveUnreadMessage()} ? 'fa-beat' : ''"
+                   th:style="${user.isUserHaveUnreadMessage()} ? 'color: #d11053;' : ''">
+                </i>
+            </a>
             <a href="#"><i class="fa-solid fa-wrench"></i></a>
         </div>
         <div class="turtle-widgets-container">

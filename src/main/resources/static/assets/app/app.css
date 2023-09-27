@@ -569,6 +569,20 @@ main .expeditionError {
   color: var(--text-primary);
 }
 
+.form-popup {
+  display: none;
+  position: absolute;
+  bottom: 50%;
+  background: var(--bg-light) !important;
+}
+.form-popup .button {
+  width: 50%;
+}
+.form-popup .input {
+  width: 90%;
+  margin-bottom: 10px;
+}
+
 .register {
   background-image: url("../images/bg-4.png") !important;
   letter-spacing: 1px;
@@ -628,24 +642,6 @@ main .expeditionError {
 }
 .register .text-success {
   color: #38e85b;
-}
-.form-popup {
-  display: none;
-  position: absolute;
-  bottom: 50%;
-  background: var(--bg-light) !important;
-}
-.form-container {
-  margin: auto;
-  max-width: 500px;
-  padding: 10px;
-  background: var(--bg-light) !important;
-}
-.form-container input[type=text]:focus{
-  outline: none;
-}
-.form-container {
-  opacity: 1;
 }
 
 /*# sourceMappingURL=app.css.map */
