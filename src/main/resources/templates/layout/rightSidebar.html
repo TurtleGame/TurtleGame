@@ -4,9 +4,8 @@
 
         <div class="setting-container">
             <a href="/private-message">
-                <i class="fa-solid fa-envelope"
-                   th:classappend="${user.isUserHaveUnreadMessage()} ? 'fa-beat' : ''"
-                   th:style="${user.isUserHaveUnreadMessage()} ? 'color: #d11053;' : ''">
+                <i class="fa-solid icon-messages fa-envelope"
+                   th:classappend="${user.isUserHaveUnreadMessage()} ? 'fa-bounce' : ''">
                 </i>
             </a>
             <a href="#"><i class="fa-solid fa-wrench"></i></a>

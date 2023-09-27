@@ -44,13 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const receivedMessage = document.getElementById('received-message');
     const sentMessage = document.getElementById('sent-message');
 
-    receivedHeader.addEventListener('click', function () {
+    receivedHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'block';
         sentMessage.style.display = 'none';
         receivedHeader.classList.add('active-header');
         sentHeader.classList.remove('active-header');
     });
-    sentHeader.addEventListener('click', function () {
+    sentHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'block';
         sentHeader.classList.add('active-header');
@@ -71,6 +71,11 @@ async function readMessage(element) {
     if (response.status === 204) {
         element.classList.remove('message-unread');
         element.classList.add('message-read');
+    }
+
+    const numberOfUnreadMessages = document.querySelectorAll('.message-unread').length;
+    if (numberOfUnreadMessages === 0) {
+        document.querySelector('.icon-messages').classList.remove('fa-bounce');
     }
 }
 
