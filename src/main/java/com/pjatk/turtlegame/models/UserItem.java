@@ -17,10 +17,6 @@ public class UserItem {
     @Column(name = "id", nullable = false)
     private int id;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
-
     private int quantity;
 
     @ManyToOne

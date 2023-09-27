@@ -82,30 +82,28 @@ public class ItemService {
     public List<Item> getEggs(int id) {
         User user = userRepository.findById(id);
         return user.getUserItemList().stream()
-                .filter(history -> history.getEndAt() == null)
                 .map(UserItem::getItem)
                 .filter(item -> "Jajko".equals(item.getItemType().getName()))
                 .toList();
     }
 
     public void abandonEgg(int userId, int eggId) {
-        LocalDateTime now = LocalDateTime.now();
         User user = userRepository.findById(userId);
 
-        user.getUserItemList()
+        UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == eggId)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć jajka o podanym ID"));
 
-        user.getUserItemList()
-                .stream()
-                .filter(history -> history.getEndAt() == null)
-                .filter(entry -> entry.getItem().getId() == eggId)
-                .forEach(history -> {
-                    history.setEndAt(now);
-                    userItemRepository.save(history);
-                });
+        if (userItem.getQuantity() > 1) {
+            userItem.setQuantity(userItem.getQuantity() - 1);
+            userItemRepository.save(userItem);
+        } else if (userItem.getQuantity() == 1) {
+            userItemRepository.delete(userItem);
+        } else {
+            throw new IllegalArgumentException("Brak jajka");
+        }
     }
 
     public void adoptEgg(int userId, int eggId, String name) {
@@ -127,7 +125,15 @@ public class ItemService {
         egg.setUser(user);
         turtleEggRepository.save(egg);
 
-        userItemRepository.deleteById(userItem.getId());
-        itemRepository.deleteById(eggId);
+        if (userItem.getQuantity() > 1) {
+            userItem.setQuantity(userItem.getQuantity() - 1);
+            userItemRepository.save(userItem);
+        } else if (userItem.getQuantity() == 1) {
+            userItemRepository.delete(userItem);
+            // skoro to item to jak dla mnie można zostawić w bazie, bo imię ustawiamy dopiero przy przejściu na bycie jajkiem
+            //itemRepository.deleteById(eggId);
+        } else {
+            throw new IllegalArgumentException("Brak jajka");
+        }
     }
 }
