@@ -43,19 +43,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const sentHeader = document.getElementById('sent-header');
     const receivedMessage = document.getElementById('received-message');
     const sentMessage = document.getElementById('sent-message');
+    const createHeader = document.getElementById('create-header');
+    const createMessage = document.getElementById('create-message');
 
     receivedHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'block';
         sentMessage.style.display = 'none';
         receivedHeader.classList.add('active-header');
         sentHeader.classList.remove('active-header');
+        createHeader.classList.remove('active-header');
+        createMessage.style.display= 'none';
+
     });
     sentHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'block';
         sentHeader.classList.add('active-header');
         receivedHeader.classList.remove('active-header');
+        createHeader.classList.remove('active-header');
+        createMessage.style.display= 'none';
     });
+    createHeader?.addEventListener('click', function (){
+        createHeader.classList.add('active-header');
+        receivedHeader.classList.remove('active-header');
+        sentHeader.classList.remove('active-header');
+        createMessage.style.display= 'block';
+        receivedMessage.style.display = 'none';
+        sentMessage.style.display = 'none';
+
+    })
+
 
 
 });

@@ -10,12 +10,12 @@
     <div class="flex flex-row gap-4 mb-2">
         <div class="card" style="width: 25%">
             <img src="https://mistwood.pl/_next/image?url=https%3A%2F%2Fmistwood.s3.eu-central-1.amazonaws.com%2Favatar%2F2585%2Fd2795228-e4f4-40b5-ba1d-fe8cb13dd200.png&w=256&q=75" class="card size-wide p-0">
-            <h2 class="text-primary mb-0" th:text="${user.getUsername()}"></h2>
+            <h2 class="text-primary mb-0" th:text="${userInformation.getUsername()}"></h2>
             <div>Hodowca</div>
             <h5>Status: <span class="text-success">Online</span><span class="text-danger">Offline</span></h5>
-            <span class="text-muted text-sm">W grze od <span th:text="${#temporals.format(user.getRegistrationDate(), 'dd.MM.YYY')}"></span>
+            <span class="text-muted text-sm">W grze od <span th:text="${#temporals.format(userInformation.getRegistrationDate(), 'dd.MM.YYY')}"></span>
         </div>
-        <div class="card" style="width: 75%" th:text="${user.getAbout()}">
+        <div class="card" style="width: 75%" th:text="${userInformation.getAbout()}">
 
         </div>
     </div>
@@ -28,7 +28,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 140px);">
 
             <!-- turtle -->
-            <div class="card p-3 m-1 text-center" th:each="turtle : ${user.getTurtles()}">
+            <div class="card p-3 m-1 text-center" th:each="turtle : ${userInformation.getTurtles()}">
                 <img src="/assets/images/turtles/fire.png" style="height: 80px;"/>
                 <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
                 <h5 class="m-0">Poziom <span th:text="${turtle.getLevel()}"></span></h5>
@@ -46,14 +46,14 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
 
             <!-- achievement -->
-            <div class="card p-3 m-1" th:each="achievement : ${user.getAchievementsEarnedList()}">
+            <div class="card p-3 m-1" th:each="achievement : ${userInformation.getAchievementsEarnedList()}">
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-center flex-middle">
                         <img th:src="@{${'/assets/images/achievement-' + achievement.getId() + '.png'}}" style="width: 36px;"/>
                     </div>
                     <div>
-                        <div class="mb-1" th:text="${user.getAchievementEarned(achievement.getId()).getAchievement().getName()}"></div>
-                        <div class="text-muted text-sm" th:text="${#temporals.format(user.getAchievementEarned(achievement.id).getAchievedAt(), 'dd.MM.YYY')}"></div>
+                        <div class="mb-1" th:text="${userInformation.getAchievementEarned(achievement.getId()).getAchievement().getName()}"></div>
+                        <div class="text-muted text-sm" th:text="${#temporals.format(userInformation.getAchievementEarned(achievement.id).getAchievedAt(), 'dd.MM.YYY')}"></div>
                     </div>
                 </div>
             </div>

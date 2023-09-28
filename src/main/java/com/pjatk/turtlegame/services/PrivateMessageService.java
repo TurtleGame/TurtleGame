@@ -1,9 +1,11 @@
 package com.pjatk.turtlegame.services;
 
+import com.pjatk.turtlegame.exceptions.UserNotFoundException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -72,5 +74,24 @@ public class PrivateMessageService {
             privateMessage.setRead(true);
             privateMessageRepository.save(privateMessage);
         });
+    }
+
+    @Transactional
+    public void createNewMessage(User sender, String username, String title, String content) {
+        User recipient = userRepository.findUserByUsername(username.trim());
+
+        if (recipient == null) {
+            throw new IllegalArgumentException("Użytkownik nie znaleziony");
+        }
+
+        PrivateMessage privateMessage = new PrivateMessage();
+        privateMessage.setSender(sender);
+        privateMessage.setRecipient(recipient);
+        privateMessage.setTitle(title);
+        privateMessage.setContent(content);
+        privateMessage.setSentAt(LocalDateTime.now());
+        privateMessageRepository.save(privateMessage);
+
+
     }
 }

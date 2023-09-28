@@ -29,7 +29,7 @@ public class PrivateMessage {
     @NotNull
     private LocalDateTime sentAt;
 
-    private int gold;
+    private Integer gold;
 
 
     @Column(name = "is_read", columnDefinition = "INT(0)")

@@ -6,14 +6,24 @@
 
 <div layout:fragment="content">
 
+    <div th:if="${#fields.hasErrors('newMessageDTO.*')}" class="expeditionError mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('newMessageDTO.*')}" th:text="${err}"/>
+        </ul>
+    </div>
+
 
     <div class="card mb-2">
 
 
         <!-- aktywna wyprawa -->
         <div class="private-message-header">
-            <h2 id="received-header" class="active-header">Odebrane</h2>
-            <h2 id="sent-header">Wysłane</h2>
+            <div class="header-container">
+                <h2 id="received-header" class="active-header">Odebrane</h2>
+                <h2 id="sent-header">Wysłane</h2>
+                <h2 id="create-header">Utwórz wiadomość</h2>
+            </div>
         </div>
         <div id="received-message">
             <div class="card p-3 m-1 message-container" th:each="message : ${messages}"
@@ -33,7 +43,8 @@
                     <div class="card bg-light mb-1" th:text="${message.getContent()}">
 
                     </div>
-                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or message.getAttachment() != null}">
+                    <div class="text-primary mb-2"
+                         th:if="${message.getGold() >= 0 or !message.getAttachment().isEmpty()}">
                         <i
                                 class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
@@ -59,9 +70,79 @@
                 </div>
             </div>
         </div>
-        <div class="card p-3 m-1 message-container hidden" id="sent-message">
-            hej
+        <div id="sent-message" class="hidden">
+            <div class="card p-3 m-1 message-container" th:each="message : ${sentMessages}">
+                <div class="flex flex-row gap-4 message-title">
+                    <div class="size-wide">
+                        <strong>
+                            <i class="fa-solid fa-paper-plane"></i> <span
+                                th:text="${message.getRecipient() != null ? message.getRecipient().getUsername() : 'Użytkownik nieznaleziony'}"></span>:
+                            <span th:text="${message.getTitle()}"></span>
+                        </strong>
+                    </div>
+                    <div class="flex flex-right flex-middle message-date"
+                         th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
+                </div>
+                <div class="message-content hidden" style="margin-top: 1rem;">
+                    <div class="card bg-light mb-1" th:text="${message.getContent()}">
+
+                    </div>
+                    <div class="text-primary mb-2"
+                         th:if="${message.getGold() >= 0 or !message.getAttachment().isEmpty()}">
+                        <i
+                                class="fa-solid fa-paperclip"></i> Załączniki:
+                    </div>
+                    <div th:if="${message.getGold()}">
+                        <img src="assets/images/gold.png" width="20" height="20">
+                        <span th:text="${message.getGold()}"></span>
+                    </div>
+                    <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
+                        <div>
+                            <img src="assets/images/items/scroll.png" width="20" height="20">
+                            <span th:text="${attachment.getItem().getName()}"></span>: <span
+                                th:text="${attachment.getQuantity()}"></span>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
+                            <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div id='create-message' class="card p-3 m-1 new-message-container hidden">
+            <form th:action="@{/private-message/create}" method="POST">
+                <div class="m-2">
+                    <div class="mb-4">
+                        <label>
+                            <b>Adresat</b>
+                            <input class="input" name="recipient" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="m-2">
+                    <div class="mb-4">
+                        <label>
+                            <b>Tytuł</b>
+                            <input class="input" autocomplete="off" name="title" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="m-2">
+                    <div class="mb-4">
+                        <label for="content"><b>Treść</b></label>
+                        <textarea class="textarea" id="content" name="content" required></textarea>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="button mb-2">Wyślij</button>
+                </div>
+            </form>
+        </div>
+
 
     </div>
 

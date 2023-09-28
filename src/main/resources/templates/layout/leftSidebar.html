@@ -9,7 +9,7 @@
                 <div>
                     <div class="username" th:text="${user.username}">
                     </div>
-                    <div class="rank">{rank}</div>
+                    <div class="rank" th:text="${user.getRole().getName()}"></div>
                 </div>
             </a>
 

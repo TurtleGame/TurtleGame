@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     public String getUserPage(Model model, @PathVariable int id) {
-        model.addAttribute("user", userRepository.findById(id));
+        model.addAttribute("userInformation", userRepository.findById(id));
         model.addAttribute("turtles", userService.getTurtles(userRepository.findById(id)));
         return "pages/userPage";
     }

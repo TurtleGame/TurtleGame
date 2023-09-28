@@ -112,6 +112,12 @@ public class User {
                 .collect(Collectors.toList());
     }
 
+    public List<PrivateMessage> getSendPrivateMessageList() {
+        return sendPrivateMessageList.stream()
+                .sorted(Comparator.comparing(PrivateMessage::getSentAt).reversed())
+                .collect(Collectors.toList());
+    }
+
     public AchievementsEarned getAchievementEarned(int id) {
         return achievementsEarnedList.stream()
                 .filter(achievement -> achievement.getAchievement().getId() == id)

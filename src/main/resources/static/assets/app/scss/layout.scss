@@ -331,6 +331,7 @@ main {
     .message-date {
       color: var(--text-muted);
     }
+
   }
 
   .message-content {
@@ -352,6 +353,8 @@ main {
     width: 150px;
   }
 
+
+
   &.message-unread {
 
     .message-title {
@@ -366,6 +369,19 @@ main {
       color: var(--text-primary);
     }
   }
+}
+
+.new-message-container {
+  .button-container {
+    display: flex;
+    justify-content: end;
+    margin-right: 8px;
+
+    .button {
+      width: 15%;
+    }
+  }
+
 }
 
 .form-popup {
@@ -395,3 +411,8 @@ main {
     color: #842e50;
   }
 }
+
+.header-container {
+  display: flex;
+}
+
