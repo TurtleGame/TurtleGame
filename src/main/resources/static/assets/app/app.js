@@ -71,8 +71,30 @@ document.addEventListener("DOMContentLoaded", () => {
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'none';
 
-    })
+    });
 
+    $('.select2').select2({
+        language: "pl",
+        ajax: {
+            url: 'user/search-by-keyword',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    keyword: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(function (item) {
+                        return {id: item, text: item}
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2
+    });
 
 
 });
@@ -113,3 +135,4 @@ function openForm() {
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
 }
+

@@ -55,7 +55,7 @@ public class PrivateMessageController {
     ) {
         if (!bindingResult.hasErrors()) {
             try {
-                privateMessageService.createNewMessage(turtleUserDetails.getUser(), newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent());
+                privateMessageService.createNewMessage(turtleUserDetails.getUser(), newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
             } catch (Exception e) {
                 bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
             }

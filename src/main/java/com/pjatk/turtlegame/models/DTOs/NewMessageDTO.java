@@ -14,5 +14,6 @@ public class NewMessageDTO {
     private String recipient;
     private String title;
     private String content;
+    private Integer gold;
 
 }

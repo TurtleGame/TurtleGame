@@ -22,7 +22,7 @@
             <div class="header-container">
                 <h2 id="received-header" class="active-header">Odebrane</h2>
                 <h2 id="sent-header">Wysłane</h2>
-                <h2 id="create-header">Utwórz wiadomość</h2>
+                <h2 id="create-header">Utwórz</h2>
             </div>
         </div>
         <div id="received-message">
@@ -44,17 +44,17 @@
 
                     </div>
                     <div class="text-primary mb-2"
-                         th:if="${message.getGold() >= 0 or !message.getAttachment().isEmpty()}">
+                         th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
                         <i
                                 class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
-                        <img src="assets/images/gold.png" width="20" height="20">
+                        <img src="/assets/images/gold.png" width="20" height="20">
                         <span th:text="${message.getGold()}"></span>
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="assets/images/items/scroll.png" width="20" height="20">
+                            <img src="/assets/images/items/scroll.png" width="20" height="20">
                             <span th:text="${attachment.getItem().getName()}"></span>: <span
                                 th:text="${attachment.getQuantity()}"></span>
                         </div>
@@ -88,17 +88,17 @@
 
                     </div>
                     <div class="text-primary mb-2"
-                         th:if="${message.getGold() >= 0 or !message.getAttachment().isEmpty()}">
+                         th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
                         <i
                                 class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
-                        <img src="assets/images/gold.png" width="20" height="20">
+                        <img src="/assets/images/gold.png" width="20" height="20">
                         <span th:text="${message.getGold()}"></span>
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="assets/images/items/scroll.png" width="20" height="20">
+                            <img src="/assets/images/items/scroll.png" width="20" height="20">
                             <span th:text="${attachment.getItem().getName()}"></span>: <span
                                 th:text="${attachment.getQuantity()}"></span>
                         </div>
@@ -115,10 +115,8 @@
             <form th:action="@{/private-message/create}" method="POST">
                 <div class="m-2">
                     <div class="mb-4">
-                        <label>
-                            <b>Adresat</b>
-                            <input class="input" name="recipient" required>
-                        </label>
+                        <b>Adresat</b>
+                        <select class="select2" name="recipient"></select>
                     </div>
                 </div>
 
@@ -135,6 +133,13 @@
                     <div class="mb-4">
                         <label for="content"><b>Treść</b></label>
                         <textarea class="textarea" id="content" name="content" required></textarea>
+                    </div>
+                </div>
+
+                <div class="m-2">
+                    <div class="mb-4">
+                        <label for="gold"><img src="/assets/images/gold.png" width="20" height="20"></label>
+                        <input class="input" id="gold" name="gold" style="width: 100px;">
                     </div>
                 </div>
                 <div class="button-container">

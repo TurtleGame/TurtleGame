@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -50,6 +51,14 @@ public class UserService {
     public boolean isEmailAlreadyTaken(String email) {
         User existingUser = userRepository.findUserByEmail(email);
         return existingUser != null;
+    }
+
+    public List<String> searchUsers(String keyword, String username){
+        return userRepository.searchUserByKeyword(keyword)
+                .stream()
+                .filter(username1 -> !username1.equals(username))
+                .collect(Collectors.toList());
+
     }
 
 
