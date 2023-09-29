@@ -28,8 +28,13 @@ public class MainController {
     public String indexLogin(
             @RequestParam(name = "error", required = false) String error,
             @ModelAttribute("userDTO") UserDTO userDTO,
-            Model model
+            Model model,
+            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails
     ) {
+
+        if(turtleUserDetails != null){
+            return "pages/main";
+        }
 
         model.addAttribute("context", "login");
 
