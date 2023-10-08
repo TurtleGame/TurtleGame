@@ -2,8 +2,11 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
+import com.pjatk.turtlegame.repositories.ItemRepository;
+import com.pjatk.turtlegame.repositories.RoleRepository;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +23,11 @@ public class UserService {
 
     TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     UserRepository userRepository;
+    ItemRepository itemRepository;
+    RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    ItemService itemService;
 
     public List<Turtle> getTurtles(User user) {
         List<TurtleOwnerHistory> turtleOwnerHistoryList = turtleOwnerHistoryRepository.findByUserAndEndAtIsNull(user);
@@ -33,6 +39,7 @@ public class UserService {
         return turtles;
     }
 
+    @Transactional
     public void addNewUser(UserDTO userDTO) {
         User user = new User();
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -40,7 +47,13 @@ public class UserService {
         user.setUsername(userDTO.getUsername().trim());
         user.setGold(0);
         user.setRegistrationDate(LocalDateTime.now());
+        user.setUserItemList(null);
+        user.setRole(roleRepository.findById(2).orElseThrow(null));
         userRepository.save(user);
+        Item item = itemRepository.findById(9).orElseThrow(null);
+        Item egg = itemRepository.findById(21).orElseThrow(null);
+        itemService.addItem(user, item, 5);
+        itemService.addItem(user, egg, 1);
     }
 
     public boolean isUsernameAlreadyTaken(String username) {
@@ -53,7 +66,7 @@ public class UserService {
         return existingUser != null;
     }
 
-    public List<String> searchUsers(String keyword, String username){
+    public List<String> searchUsers(String keyword, String username) {
         return userRepository.searchUserByKeyword(keyword)
                 .stream()
                 .filter(username1 -> !username1.equals(username))
@@ -63,3 +76,4 @@ public class UserService {
 
 
 }
+

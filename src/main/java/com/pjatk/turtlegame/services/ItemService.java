@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,8 +58,14 @@ public class ItemService {
 
     public void addItem(User user, Item item, int quantity){
 
+        List<UserItem> userItemList = user.getUserItemList();
 
-        UserItem userItem = user.getUserItemList()
+        if (userItemList == null) {
+            userItemList = new ArrayList<>();
+            user.setUserItemList(userItemList);
+        }
+
+        UserItem userItem = userItemList
                 .stream()
                 .filter(entry -> entry.getItem().equals(item))
                 .findFirst().orElse(null);
@@ -136,4 +143,6 @@ public class ItemService {
             throw new IllegalArgumentException("Brak jajka");
         }
     }
+
+
 }

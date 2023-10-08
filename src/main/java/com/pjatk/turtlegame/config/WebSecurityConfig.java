@@ -40,8 +40,8 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/api/turtles/**").permitAll();
                     auth.requestMatchers("/user/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/private-message/**").hasAnyAuthority("ADMIN", "USER");
-                    auth.requestMatchers("/main/**").hasAuthority("ADMIN");
-                    auth.requestMatchers("/expeditions/**").hasAuthority("ADMIN");
+                    auth.requestMatchers("/main/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/expeditions/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/assets/**").permitAll();
                     auth.requestMatchers("/turtles/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/nest/**").hasAnyAuthority("ADMIN", "USER");

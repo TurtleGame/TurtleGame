@@ -8,6 +8,7 @@ import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.PrivateMessageService;
+import com.pjatk.turtlegame.services.TurtleStatisticService;
 import com.pjatk.turtlegame.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ public class MyInterceptor implements HandlerInterceptor {
     private final TurtleEggRepository turtleEggRepository;
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     PrivateMessageService privateMessageService;
+    private final TurtleStatisticService turtleStatisticService;
 
     @Scheduled(fixedRate = 2 * 60 * 1000) // Uruchamia się codziennie o północy
     public void resetFedFlag() {
@@ -109,8 +111,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 turtle.setGender(0);
                 turtle.setOwner(user);
                 turtle.setEnergy(100);
+
                 turtle.setFed(false);
                 turtleRepository.save(turtle);
+                turtleStatisticService.addBasicStats(turtle);
 
                 turtleEggRepository.deleteById(egg.getId());
             }
