@@ -52,11 +52,9 @@ public class ItemService {
         } else {
             throw new IllegalArgumentException("Brak wystarczającej ilości");
         }
-
-
     }
 
-    public void addItem(User user, Item item, int quantity){
+    public void addItem(User user, Item item, int quantity) {
 
         List<UserItem> userItemList = user.getUserItemList();
 
@@ -70,19 +68,19 @@ public class ItemService {
                 .filter(entry -> entry.getItem().equals(item))
                 .findFirst().orElse(null);
 
-        if(userItem == null){
+        if (userItem == null) {
             userItem = new UserItem();
             userItem.setItem(item);
             userItem.setUser(user);
             userItem.setQuantity(quantity);
         } else {
-            userItem.setQuantity(userItem.getQuantity()+quantity);
+            userItem.setQuantity(userItem.getQuantity() + quantity);
         }
 
         userItemRepository.save(userItem);
     }
 
-    public List<ItemStatistic> getItemsStatistics(){
+    public List<ItemStatistic> getItemsStatistics() {
         return itemStatisticRepository.findAll();
     }
 
@@ -113,9 +111,7 @@ public class ItemService {
         }
     }
 
-    public void adoptEgg(int userId, int eggId, String name) {
-        User user = userRepository.findById(userId);
-
+    public void adoptEgg(User user, int eggId, String name) {
         UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == eggId)
@@ -132,16 +128,7 @@ public class ItemService {
         egg.setUser(user);
         turtleEggRepository.save(egg);
 
-        if (userItem.getQuantity() > 1) {
-            userItem.setQuantity(userItem.getQuantity() - 1);
-            userItemRepository.save(userItem);
-        } else if (userItem.getQuantity() == 1) {
-            userItemRepository.delete(userItem);
-            // skoro to item to jak dla mnie można zostawić w bazie, bo imię ustawiamy dopiero przy przejściu na bycie jajkiem
-            //itemRepository.deleteById(eggId);
-        } else {
-            throw new IllegalArgumentException("Brak jajka");
-        }
+        removeItem(user.getId(), userItem.getItem().getId(), 1);
     }
 
 

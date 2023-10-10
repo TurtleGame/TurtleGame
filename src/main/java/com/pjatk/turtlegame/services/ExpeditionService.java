@@ -3,9 +3,11 @@ package com.pjatk.turtlegame.services;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.PrivateMessageAttachmentRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
+import com.pjatk.turtlegame.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ public class ExpeditionService {
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     TurtleRepository turtleRepository;
     PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
+    private final UserRepository userRepository;
+    private final PrivateMessageService privateMessageService;
 
 
     public void turtleExpedition(Turtle turtle, Expedition expedition, int durationTime) {
@@ -83,5 +87,17 @@ public class ExpeditionService {
         return privateMessageAttachments;
     }
 
+    @Transactional
+    public void processTurtleExpeditionHistory(List<TurtleExpeditionHistory> turtleExpeditionHistoryList, User user) throws Exception {
+        for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
+            if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
+                user.setGold((user.getGold() + history.getGoldGained()));
+                history.setWasRewarded(true);
+                userRepository.save(user);
+                turtleExpeditionHistoryRepository.save(history);
+                privateMessageService.sendReport(user.getId(), history.getTurtle().getId());
+            }
+        }
+    }
 
 }

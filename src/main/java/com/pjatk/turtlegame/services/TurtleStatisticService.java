@@ -2,7 +2,6 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.TurtleStatistic;
-import com.pjatk.turtlegame.repositories.StatisticRepository;
 import com.pjatk.turtlegame.repositories.TurtleStaticsRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

@@ -7,6 +7,7 @@ import com.pjatk.turtlegame.repositories.TurtleEggRepository;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.PrivateMessageService;
 import com.pjatk.turtlegame.services.TurtleStatisticService;
 import com.pjatk.turtlegame.services.UserService;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.pjatk.turtlegame.models.Turtle;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,8 +38,10 @@ public class MyInterceptor implements HandlerInterceptor {
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     PrivateMessageService privateMessageService;
     private final TurtleStatisticService turtleStatisticService;
+    private final ExpeditionService expeditionService;
 
-    @Scheduled(fixedRate = 2 * 60 * 1000) // Uruchamia się codziennie o północy
+    @Scheduled(fixedRate = 2 * 60 * 1000)
+    @Transactional// Uruchamia się codziennie o północy
     public void resetFedFlag() {
         List<Turtle> allTurtles = turtleRepository.findAll();
         for (Turtle turtle : allTurtles) {
@@ -46,7 +50,8 @@ public class MyInterceptor implements HandlerInterceptor {
         }
     }
 
-    @Scheduled(fixedRate = 2 * 60 * 1000) // Uruchamia się codziennie o północy
+    @Scheduled(fixedRate = 2 * 60 * 1000)
+    @Transactional// Uruchamia się codziennie o północy
     public void resetWarming() {
         List<TurtleEgg> eggs = turtleEggRepository.findAll();
         for (TurtleEgg egg : eggs) {
@@ -86,15 +91,7 @@ public class MyInterceptor implements HandlerInterceptor {
 
         List<TurtleExpeditionHistory> turtleExpeditionHistoryList = turtleExpeditionHistoryRepository.findAll();
 
-        for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
-            if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
-                user.setGold((user.getGold() + history.getGoldGained()));
-                history.setWasRewarded(true);
-                userRepository.save(user);
-                turtleExpeditionHistoryRepository.save(history);
-                privateMessageService.sendReport(user.getId(), history.getTurtle().getId());
-            }
-        }
+        expeditionService.processTurtleExpeditionHistory(turtleExpeditionHistoryList, user);
 
         for (TurtleEgg egg : user.getEggs()) {
             if (egg.getHatchingAt().isAfter(LocalDateTime.now())) {

@@ -4,6 +4,7 @@ import com.pjatk.turtlegame.repositories.TurtleEggRepository;
 import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.PrivateMessageService;
 import com.pjatk.turtlegame.services.TurtleStatisticService;
 import com.pjatk.turtlegame.services.UserService;
@@ -23,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     private final PrivateMessageService privateMessageService;
     private final TurtleStatisticService turtleStatisticService;
+    private final ExpeditionService expeditionService;
 
 
     @Override
@@ -33,7 +35,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         turtleEggRepository,
                         turtleExpeditionHistoryRepository,
                         privateMessageService,
-                        turtleStatisticService
+                        turtleStatisticService,
+                        expeditionService
+
                 ))
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**")

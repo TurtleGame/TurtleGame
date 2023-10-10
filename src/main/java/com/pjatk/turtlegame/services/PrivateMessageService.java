@@ -79,15 +79,17 @@ public class PrivateMessageService {
     @Transactional
     public void createNewMessage(User sender, String username, String title, String content, Integer gold) {
 
+        User user = userRepository.findById(sender.getId());
+
         if(gold == null){
             gold = 0;
         }
 
-        if (sender.getGold() < gold) {
+        if (user.getGold() < gold) {
             throw new IllegalArgumentException("Posiadasz za mało złota!");
         }
-        sender.setGold(sender.getGold() - gold);
-        userRepository.save(sender);
+        user.setGold(user.getGold() - gold);
+        userRepository.save(user);
 
 
         User recipient = userRepository.findUserByUsername(username.trim());
@@ -101,7 +103,7 @@ public class PrivateMessageService {
 
 
         PrivateMessage privateMessage = new PrivateMessage();
-        privateMessage.setSender(sender);
+        privateMessage.setSender(user);
         privateMessage.setGold(gold);
         privateMessage.setRecipient(recipient);
         privateMessage.setTitle(title);

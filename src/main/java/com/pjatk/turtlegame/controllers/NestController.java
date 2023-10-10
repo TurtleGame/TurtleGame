@@ -60,7 +60,8 @@ public class NestController {
             return "pages/nest";
         }
 
-        itemService.adoptEgg(turtleUserDetails.getId(), id, name);
+        itemService.adoptEgg(turtleUserDetails.getUser(), id, name);
+
         return "redirect:/nest";
     }
 
