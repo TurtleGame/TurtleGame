@@ -2,7 +2,6 @@ package com.pjatk.turtlegame.models.DTOs;
 
 import com.pjatk.turtlegame.models.Expedition;
 import com.pjatk.turtlegame.models.Turtle;
-import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,14 +10,12 @@ import lombok.Setter;
 @Getter
 public class TurtleExpeditionForm {
 
-    @NotNull
-    @JoinColumn(name = "turtle_id")
+    @NotNull(message = "Musisz wybrać żółwia!")
     private Turtle turtle;
 
-    @NotNull
-    @JoinColumn(name = "expedition_id")
+    @NotNull(message = "Musisz wybrać wyprawę!")
     private Expedition expedition;
 
-    @NotNull
+    @NotNull(message = "Musisz wybrać długość wyprawy!")
     private int durationTime;
 }

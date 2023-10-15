@@ -61,37 +61,18 @@ public class MyInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         if (!request.getMethod().equalsIgnoreCase("GET")) {
             return true;
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return true;
-        }
-
-        User user = this.userRepository.findUserByUsername(authentication.getName());
+        User user = getLoggedUser();
         if (user == null) {
             return true;
         }
 
-
-        for (Turtle turtle : user.getTurtles()) {
-            if (turtle.isAvailable()) {
-                continue;
-            }
-
-            if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
-                turtle.setAvailable(true);
-                turtleRepository.save(turtle);
-            }
-        }
-
-        List<TurtleExpeditionHistory> turtleExpeditionHistoryList = turtleExpeditionHistoryRepository.findAll();
-
-        expeditionService.processTurtleExpeditionHistory(turtleExpeditionHistoryList, user);
+        handleExpeditions(user);
 
         for (TurtleEgg egg : user.getEggs()) {
             if (egg.getHatchingAt().isAfter(LocalDateTime.now())) {
@@ -121,21 +102,40 @@ public class MyInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return;
-        }
-
-        User user = this.userRepository.findUserByUsername(authentication.getName());
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        User user = getLoggedUser();
         if (user == null) {
             return;
         }
-
         if (modelAndView != null) {
             modelAndView.addObject("user", user);
         }
+    }
+
+    protected User getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        return this.userRepository.findUserByUsername(authentication.getName());
+    }
+
+    protected void handleExpeditions(User user) {
+
+        for (Turtle turtle : user.getTurtles()) {
+            if (turtle.isAvailable()) {
+                continue;
+            }
+
+            if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
+                turtle.setAvailable(true);
+                turtleRepository.save(turtle);
+            }
+        }
+
+        List<TurtleExpeditionHistory> turtleExpeditionHistoryList = turtleExpeditionHistoryRepository.findAll();
+        expeditionService.processTurtleExpeditionHistory(turtleExpeditionHistoryList, user);
     }
 }
 

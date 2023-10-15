@@ -1,11 +1,9 @@
 package com.pjatk.turtlegame.services;
 
-import com.pjatk.turtlegame.exceptions.UserNotFoundException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,11 +22,10 @@ public class PrivateMessageService {
     PrivateMessageRepository privateMessageRepository;
 
     @Transactional
-    public void sendReport(int recipientId, int turtleId) throws Exception {
+    public void sendReport(int recipientId, Turtle turtle){
 
         User user = userRepository.findById(recipientId);
-        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow(() -> new Exception("Turtle not found"));
-        TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtleId);
+        TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtle.getId());
 
         PrivateMessage report = new PrivateMessage();
         report.setTurtle(turtle);

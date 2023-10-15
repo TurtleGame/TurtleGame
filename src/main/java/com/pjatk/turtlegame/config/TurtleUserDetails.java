@@ -1,7 +1,6 @@
 package com.pjatk.turtlegame.config;
 
 import com.pjatk.turtlegame.models.User;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,14 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-@Getter
-public class TurtleUserDetails implements UserDetails {
-    private final User user;
-
-    public TurtleUserDetails(User user) {
-        super();
-        this.user = user;
-    }
+public record TurtleUserDetails(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

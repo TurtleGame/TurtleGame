@@ -11,6 +11,7 @@ import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ExpeditionHistoryService;
 import com.pjatk.turtlegame.services.ExpeditionService;
 import com.pjatk.turtlegame.services.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -45,31 +46,27 @@ public class ExpeditionController {
     }
 
     @PostMapping(path = "")
-    public String send(Model model,
-                       @ModelAttribute("turtleExpeditionForm") TurtleExpeditionForm turtleExpeditionForm,
-                       @RequestParam(value = "turtle", required = false) Integer turtleId,
-                       @RequestParam("expedition") int expeditionId,
+    public String send(@Valid @ModelAttribute("turtleExpeditionForm") TurtleExpeditionForm turtleExpeditionForm,
+                       BindingResult bindingResult,
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                       BindingResult bindingResult) throws Exception {
+                       Model model
+                    ) throws Exception {
 
+        model.addAttribute("context", "expeditions");
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
-        model.addAttribute("turtles", userService.getTurtles(turtleUserDetails.getUser()));
-        model.addAttribute("context", "expeditions");
-
-        if (turtleId == null) {
-            bindingResult.rejectValue("turtle", "error.nullTurtle", "Musisz wybrać żółwia");
-        }
 
         if (bindingResult.hasErrors()) {
             return "pages/expedition";
         }
 
-        User user = userRepository.findById(turtleUserDetails.getId());
-        Turtle turtle = user.getTurtle(turtleId);
-        Expedition expedition = expeditionRepository.findById(expeditionId);
+        Turtle turtle = turtleExpeditionForm.getTurtle();
+        Expedition expedition = turtleExpeditionForm.getExpedition();
+        if (turtle.getOwner() == null || turtle.getOwner().getId() != turtleUserDetails.getId()) {
+            bindingResult.rejectValue("turtle", "error.nullTurtle", "Nie znaleziono żółwia.");
 
-
+            return "pages/expedition";
+        }
         if (turtle.getLevel() < expedition.getMinLevel()) {
             bindingResult.rejectValue("expedition", "error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
 
@@ -80,6 +77,7 @@ public class ExpeditionController {
 
             return "pages/expedition";
         }
+
         expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime());
 
         return "redirect:/expeditions";

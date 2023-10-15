@@ -1,7 +1,6 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
 import com.pjatk.turtlegame.models.DTOs.NewMessageDTO;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
@@ -55,7 +54,7 @@ public class PrivateMessageController {
     ) {
         if (!bindingResult.hasErrors()) {
             try {
-                privateMessageService.createNewMessage(turtleUserDetails.getUser(), newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
+                privateMessageService.createNewMessage(turtleUserDetails.user(), newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
             } catch (Exception e) {
                 bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
             }

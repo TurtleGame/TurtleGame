@@ -88,14 +88,14 @@ public class ExpeditionService {
     }
 
     @Transactional
-    public void processTurtleExpeditionHistory(List<TurtleExpeditionHistory> turtleExpeditionHistoryList, User user) throws Exception {
+    public void processTurtleExpeditionHistory(List<TurtleExpeditionHistory> turtleExpeditionHistoryList, User user) {
         for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
                 user.setGold((user.getGold() + history.getGoldGained()));
                 history.setWasRewarded(true);
                 userRepository.save(user);
                 turtleExpeditionHistoryRepository.save(history);
-                privateMessageService.sendReport(user.getId(), history.getTurtle().getId());
+                privateMessageService.sendReport(user.getId(), history.getTurtle());
             }
         }
     }

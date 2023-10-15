@@ -17,15 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    private TurtleUserDetailsService turtleUserDetailsService;
-
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,8 +28,6 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers("/css/**").permitAll();
-                    auth.requestMatchers("/js/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers("/logout").permitAll();
                     auth.requestMatchers("/api/turtles/**").permitAll();

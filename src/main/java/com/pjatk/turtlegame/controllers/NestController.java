@@ -1,10 +1,7 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
-import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.EggsForm;
-import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleEggService;
@@ -60,7 +57,7 @@ public class NestController {
             return "pages/nest";
         }
 
-        itemService.adoptEgg(turtleUserDetails.getUser(), id, name);
+        itemService.adoptEgg(turtleUserDetails.user(), id, name);
 
         return "redirect:/nest";
     }
