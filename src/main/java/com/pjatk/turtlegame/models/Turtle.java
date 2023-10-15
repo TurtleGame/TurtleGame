@@ -66,7 +66,7 @@ public class Turtle {
     @OneToMany(mappedBy = "turtle")
     private List<UserItem> equipmentHistoryList;
 
-    @OneToMany(mappedBy = "turtle")
+    @OneToMany(mappedBy = "turtle", fetch = FetchType.EAGER)
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
 
     @ManyToOne

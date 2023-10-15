@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ItemType {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

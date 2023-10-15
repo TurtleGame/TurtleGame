@@ -13,29 +13,19 @@ import java.util.List;
 @AllArgsConstructor
 public class ItemService {
     private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
     private final ItemStatisticRepository itemStatisticRepository;
     private final UserItemRepository userItemRepository;
     private final TurtleEggRepository turtleEggRepository;
     private final TurtleTypeRepository turtleTypeRepository;
 
-
-    public List<UserItem> getItems(int id) {
-        User user = userRepository.findById(id);
-        return user.getUserItemList();
-    }
-
-    public List<Item> getFood(int id) {
-        User user = userRepository.findById(id);
+    public List<Item> getFood(User user) {
         return user.getUserItemList().stream()
                 .map(UserItem::getItem)
                 .filter(item -> "Jedzenie".equals(item.getItemType().getName()))
                 .toList();
     }
 
-    public void removeItem(int userId, int itemId, int quantity) {
-        User user = userRepository.findById(userId);
-
+    public void removeItem(User user, int itemId, int quantity) {
         UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == itemId)
@@ -128,7 +118,7 @@ public class ItemService {
         egg.setUser(user);
         turtleEggRepository.save(egg);
 
-        removeItem(user.getId(), userItem.getItem().getId(), 1);
+        removeItem(user, userItem.getItem().getId(), 1);
     }
 
 

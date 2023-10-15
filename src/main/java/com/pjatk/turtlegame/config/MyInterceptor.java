@@ -24,6 +24,7 @@ import com.pjatk.turtlegame.models.Turtle;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -122,7 +123,6 @@ public class MyInterceptor implements HandlerInterceptor {
     }
 
     protected void handleExpeditions(User user) {
-
         for (Turtle turtle : user.getTurtles()) {
             if (turtle.isAvailable()) {
                 continue;
@@ -132,10 +132,9 @@ public class MyInterceptor implements HandlerInterceptor {
                 turtle.setAvailable(true);
                 turtleRepository.save(turtle);
             }
-        }
 
-        List<TurtleExpeditionHistory> turtleExpeditionHistoryList = turtleExpeditionHistoryRepository.findAll();
-        expeditionService.processTurtleExpeditionHistory(turtleExpeditionHistoryList, user);
+            expeditionService.processTurtleExpeditionHistory(turtle.getTurtleExpeditionHistoryList());
+        }
     }
 }
 

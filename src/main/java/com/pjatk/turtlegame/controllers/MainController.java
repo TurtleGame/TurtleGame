@@ -32,7 +32,7 @@ public class MainController {
             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails
     ) {
 
-        if(turtleUserDetails != null){
+        if (turtleUserDetails != null) {
             return "pages/main";
         }
 
@@ -50,7 +50,6 @@ public class MainController {
             @RequestParam(name = "error", required = false) String error,
             @ModelAttribute("userDTO") UserDTO userDTO,
             Model model) {
-
 
         model.addAttribute("context", "register");
 

@@ -25,7 +25,7 @@ public class ExpeditionService {
     private final UserRepository userRepository;
     private final PrivateMessageService privateMessageService;
 
-
+    @Transactional
     public void turtleExpedition(Turtle turtle, Expedition expedition, int durationTime) {
 
         turtle.setAvailable(false);
@@ -88,14 +88,15 @@ public class ExpeditionService {
     }
 
     @Transactional
-    public void processTurtleExpeditionHistory(List<TurtleExpeditionHistory> turtleExpeditionHistoryList, User user) {
+    public void processTurtleExpeditionHistory(List<TurtleExpeditionHistory> turtleExpeditionHistoryList) {
         for (TurtleExpeditionHistory history : turtleExpeditionHistoryList) {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
-                user.setGold((user.getGold() + history.getGoldGained()));
-                history.setWasRewarded(true);
+                User user = history.getTurtle().getOwner();
+                user.setGold(user.getGold() + history.getGoldGained());
                 userRepository.save(user);
+                history.setWasRewarded(true);
                 turtleExpeditionHistoryRepository.save(history);
-                privateMessageService.sendReport(user.getId(), history.getTurtle());
+                privateMessageService.sendReport(history.getTurtle());
             }
         }
     }

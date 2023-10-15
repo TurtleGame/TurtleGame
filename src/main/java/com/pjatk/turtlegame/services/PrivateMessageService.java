@@ -18,13 +18,11 @@ public class PrivateMessageService {
     TurtleRepository turtleRepository;
     TurtleExpeditionHistoryRepository turtleExpeditionHistory;
     PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
-
     PrivateMessageRepository privateMessageRepository;
 
     @Transactional
-    public void sendReport(int recipientId, Turtle turtle){
-
-        User user = userRepository.findById(recipientId);
+    public void sendReport(Turtle turtle) {
+        User user = turtle.getOwner();
         TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtle.getId());
 
         PrivateMessage report = new PrivateMessage();
@@ -44,12 +42,9 @@ public class PrivateMessageService {
             privateMessageAttachmentRepository.save(attachment);
             itemService.addItem(user, attachment.getItem(), attachment.getQuantity());
         }
-
     }
 
-    public void deleteMessage(int userId, int messageId) {
-        User user = userRepository.findById(userId);
-
+    public void deleteMessage(User user, int messageId) {
         PrivateMessage userPrivateMessage = user
                 .getRecipientPrivateMessageList()
                 .stream()
@@ -74,11 +69,9 @@ public class PrivateMessageService {
     }
 
     @Transactional
-    public void createNewMessage(User sender, String username, String title, String content, Integer gold) {
+    public void createNewMessage(User user, String username, String title, String content, Integer gold) {
 
-        User user = userRepository.findById(sender.getId());
-
-        if(gold == null){
+        if (gold == null) {
             gold = 0;
         }
 
@@ -88,16 +81,12 @@ public class PrivateMessageService {
         user.setGold(user.getGold() - gold);
         userRepository.save(user);
 
-
         User recipient = userRepository.findUserByUsername(username.trim());
-
         if (recipient == null) {
             throw new IllegalArgumentException("Użytkownik nie znaleziony");
         }
-
         recipient.setGold(recipient.getGold() + gold);
         userRepository.save(recipient);
-
 
         PrivateMessage privateMessage = new PrivateMessage();
         privateMessage.setSender(user);
@@ -107,7 +96,5 @@ public class PrivateMessageService {
         privateMessage.setContent(content);
         privateMessage.setSentAt(LocalDateTime.now());
         privateMessageRepository.save(privateMessage);
-
-
     }
 }

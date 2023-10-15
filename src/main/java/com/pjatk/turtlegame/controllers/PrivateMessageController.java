@@ -29,14 +29,16 @@ public class PrivateMessageController {
         model.addAttribute("messages", user.getRecipientPrivateMessageList());
         model.addAttribute("sentMessages", user.getSendPrivateMessageList());
         model.addAttribute("newMessageDTO", new NewMessageDTO());
+
         return "pages/privateMessage";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteMessage(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                                 @PathVariable int id) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+        privateMessageService.deleteMessage(user, id);
 
-        privateMessageService.deleteMessage(turtleUserDetails.getId(), id);
         return "redirect:/private-message";
     }
 
@@ -52,21 +54,20 @@ public class PrivateMessageController {
                                    BindingResult bindingResult,
                                    Model model
     ) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+
         if (!bindingResult.hasErrors()) {
             try {
-                privateMessageService.createNewMessage(turtleUserDetails.user(), newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
+                privateMessageService.createNewMessage(user, newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
+                return "redirect:/private-message";
             } catch (Exception e) {
                 bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
             }
         }
 
-        if (bindingResult.hasErrors()) {
-            User user = userRepository.findById(turtleUserDetails.getId());
-            model.addAttribute("messages", user.getRecipientPrivateMessageList());
-            model.addAttribute("sentMessages", user.getSendPrivateMessageList());
+        model.addAttribute("messages", user.getRecipientPrivateMessageList());
+        model.addAttribute("sentMessages", user.getSendPrivateMessageList());
 
-            return "pages/privateMessage";
-        }
-        return "redirect:/private-message";
+        return "pages/privateMessage";
     }
 }

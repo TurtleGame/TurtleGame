@@ -4,9 +4,11 @@ import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
+import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
-import com.pjatk.turtlegame.services.StatisticService;
 import com.pjatk.turtlegame.services.TurtleService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class TurtleController {
     private final TurtleService turtleService;
     private final ItemService itemService;
-    private final StatisticService statisticService;
+    private final UserRepository userRepository;
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -31,17 +33,18 @@ public class TurtleController {
     }
 
     @PostMapping("/{id}/delete")
-    public String abandonTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws Exception {
+    public String abandonTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+        turtleService.abandonTurtle(id, user);
 
-        turtleService.abandonTurtle(id, turtleUserDetails.getId());
         return "redirect:/turtles";
     }
 
     @GetMapping("/{id}/details")
     public String turtleDetail(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
-
-        model.addAttribute("turtle", turtleService.getTurtleDetails(id, turtleUserDetails.getId()));
-        model.addAttribute("foods", itemService.getFood(turtleUserDetails.getId()));
+        User user = userRepository.findById(turtleUserDetails.getId());
+        model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
+        model.addAttribute("foods", itemService.getFood(user));
         model.addAttribute("statistics", itemService.getItemsStatistics());
         model.addAttribute("feedTurtleDTO", new FeedTurtleDTO());
 
@@ -49,33 +52,27 @@ public class TurtleController {
     }
 
     @PostMapping("/{id}/details")
-    public String feedTurtle(@ModelAttribute("feedTurtleDTO") FeedTurtleDTO feedTurtleDTO,
-                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+    public String feedTurtle(@Valid @ModelAttribute("feedTurtleDTO") FeedTurtleDTO feedTurtleDTO,
                              BindingResult bindingResult,
+                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                              Model model,
                              @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
 
-        if (feedTurtleDTO.getFoodId() == null) {
-            bindingResult.rejectValue("foodId", "error.notFood", "Brak wybranego pokarmu");
-        }
-
+        User user = userRepository.findById(turtleUserDetails.getId());
         if (!bindingResult.hasErrors()) {
             try {
-                turtleService.feedTurtle(feedTurtleDTO.getFoodId(), turtleUserDetails.getId(), feedTurtleDTO.getTurtleId());
+                turtleService.feedTurtle(feedTurtleDTO.getFoodId(), user, feedTurtleDTO.getTurtleId());
+                return "redirect:/turtles/{id}/details";
             } catch (Exception e) {
                 bindingResult.rejectValue("foodId", "error.notFood", e.getMessage());
             }
         }
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("turtle", turtleService.getTurtleDetails(id, turtleUserDetails.getId()));
-            model.addAttribute("foods", itemService.getFood(turtleUserDetails.getId()));
-            model.addAttribute("statistics", itemService.getItemsStatistics());
+        model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
+        model.addAttribute("foods", itemService.getFood(user));
+        model.addAttribute("statistics", itemService.getItemsStatistics());
 
-            return "pages/turtleDetails";
-        }
-
-        return "redirect:/turtles/{id}/details";
+        return "pages/turtleDetails";
     }
 
 }

@@ -25,12 +25,8 @@ public class TurtleService {
     private final ItemStatisticRepository itemStatisticRepository;
 
 
-    public void abandonTurtle(int turtleId, int ownerId) {
-
+    public void abandonTurtle(int turtleId, User user) {
         LocalDateTime now = LocalDateTime.now();
-
-        User user = userRepository.findById(ownerId);
-
         Turtle turtle = user.getTurtle(turtleId);
 
         turtle.getTurtleOwnerHistoryList().stream()
@@ -52,15 +48,16 @@ public class TurtleService {
     }
 
     @Transactional
-    public void feedTurtle(Integer foodId, Integer userId, Integer turtleId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć użytkownika o podanym ID"));
+    public void feedTurtle(Integer foodId, User user, Integer turtleId) throws TurtleNotFoundException {
         Turtle turtle = user.getTurtle(turtleId);
-
+        if (turtle == null) {
+            throw new TurtleNotFoundException("Turtle not found.");
+        }
         if (turtle.isFed()) {
             throw new IllegalArgumentException("Zółw jest już nakarmiony.");
         }
 
-        itemService.removeItem(userId, foodId, 1);
+        itemService.removeItem(user, foodId, 1);
 
         turtle.setLevel(turtle.getLevel() + 1);
         turtle.setEnergy(100);

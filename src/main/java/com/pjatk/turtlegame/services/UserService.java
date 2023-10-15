@@ -29,16 +29,6 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     ItemService itemService;
 
-    public List<Turtle> getTurtles(User user) {
-        List<TurtleOwnerHistory> turtleOwnerHistoryList = turtleOwnerHistoryRepository.findByUserAndEndAtIsNull(user);
-        List<Turtle> turtles = new ArrayList<>();
-        for (TurtleOwnerHistory item : turtleOwnerHistoryList) {
-            turtles.add(item.getTurtle());
-        }
-
-        return turtles;
-    }
-
     @Transactional
     public void addNewUser(UserDTO userDTO) {
         User user = new User();
