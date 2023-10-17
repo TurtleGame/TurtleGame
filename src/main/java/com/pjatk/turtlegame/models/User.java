@@ -26,10 +26,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private int id;
 
-
     @Size(max = 300)
     private String activationToken;
-
 
     private LocalDateTime activationTokenExpireAt;
 
@@ -62,6 +60,9 @@ public class User {
     private String city;
 
     private LocalDateTime registrationDate;
+
+    private LocalDateTime lastActivity;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id")

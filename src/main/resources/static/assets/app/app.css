@@ -348,6 +348,17 @@ main .expeditionError {
   border-radius: 10px;
 }
 
+.successMessage {
+  background: #2e8f29;
+  color: #070706;
+  text-decoration: solid;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -651,6 +662,15 @@ main .expeditionError {
 
 .header-container {
   display: flex;
+}
+
+.edit-container .button-container {
+  display: flex;
+  justify-content: end;
+}
+.edit-container .button {
+  width: 15%;
+  margin-top: 5px;
 }
 
 .register {

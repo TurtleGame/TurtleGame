@@ -2,11 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
+<h1 layout:fragment="header">Edytuj profil</h1>
+
 <div layout:fragment="content">
-    <div class="card">
-        <div class="card-title">Edytuj profil</div>
-        <div class="card-body">
-            hej
+    <div th:if="${changePasswordSuccessMessage}" class="successMessage" role="alert">
+        <span th:text="${changePasswordSuccessMessage}"></span>
+    </div>
+    <div th:if="${changePasswordFailedMessage}" class="expeditionError mb-2" role="alert">
+        <span th:text="${changePasswordFailedMessage}"></span>
+    </div>
+    <!-- editPage -->
+    <div class="edit-container">
+        <div class="card size-wide mb-2">
+
+            Edytuj avatar
+            <div class="m-2">
+                <div class="mb-4">
+                    <form method="post" th:action="@{/user/edit-password}">
+                        <label class="text-primary m-0 mb-4"><b>Stare hasło</b>
+                            <input type="password" class="input" autocomplete="off" name="oldPassword" required></label>
+                        <label class="text-primary m-0 mb-4"><b>Nowe hasło</b>
+                            <input type="password" class="input" autocomplete="off" name="newPassword" minlength="6" required></label>
+                        <div class="button-container">
+                            <input type="submit" value="Zmień hasło" class="button">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="m-2">
+                <div class="mb-4">
+                    <form method="post" th:action="@{/user/edit-info}">
+                        <label for="content" class="text-primary m-0 mb-4"><b>Zmień opis</b></label>
+                        <textarea class="textarea" id="content" name="content" required
+                                  th:text="${user.getAbout()}"><pre></pre></textarea>
+                        <div class="button-container">
+                            <input type="submit" value="Zmień opis" class="button">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- end editPage -->
+
 </div>

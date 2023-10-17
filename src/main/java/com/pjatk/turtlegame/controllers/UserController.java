@@ -8,11 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.List;
 
@@ -26,14 +24,25 @@ public class UserController {
     @GetMapping(path = "/{id}")
     public String getUserPage(Model model, @PathVariable int id) {
         User user = userRepository.findById(id);
+        boolean isOnline = userService.isUserOnline(user);
         model.addAttribute("userInformation", user);
         model.addAttribute("turtles", user.getTurtles());
+        model.addAttribute("isOnline", isOnline);
         return "pages/userPage";
     }
 
-    @GetMapping(path = "/{id}/edit")
-    public String getEditPage(Model model, @PathVariable int id) {
-        model.addAttribute("user", userRepository.findById(id));
+    @GetMapping(path = "/edit")
+    public String getEditPage(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        model.addAttribute("user", userRepository.findById(turtleUserDetails.getId()));
+        return "pages/editPage";
+    }
+
+    @PostMapping(path = "/edit-info")
+    public String changeAboutInfo(@RequestParam("content") String content,
+                                  @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+
+        userService.editAbout(content, user);
         return "pages/editPage";
     }
 
@@ -42,5 +51,21 @@ public class UserController {
 
 
         return ResponseEntity.ok(userService.searchUsers(keyword, turtleUserDetails.getUsername()));
+    }
+
+    @PostMapping(path = "/edit-password")
+    public String changePassword(@RequestParam("oldPassword") String oldPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                 Model model) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+
+        if (!userService.changePassword(user, oldPassword, newPassword)) {
+            model.addAttribute("changePasswordFailedMessage", "Zmiana hasła nieudana!");
+            return "pages/editPage";
+        }
+
+        model.addAttribute("changePasswordSuccessMessage", "Zmiana hasła udana");
+        return "pages/editPage";
     }
 }

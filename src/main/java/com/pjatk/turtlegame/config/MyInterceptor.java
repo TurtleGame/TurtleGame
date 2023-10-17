@@ -75,6 +75,8 @@ public class MyInterceptor implements HandlerInterceptor {
 
         handleExpeditions(user);
 
+        userService.updateUserActivity(user);
+
         for (TurtleEgg egg : user.getEggs()) {
             if (egg.getHatchingAt().isAfter(LocalDateTime.now())) {
                 continue;
