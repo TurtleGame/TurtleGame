@@ -10,8 +10,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -60,12 +62,47 @@ public class UserController {
                                  Model model) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
-        if (!userService.changePassword(user, oldPassword, newPassword)) {
-            model.addAttribute("changePasswordFailedMessage", "Zmiana hasła nieudana!");
+        try {
+            userService.changePassword(user, oldPassword, newPassword);
+        } catch (Exception e) {
+            model.addAttribute("FailedMessage", e.getMessage());
             return "pages/editPage";
         }
 
-        model.addAttribute("changePasswordSuccessMessage", "Zmiana hasła udana");
+        model.addAttribute("SuccessMessage", "Zmiana hasła udana");
+        return "pages/editPage";
+    }
+
+    @PostMapping(path = "/change-username")
+    public String changeUsername(@RequestParam("newUsername") String username,
+                                 @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                 Model model) {
+
+        User user = userRepository.findById(turtleUserDetails.getId());
+
+        try {
+            userService.changeUsername(user, username);
+        } catch (Exception e) {
+            model.addAttribute("FailedMessage", e.getMessage());
+            return "pages/editPage";
+        }
+
+        return "redirect:/logout";
+    }
+
+    @PostMapping(path = "change-avatar")
+    public String changeAvatar(@RequestParam("avatar") MultipartFile avatar,
+                               @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                               Model model) {
+
+        User user = userRepository.findById(turtleUserDetails.getId());
+        try {
+            userService.changeAvatar(user, avatar);
+        } catch (IOException e) {
+            model.addAttribute("FailedMessage", e.getMessage());
+            return "pages/editPage";
+        }
+        model.addAttribute("SuccessMessage", "Avatar pomyślnie dodany!");
         return "pages/editPage";
     }
 }

@@ -5,44 +5,81 @@
 <h1 layout:fragment="header">Edytuj profil</h1>
 
 <div layout:fragment="content">
-    <div th:if="${changePasswordSuccessMessage}" class="successMessage" role="alert">
-        <span th:text="${changePasswordSuccessMessage}"></span>
+    <div th:if="${SuccessMessage}" class="successMessage" role="alert">
+        <span th:text="${SuccessMessage}"></span>
     </div>
-    <div th:if="${changePasswordFailedMessage}" class="expeditionError mb-2" role="alert">
-        <span th:text="${changePasswordFailedMessage}"></span>
+    <div th:if="${FailedMessage}" class="expeditionError mb-2" role="alert">
+        <span th:text="${FailedMessage}"></span>
     </div>
     <!-- editPage -->
     <div class="edit-container">
+
         <div class="card size-wide mb-2">
-
-            Edytuj avatar
-            <div class="m-2">
-                <div class="mb-4">
-                    <form method="post" th:action="@{/user/edit-password}">
-                        <label class="text-primary m-0 mb-4"><b>Stare hasło</b>
-                            <input type="password" class="input" autocomplete="off" name="oldPassword" required></label>
-                        <label class="text-primary m-0 mb-4"><b>Nowe hasło</b>
-                            <input type="password" class="input" autocomplete="off" name="newPassword" minlength="6" required></label>
-                        <div class="button-container">
-                            <input type="submit" value="Zmień hasło" class="button">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="m-2">
-                <div class="mb-4">
-                    <form method="post" th:action="@{/user/edit-info}">
-                        <label for="content" class="text-primary m-0 mb-4"><b>Zmień opis</b></label>
-                        <textarea class="textarea" id="content" name="content" required
-                                  th:text="${user.getAbout()}"><pre></pre></textarea>
-                        <div class="button-container">
-                            <input type="submit" value="Zmień opis" class="button">
-                        </div>
-                    </form>
-                </div>
+            <h2 class="m-0 mb-4">Zmień avatar</h2>
+            <div class="mb-4">
+                <form method="post" th:action="@{/user/change-avatar}" enctype="multipart/form-data">
+                    <label class="text-primary m-0 mb-4"><b>Avatar</b>
+                        <input type="file" class="input" style="padding-top: 6px" name="avatar" accept="image/png, image/jpeg"></label>
+                    <div class="button-container">
+                        <input type="submit" value="Dodaj avatar" class="button">
+                    </div>
+                </form>
             </div>
         </div>
+
+
+        <div class="card size-wide mb-2">
+            <h2 class="m-0 mb-4">Zmień nick</h2>
+            <div class="mb-4 flex">
+                Tutaj możesz zmienić swój nick. Koszt tej akcji to &nbsp;<img src="/assets/images/gold.png" width="20"
+                                                                              height="20">100.
+                Po zmianie nicku wymagane będzie ponowne zalogowanie.
+            </div>
+            <div class="mb-4">
+                <form method="post" th:action="@{/user/change-username}">
+                    <label class="text-primary m-0 mb-4"><b>Nowy nick</b>
+                        <input type="text" class="input" autocomplete="off" name="newUsername" minlength="2"
+                               required></label>
+                    <div class="button-container">
+                        <input type="submit" value="Zmień nick" class="button">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card size-wide mb-2">
+            <h2 class="m-0 mb-4">Zmień hasło</h2>
+            <div class="mb-4">
+                Tutaj możesz zmienić swoje hasło.
+            </div>
+            <div class="mb-4">
+                <form method="post" th:action="@{/user/edit-password}">
+                    <label class="text-primary m-0 mb-4"><b>Stare hasło</b>
+                        <input type="password" class="input" autocomplete="off" name="oldPassword" required></label>
+                    <label class="text-primary m-0 mb-4"><b>Nowe hasło</b>
+                        <input type="password" class="input" autocomplete="off" name="newPassword" minlength="6"
+                               required></label>
+                    <div class="button-container">
+                        <input type="submit" value="Zmień hasło" class="button">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card size-wide mb-2">
+            <h2 class="m-0 mb-4">Zmień opis</h2>
+            <div class="mb-4">
+                <form method="post" th:action="@{/user/edit-info}">
+                    <label for="content" class="text-primary m-0 mb-4"><b>Zmień opis</b></label>
+                    <textarea class="textarea" id="content" name="content" required
+                              th:text="${user.getAbout()}"><pre></pre></textarea>
+                    <div class="button-container">
+                        <input type="submit" value="Zmień opis" class="button">
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
     <!-- end editPage -->
 

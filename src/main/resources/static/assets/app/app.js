@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         receivedHeader.classList.add('active-header');
         sentHeader.classList.remove('active-header');
         createHeader.classList.remove('active-header');
-        createMessage.style.display= 'none';
+        createMessage.style.display = 'none';
 
     });
     sentHeader?.addEventListener('click', function () {
@@ -53,13 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
         sentHeader.classList.add('active-header');
         receivedHeader.classList.remove('active-header');
         createHeader.classList.remove('active-header');
-        createMessage.style.display= 'none';
+        createMessage.style.display = 'none';
     });
-    createHeader?.addEventListener('click', function (){
+    createHeader?.addEventListener('click', function () {
         createHeader.classList.add('active-header');
         receivedHeader.classList.remove('active-header');
         sentHeader.classList.remove('active-header');
-        createMessage.style.display= 'block';
+        createMessage.style.display = 'block';
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'none';
 
@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         minimumInputLength: 2
     });
-
 
 });
 

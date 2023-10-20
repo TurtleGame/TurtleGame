@@ -9,10 +9,13 @@
     <!-- profile avatar & description -->
     <div class="flex flex-row gap-4 mb-2">
         <div class="card" style="width: 25%">
-            <img src="https://mistwood.pl/_next/image?url=https%3A%2F%2Fmistwood.s3.eu-central-1.amazonaws.com%2Favatar%2F2585%2Fd2795228-e4f4-40b5-ba1d-fe8cb13dd200.png&w=256&q=75"
-                 class="card size-wide p-0">
+            <img th:src="@{'/media/' + ${userInformation.id} + '.png'}"
+                 onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
+            class="card size-wide p-0">
             <h2 class="text-primary mb-0" th:text="${userInformation.getUsername()}"></h2>
-            <div>Hodowca</div>
+            <div th:text="${userInformation.getRole().getName()}"
+                 th:style="'color: ' + (${userInformation.getRole().getColor() ?: ''})">
+            </div>
             <h5>Status: <span th:if="${isOnline}" th:text="'Online'" th:class="'text-success'"></span>
                 <span th:unless="${isOnline}" th:text="'Offline'" th:class="'text-danger'"></span>
 

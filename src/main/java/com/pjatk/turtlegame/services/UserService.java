@@ -12,7 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -87,21 +94,56 @@ public class UserService {
 
     }
 
-    public boolean changePassword(User user, String oldPassword, String newPassword) {
+    public void changePassword(User user, String oldPassword, String newPassword) throws Exception {
         final BCryptPasswordEncoder passwordEncoder1 = new BCryptPasswordEncoder();
 
         if (!passwordEncoder1.matches(oldPassword, user.getPassword())) {
-            return false;
+           throw  new Exception("Stare hasło nie pasuje");
         }
         if (newPassword.length() < 6) {
-            return false;
+            throw  new Exception("Hasło jest za krótkie!");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
-        return true;
+
 
     }
 
+    public void changeUsername(User user, String username) throws Exception {
+        if(username.length() < 2 || username.length() > 15){
+            throw new Exception("Zła długość nicku");
+        }
 
+        if(userRepository.findUserByUsername(username) != null){
+           throw new Exception("Nick jest już zajęty");
+        }
+        if(user.getGold() < 100){
+            throw new Exception("Nie masz wystarczającej ilości golda!");
+        }
+        user.setGold(user.getGold() - 100);
+        user.setUsername(username);
+        userRepository.save(user);
+
+    }
+
+    public void changeAvatar(User user, MultipartFile avatar) throws IOException {
+        String uploadDir = "src\\main\\media\\avatars\\";
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        String fileName = user.getId() + ".png"; //
+
+        try (InputStream inputStream = avatar.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+
+            // Zapisujemy obraz jako plik PNG
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new IOException("Nie udało się zapisać pliku!");
+        }
+    }
 }
 

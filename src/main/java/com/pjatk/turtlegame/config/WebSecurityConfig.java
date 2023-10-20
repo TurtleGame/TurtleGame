@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/items").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/achievements").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/registration").permitAll();
+                    auth.requestMatchers("/media/**").permitAll();
                 })
                 .formLogin(form -> form
                         .loginPage("/login")

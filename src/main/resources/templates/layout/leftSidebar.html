@@ -5,11 +5,14 @@
         <div class="user-data">
 
             <a th:href="@{/user/{id}(id=${user.id})}" class="credentials-container">
-                <div class="avatar"></div>
+                <div class="avatar">
+                    <img th:src="@{'/media/' + ${user.id} + '.png'}" style="width: 100%"
+                         onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';" />
+                </div>
                 <div>
                     <div class="username" th:text="${user.username}">
                     </div>
-                    <div class="rank" th:text="${user.getRole().getName()}"></div>
+                    <div class="rank" th:text="${user.getRole().getName()}" th:style="'color: ' + (${user.getRole().getColor() ?: ''})"></div>
                 </div>
             </a>
 
