@@ -55,14 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
         createHeader.classList.remove('active-header');
         createMessage.style.display = 'none';
     });
-    createHeader?.addEventListener('click', function () {
+    $('#create-header').on('click', function() {
         createHeader.classList.add('active-header');
         receivedHeader.classList.remove('active-header');
         sentHeader.classList.remove('active-header');
         createMessage.style.display = 'block';
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'none';
-
     });
 
     $('.select2').select2({
@@ -87,6 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         minimumInputLength: 2
     });
+    $('.reply-button').on('click', function () {
+        const sender = $(this).data('sender');
+        const title = $(this).data('title');
+        $('#create-header').trigger('click');
+        $('[name="title"]', $('#create-message')).val("Re: " + title);
+        const newOption = new Option(sender, sender, true, true);
+        $('[name="recipient"]').append(newOption).trigger('change');
+    })
 
 });
 

@@ -12,7 +12,9 @@
             <li th:each="err : ${#fields.errors('newMessageDTO.*')}" th:text="${err}"/>
         </ul>
     </div>
-
+    <div th:if="${successMessage}" class="successMessage" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
 
     <div class="card mb-2">
 
@@ -60,9 +62,9 @@
                         </div>
                     </div>
                     <div class="buttons">
-                        <a href="#" th:if="${message.getSender()}">
-                            <button class="button mb-2">Odpowiedz</button>
-                        </a>
+                        <span th:if="${message.getSender()}">
+                            <button class="button mb-2 reply-button" th:attr="data-sender=${message.getSender().getUsername()},data-title=${message.getTitle()}">Odpowiedz</button>
+                        </span>
                         <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
                             <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
                         </form>
@@ -114,10 +116,10 @@
         <div id='create-message' class="card p-3 m-1 new-message-container hidden">
             <form th:action="@{/private-message/create}" method="POST">
                 <div class="m-2">
-                    <div class="mb-4">
+                    <label class="mb-4">
                         <b>Adresat</b>
                         <select class="select2" name="recipient"></select>
-                    </div>
+                    </label>
                 </div>
 
                 <div class="m-2">

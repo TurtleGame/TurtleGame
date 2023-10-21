@@ -65,7 +65,7 @@ public class UserController {
         try {
             userService.changePassword(user, oldPassword, newPassword);
         } catch (Exception e) {
-            model.addAttribute("FailedMessage", e.getMessage());
+            model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }
 
@@ -83,7 +83,7 @@ public class UserController {
         try {
             userService.changeUsername(user, username);
         } catch (Exception e) {
-            model.addAttribute("FailedMessage", e.getMessage());
+            model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }
 
@@ -99,10 +99,11 @@ public class UserController {
         try {
             userService.changeAvatar(user, avatar);
         } catch (IOException e) {
-            model.addAttribute("FailedMessage", e.getMessage());
+            model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }
         model.addAttribute("SuccessMessage", "Avatar pomyślnie dodany!");
         return "pages/editPage";
     }
 }
+

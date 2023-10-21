@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -129,12 +130,21 @@ public class UserService {
     public void changeAvatar(User user, MultipartFile avatar) throws IOException {
         String uploadDir = "src\\main\\media\\avatars\\";
         Path uploadPath = Paths.get(uploadDir);
+        String extension = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().lastIndexOf(".") + 1);
+        ArrayList<String> acceptedExtensions = new ArrayList<>();
+        acceptedExtensions.add("jpg");
+        acceptedExtensions.add("jpeg");
+        acceptedExtensions.add("png");
+
+        if (!acceptedExtensions.contains(extension)) {
+            throw new IOException("Obsługiwane formaty plików to: " + String.join(", ", acceptedExtensions));
+        }
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = user.getId() + ".png"; //
+        String fileName = user.getId() + "." + extension; //
 
         try (InputStream inputStream = avatar.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);

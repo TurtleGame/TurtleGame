@@ -55,18 +55,20 @@ public class PrivateMessageController {
                                    Model model
     ) {
         User user = userRepository.findById(turtleUserDetails.getId());
-
-        if (!bindingResult.hasErrors()) {
-            try {
-                privateMessageService.createNewMessage(user, newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
-                return "redirect:/private-message";
-            } catch (Exception e) {
-                bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
-            }
-        }
-
         model.addAttribute("messages", user.getRecipientPrivateMessageList());
         model.addAttribute("sentMessages", user.getSendPrivateMessageList());
+
+        if (bindingResult.hasErrors()) {
+            return "pages/privateMessage";
+
+        }
+        try {
+            privateMessageService.createNewMessage(user, newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold());
+
+        } catch (Exception e) {
+            bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
+        }
+        model.addAttribute("successMessage", "Wysłałeś wiadomość!");
 
         return "pages/privateMessage";
     }
