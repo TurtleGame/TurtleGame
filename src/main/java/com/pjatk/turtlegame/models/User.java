@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,5 +137,14 @@ public class User {
 
     public boolean isUserHaveUnreadMessage(){
         return recipientPrivateMessageList.stream().anyMatch(message -> !message.isRead());
+    }
+
+    public boolean isUserHaveTurtleOnExpedition(){
+        for(Turtle turtle : turtles){
+            if(turtle.getCurrentExpedition() != null){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -89,6 +90,17 @@ public class PrivateMessageService {
             privateMessage.setRead(true);
             privateMessageRepository.save(privateMessage);
         });
+    }
+
+    public void markAllMessagesAsRead(User user){
+        List<PrivateMessage> messageList = user
+                .getRecipientPrivateMessageList()
+                .stream().toList();
+
+        for(PrivateMessage message : messageList){
+            message.setRead(true);
+            privateMessageRepository.save(message);
+        }
     }
 
     @Transactional

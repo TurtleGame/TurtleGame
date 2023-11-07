@@ -48,6 +48,12 @@ public class PrivateMessageController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/read-all")
+    public ResponseEntity<Void> markAllMessagesAsRead(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails){
+        privateMessageService.markAllMessagesAsRead(userRepository.findById(turtleUserDetails.getId()));
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/create")
     public String createNewMessage(@ModelAttribute("newMessageDTO") NewMessageDTO newMessageDTO,
                                    @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,

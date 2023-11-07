@@ -48,14 +48,9 @@ public class ItemService {
 
         List<UserItem> userItemList = user.getUserItemList();
 
-        if (userItemList == null) {
-            userItemList = new ArrayList<>();
-            user.setUserItemList(userItemList);
-        }
-
         UserItem userItem = userItemList
                 .stream()
-                .filter(entry -> entry.getItem().equals(item))
+                .filter(entry -> entry.getItem().getId() == (item.getId()))
                 .findFirst().orElse(null);
 
         if (userItem == null) {

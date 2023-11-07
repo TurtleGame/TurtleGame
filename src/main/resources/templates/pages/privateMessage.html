@@ -27,6 +27,9 @@
                 <h2 id="create-header">Utwórz</h2>
             </div>
         </div>
+        <div id="read-all" class="flex flex-right">
+            <button class="button" onclick="readAllMessage()">Przeczytaj wszystkie</button>
+        </div>
         <div id="received-message">
             <div class="card p-3 m-1 message-container" th:each="message : ${messages}"
                  th:classappend="${message.isRead} ? 'message-read' : 'message-unread'"

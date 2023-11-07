@@ -20,6 +20,8 @@ function deleteMessage(buttonElement) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    updateCountdown();
+
     document.querySelectorAll('.message-title').forEach((el) => {
         el.addEventListener('click', () => {
             el.closest('.message-container')
@@ -37,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sentMessage = document.getElementById('sent-message');
     const createHeader = document.getElementById('create-header');
     const createMessage = document.getElementById('create-message');
+    const readAllButton = document.getElementById('read-all');
 
     receivedHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'block';
@@ -45,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sentHeader.classList.remove('active-header');
         createHeader.classList.remove('active-header');
         createMessage.style.display = 'none';
+        readAllButton.style.display = 'block';
 
     });
     sentHeader?.addEventListener('click', function () {
@@ -54,14 +58,16 @@ document.addEventListener("DOMContentLoaded", () => {
         receivedHeader.classList.remove('active-header');
         createHeader.classList.remove('active-header');
         createMessage.style.display = 'none';
+        readAllButton.style.display = 'none';
     });
-    $('#create-header').on('click', function() {
+    $('#create-header').on('click', function () {
         createHeader.classList.add('active-header');
         receivedHeader.classList.remove('active-header');
         sentHeader.classList.remove('active-header');
         createMessage.style.display = 'block';
         receivedMessage.style.display = 'none';
         sentMessage.style.display = 'none';
+        readAllButton.style.display = 'none';
     });
 
     $('.select2').select2({
@@ -115,6 +121,53 @@ async function readMessage(element) {
         document.querySelector('.icon-messages').classList.remove('fa-bounce');
     }
 }
+
+async function readAllMessage() {
+
+    const response = await fetch(`/private-message/read-all`, {
+            method: "POST"
+        }
+    );
+
+    if(response.status === 204){
+    const messages = document.querySelectorAll('.message-unread')
+        messages.forEach((message) => {
+            message.classList.remove('message-unread');
+            message.classList.add('message-read');
+        })
+    }
+    document.querySelector('.icon-messages').classList.remove('fa-bounce');
+}
+
+function updateCountdown() {
+    const countdownElements = document.querySelectorAll("[id^='countdown-']");
+
+    countdownElements.forEach(countdownElement => {
+        const targetDate = new Date(countdownElement.getAttribute("data-target-date")).getTime();
+
+        function update() {
+            const currentDate = new Date().getTime();
+            const timeLeft = targetDate - currentDate;
+
+            if (timeLeft <= 0) {
+                countdownElement.innerHTML = "00:00:00";
+                location.reload();
+            } else {
+                const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                countdownElement.innerHTML = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        update();
+        setInterval(update, 1000);
+    });
+}
+
+
+
 
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");
