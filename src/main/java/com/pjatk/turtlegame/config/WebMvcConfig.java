@@ -1,13 +1,7 @@
 package com.pjatk.turtlegame.config;
 
-import com.pjatk.turtlegame.repositories.TurtleEggRepository;
-import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
-import com.pjatk.turtlegame.services.ExpeditionService;
-import com.pjatk.turtlegame.services.PrivateMessageService;
-import com.pjatk.turtlegame.services.TurtleStatisticService;
-import com.pjatk.turtlegame.services.UserService;
+import com.pjatk.turtlegame.repositories.*;
+import com.pjatk.turtlegame.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,6 +20,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final PrivateMessageService privateMessageService;
     private final TurtleStatisticService turtleStatisticService;
     private final ExpeditionService expeditionService;
+    private final TurtleTrainingHistoryRepository turtleTrainingHistoryRepository;
+    private final AcademyService academyService;
 
 
     @Override
@@ -37,7 +33,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         turtleExpeditionHistoryRepository,
                         privateMessageService,
                         turtleStatisticService,
-                        expeditionService
+                        expeditionService,
+                        turtleTrainingHistoryRepository,
+                        academyService
 
                 ))
                 .addPathPatterns("/**")

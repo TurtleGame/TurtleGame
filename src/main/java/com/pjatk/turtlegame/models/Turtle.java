@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.OptionalInt;
 
@@ -51,16 +52,13 @@ public class Turtle {
     private List<TurtleBattleHistory> lostBattles;
 
     @OneToMany(mappedBy = "turtle")
-    private List<TurtleTrainingHistory> turtleTrainingHistoryList;
-
-    @OneToMany(mappedBy = "turtle")
     @JsonIgnore
     private List<TurtleOwnerHistory> turtleOwnerHistoryList;
 
     @OneToMany(mappedBy = "turtle")
     private List<TurtleTransationHistory> turtleTransationHistoryList;
 
-    @OneToMany(mappedBy = "turtle")
+    @OneToMany(mappedBy = "turtle", fetch = FetchType.EAGER)
     private List<TurtleStatistic> turtleStatisticList;
 
     @OneToMany(mappedBy = "turtle")
@@ -69,12 +67,23 @@ public class Turtle {
     @OneToMany(mappedBy = "turtle", fetch = FetchType.EAGER)
     private List<TurtleExpeditionHistory> turtleExpeditionHistoryList;
 
+    @OneToMany(mappedBy = "turtle", fetch = FetchType.EAGER)
+    private List<TurtleTrainingHistory> turtleTrainingHistoryList;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
     public TurtleExpeditionHistory getCurrentExpedition() {
         return getTurtleExpeditionHistoryList()
+                .stream()
+                .filter(history -> history.getEndAt().isAfter(LocalDateTime.now()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public TurtleTrainingHistory getCurrentTraining() {
+        return getTurtleTrainingHistoryList()
                 .stream()
                 .filter(history -> history.getEndAt().isAfter(LocalDateTime.now()))
                 .findFirst()
@@ -90,4 +99,15 @@ public class Turtle {
         return hpValue.orElse(0);
     }
 
+    public LocalDateTime getAvailableAt() {
+        if (getCurrentExpedition() != null) {
+            if (getCurrentExpedition().getEndAt() != null)
+                return getCurrentExpedition().getEndAt();
+        }
+        else if (getCurrentTraining() != null) {
+            if (getCurrentTraining().getEndAt() != null)
+                return getCurrentTraining().getEndAt();
+        }
+        return null;
+    }
 }

@@ -223,6 +223,9 @@ a {
   background: var(--text-primary);
   color: rgba(0, 0, 0, 0.6666666667);
 }
+.button:disabled {
+  color: #666;
+}
 .button[disabled] {
   opacity: 0.5;
   border: 2px solid var(--border-default);

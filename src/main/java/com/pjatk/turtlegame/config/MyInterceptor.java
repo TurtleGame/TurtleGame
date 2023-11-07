@@ -3,14 +3,8 @@ package com.pjatk.turtlegame.config;
 import com.pjatk.turtlegame.models.TurtleEgg;
 import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
 import com.pjatk.turtlegame.models.User;
-import com.pjatk.turtlegame.repositories.TurtleEggRepository;
-import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
-import com.pjatk.turtlegame.services.ExpeditionService;
-import com.pjatk.turtlegame.services.PrivateMessageService;
-import com.pjatk.turtlegame.services.TurtleStatisticService;
-import com.pjatk.turtlegame.services.UserService;
+import com.pjatk.turtlegame.repositories.*;
+import com.pjatk.turtlegame.services.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -40,6 +34,8 @@ public class MyInterceptor implements HandlerInterceptor {
     PrivateMessageService privateMessageService;
     private final TurtleStatisticService turtleStatisticService;
     private final ExpeditionService expeditionService;
+    TurtleTrainingHistoryRepository turtleTrainingHistoryRepository;
+    private final AcademyService academyService;
 
     @Scheduled(fixedRate = 2 * 60 * 1000)
     @Transactional// Uruchamia się codziennie o północy
@@ -83,21 +79,7 @@ public class MyInterceptor implements HandlerInterceptor {
             }
 
             if (egg.getHatchingAt().isBefore(LocalDateTime.now()) || egg.getHatchingAt().isEqual(LocalDateTime.now())) {
-                Turtle turtle = new Turtle();
-                turtle.setAvailable(true);
-                turtle.setLevel(0);
-                turtle.setName(egg.getName());
-                turtle.setUnassignedPoints(0);
-                turtle.setTurtleType(egg.getTurtleType());
-                turtle.setGender(0);
-                turtle.setOwner(user);
-                turtle.setEnergy(100);
-
-                turtle.setFed(false);
-                turtleRepository.save(turtle);
-                turtleStatisticService.addBasicStats(turtle);
-
-                turtleEggRepository.deleteById(egg.getId());
+                transformEgg(egg, user);
             }
         }
 
@@ -130,13 +112,34 @@ public class MyInterceptor implements HandlerInterceptor {
                 continue;
             }
 
-            if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
+            if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now()) && !turtleTrainingHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
+                System.out.println();
                 turtle.setAvailable(true);
                 turtleRepository.save(turtle);
             }
 
+            academyService.processTurtleTrainingHistory(turtle.getTurtleTrainingHistoryList());
             expeditionService.processTurtleExpeditionHistory(turtle.getTurtleExpeditionHistoryList());
         }
+    }
+
+    @Transactional
+    public void transformEgg(TurtleEgg egg, User user) {
+        Turtle turtle = new Turtle();
+        turtle.setAvailable(true);
+        turtle.setLevel(0);
+        turtle.setName(egg.getName());
+        turtle.setUnassignedPoints(0);
+        turtle.setTurtleType(egg.getTurtleType());
+        turtle.setGender(0);
+        turtle.setOwner(user);
+        turtle.setEnergy(100);
+
+        turtle.setFed(false);
+        turtleRepository.save(turtle);
+        turtleStatisticService.addBasicStats(turtle);
+
+        turtleEggRepository.deleteById(egg.getId());
     }
 }
 

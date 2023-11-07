@@ -17,11 +17,12 @@ public class PrivateMessageService {
     UserRepository userRepository;
     TurtleRepository turtleRepository;
     TurtleExpeditionHistoryRepository turtleExpeditionHistory;
+    TurtleTrainingHistoryRepository turtleTrainingHistory;
     PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
     PrivateMessageRepository privateMessageRepository;
 
     @Transactional
-    public void sendReport(Turtle turtle) {
+    public void sendExpeditionReport(Turtle turtle) {
         User user = turtle.getOwner();
         TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtle.getId());
 
@@ -42,6 +43,28 @@ public class PrivateMessageService {
             privateMessageAttachmentRepository.save(attachment);
             itemService.addItem(user, attachment.getItem(), attachment.getQuantity());
         }
+    }
+
+    @Transactional
+    public void sendTrainingReport(Turtle turtle) {
+        User user = turtle.getOwner();
+        TurtleTrainingHistory trainingHistory = turtleTrainingHistory.findTopByTurtleIdOrderByEndAtDesc(turtle.getId());
+
+        String grammar;
+        if (trainingHistory.getPoints() == 1) grammar = "punkt";
+        else grammar = "punkty";
+
+        PrivateMessage report = new PrivateMessage();
+        report.setTurtle(turtle);
+        report.setRead(false);
+        report.setRecipient(user);
+        report.setSender(null);
+        report.setSentAt(LocalDateTime.now());
+        report.setTitle("Twój żółw " + turtle.getName() + " skończył trening!");
+        report.setGold(0);
+        report.setContent("Twój żółw " + turtle.getName() + " skończył trening " + trainingHistory.getSkill() + ". \n Wytrenował " + trainingHistory.getPoints() + " " + grammar + ".");
+
+        privateMessageRepository.save(report);
     }
 
     public void deleteMessage(User user, int messageId) {

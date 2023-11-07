@@ -121,5 +121,10 @@ public class ItemService {
         removeItem(user, userItem.getItem().getId(), 1);
     }
 
-
+    public List<Item> getAcademyItems(User user) {
+        return user.getUserItemList().stream()
+                .map(UserItem::getItem)
+                .filter(item -> "Awansowanie".equals(item.getItemType().getName()))
+                .toList();
+    }
 }
