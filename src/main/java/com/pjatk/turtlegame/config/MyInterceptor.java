@@ -32,7 +32,7 @@ public class MyInterceptor implements HandlerInterceptor {
     private final TurtleEggRepository turtleEggRepository;
     TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     PrivateMessageService privateMessageService;
-    private final TurtleStatisticService turtleStatisticService;
+    private final TurtleEggService turtleEggService;
     private final ExpeditionService expeditionService;
     TurtleTrainingHistoryRepository turtleTrainingHistoryRepository;
     private final AcademyService academyService;
@@ -73,15 +73,7 @@ public class MyInterceptor implements HandlerInterceptor {
 
         userService.updateUserActivity(user);
 
-        for (TurtleEgg egg : user.getEggs()) {
-            if (egg.getHatchingAt().isAfter(LocalDateTime.now())) {
-                continue;
-            }
-
-            if (egg.getHatchingAt().isBefore(LocalDateTime.now()) || egg.getHatchingAt().isEqual(LocalDateTime.now())) {
-                transformEgg(egg, user);
-            }
-        }
+        transformEgg(user);
 
         return true;
     }
@@ -122,23 +114,16 @@ public class MyInterceptor implements HandlerInterceptor {
         }
     }
 
-    @Transactional
-    public void transformEgg(TurtleEgg egg, User user) {
-        Turtle turtle = new Turtle();
-        turtle.setAvailable(true);
-        turtle.setLevel(0);
-        turtle.setName(egg.getName());
-        turtle.setUnassignedPoints(0);
-        turtle.setTurtleType(egg.getTurtleType());
-        turtle.setGender(0);
-        turtle.setOwner(user);
-        turtle.setEnergy(100);
+    protected void transformEgg(User user) {
+        for (TurtleEgg egg : user.getEggs()) {
+            if (egg.getHatchingAt().isAfter(LocalDateTime.now())) {
+                continue;
+            }
 
-        turtle.setFed(false);
-        turtleRepository.save(turtle);
-        turtleStatisticService.addBasicStats(turtle);
-
-        turtleEggRepository.deleteById(egg.getId());
+            if (egg.getHatchingAt().isBefore(LocalDateTime.now()) || egg.getHatchingAt().isEqual(LocalDateTime.now())) {
+                turtleEggService.transformEgg(egg, user);
+            }
+        }
     }
 }
 
