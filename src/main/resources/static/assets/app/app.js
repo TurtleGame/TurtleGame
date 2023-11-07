@@ -151,7 +151,6 @@ function updateCountdown() {
 
             if (timeLeft <= 0) {
                 countdownElement.innerHTML = "00:00:00";
-                location.reload();
             } else {
                 const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
                 const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
