@@ -18,7 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final TurtleEggRepository turtleEggRepository;
     private final TurtleExpeditionHistoryRepository turtleExpeditionHistoryRepository;
     private final PrivateMessageService privateMessageService;
-    private final TurtleStatisticService turtleStatisticService;
+    private final TurtleEggService turtleEggService;
     private final ExpeditionService expeditionService;
     private final TurtleTrainingHistoryRepository turtleTrainingHistoryRepository;
     private final AcademyService academyService;
@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         turtleEggRepository,
                         turtleExpeditionHistoryRepository,
                         privateMessageService,
-                        turtleStatisticService,
+                        turtleEggService,
                         expeditionService,
                         turtleTrainingHistoryRepository,
                         academyService

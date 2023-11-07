@@ -147,4 +147,13 @@ public class User {
         }
         return false;
     }
+
+    public boolean isUserHaveTurtleOnTraining(){
+        for(Turtle turtle : turtles){
+            if(turtle.getCurrentTraining() != null){
+                return true;
+            }
+        }
+        return false;
+    }
 }
