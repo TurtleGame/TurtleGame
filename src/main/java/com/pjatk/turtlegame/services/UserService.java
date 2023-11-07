@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -99,10 +101,10 @@ public class UserService {
         final BCryptPasswordEncoder passwordEncoder1 = new BCryptPasswordEncoder();
 
         if (!passwordEncoder1.matches(oldPassword, user.getPassword())) {
-           throw  new Exception("Stare hasło nie pasuje");
+            throw new Exception("Stare hasło nie pasuje");
         }
         if (newPassword.length() < 6) {
-            throw  new Exception("Hasło jest za krótkie!");
+            throw new Exception("Hasło jest za krótkie!");
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
@@ -111,14 +113,14 @@ public class UserService {
     }
 
     public void changeUsername(User user, String username) throws Exception {
-        if(username.length() < 2 || username.length() > 15){
+        if (username.length() < 2 || username.length() > 15) {
             throw new Exception("Zła długość nicku");
         }
 
-        if(userRepository.findUserByUsername(username) != null){
-           throw new Exception("Nick jest już zajęty");
+        if (userRepository.findUserByUsername(username) != null) {
+            throw new Exception("Nick jest już zajęty");
         }
-        if(user.getGold() < 100){
+        if (user.getGold() < 100) {
             throw new Exception("Nie masz wystarczającej ilości golda!");
         }
         user.setGold(user.getGold() - 100);
@@ -144,13 +146,22 @@ public class UserService {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = user.getId() + "." + extension; //
+        String fileName = user.getId() + ".png";
 
         try (InputStream inputStream = avatar.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
 
-            // Zapisujemy obraz jako plik PNG
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            if (extension.equals("jpg") || extension.equals("jpeg")) {
+
+                BufferedImage image = ImageIO.read(inputStream);
+                if (image != null) {
+                    ImageIO.write(image, "png", filePath.toFile());
+                } else {
+                    throw new IOException("Nie udało się przekonwertować obrazu.");
+                }
+            } else {
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (IOException e) {
             throw new IOException("Nie udało się zapisać pliku!");
         }

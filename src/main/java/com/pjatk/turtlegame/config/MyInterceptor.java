@@ -113,7 +113,6 @@ public class MyInterceptor implements HandlerInterceptor {
             }
 
             if (!turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now()) && !turtleTrainingHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
-                System.out.println();
                 turtle.setAvailable(true);
                 turtleRepository.save(turtle);
             }
