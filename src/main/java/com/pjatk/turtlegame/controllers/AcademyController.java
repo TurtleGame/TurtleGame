@@ -8,7 +8,6 @@ import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.repositories.TurtleTrainingHistoryRepository;
 import com.pjatk.turtlegame.repositories.TrainingRepository;
 import com.pjatk.turtlegame.services.AcademyService;
-import com.pjatk.turtlegame.services.ItemService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,10 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 @Controller
 @RequestMapping(path = "/academy")

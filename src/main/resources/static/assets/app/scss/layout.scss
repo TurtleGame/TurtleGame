@@ -438,4 +438,23 @@ main {
     margin-top: 5px;
   }
 }
+.pending-request {
+  a {
+    color: var(--text-primary);
+  }
+
+  .button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-bright);
+    }
+  }
+
+
+
+}
 

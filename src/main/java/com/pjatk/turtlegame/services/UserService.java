@@ -2,10 +2,7 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
-import com.pjatk.turtlegame.repositories.ItemRepository;
-import com.pjatk.turtlegame.repositories.RoleRepository;
-import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +23,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +35,7 @@ public class UserService {
     UserRepository userRepository;
     ItemRepository itemRepository;
     RoleRepository roleRepository;
+    FriendRequestRepository friendRequestRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     ItemService itemService;
@@ -166,5 +166,52 @@ public class UserService {
             throw new IOException("Nie udało się zapisać pliku!");
         }
     }
+
+    public void sendFriendRequest(User sender, String receiverUsername) throws Exception {
+        User receiver = userRepository.findUserByUsername(receiverUsername);
+        List<FriendRequest> friendRequestList = receiver
+                .getReceivedFriendRequests()
+                .stream()
+                .filter(friendRequest -> friendRequest.getSender().getId() == sender.getId())
+                .toList();
+        if (!friendRequestList.isEmpty()) {
+            throw new Exception("Zaproszenie do znajomych zostało już wysłane wcześniej!");
+        }
+        FriendRequest friendRequest = new FriendRequest();
+        friendRequest.setSender(sender);
+        friendRequest.setStatus("Oczekuje");
+        friendRequest.setReceiver(receiver);
+        friendRequestRepository.save(friendRequest);
+
+    }
+
+    public void deleteFromFriendsList(int friendRequestId) {
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+        friendRequestRepository.delete(friendRequest);
+    }
+
+    public void acceptFriendRequest(int friendRequestId) {
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+        friendRequest.setStatus("Zaakceptowano");
+        friendRequestRepository.save(friendRequest);
+    }
+
+    public Map<Integer, User> getFriends(User user) {
+        List<FriendRequest> friendRequestList = friendRequestRepository.findBySenderOrReceiver(user, user);
+
+        return friendRequestList.stream()
+                .filter(friendRequest -> "Zaakceptowano".equals(friendRequest.getStatus()))
+                .collect(Collectors.toMap(
+                        FriendRequest::getId,
+                        friendRequest -> {
+                            if (Objects.equals(friendRequest.getSender().getUsername(), user.getUsername())) {
+                                return friendRequest.getReceiver();
+                            } else {
+                                return friendRequest.getSender();
+                            }
+                        }
+                ));
+    }
+//zamienic status na flage, walidacja czy mozsemy dodac usunac frienda
 }
 

@@ -223,9 +223,6 @@ a {
   background: var(--text-primary);
   color: rgba(0, 0, 0, 0.6666666667);
 }
-.button:disabled {
-  color: #666;
-}
 .button[disabled] {
   opacity: 0.5;
   border: 2px solid var(--border-default);
@@ -675,6 +672,19 @@ main .expeditionError {
 .edit-container .button {
   width: 15%;
   margin-top: 5px;
+}
+
+.pending-request a {
+  color: var(--text-primary);
+}
+.pending-request .button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.pending-request .button:hover {
+  color: var(--text-bright);
 }
 
 .register {

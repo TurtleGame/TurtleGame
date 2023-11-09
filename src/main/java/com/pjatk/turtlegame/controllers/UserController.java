@@ -69,7 +69,7 @@ public class UserController {
             return "pages/editPage";
         }
 
-        model.addAttribute("SuccessMessage", "Zmiana hasła udana");
+        model.addAttribute("successMessage", "Zmiana hasła udana");
         return "pages/editPage";
     }
 
@@ -102,7 +102,7 @@ public class UserController {
             model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }
-        model.addAttribute("SuccessMessage", "Avatar pomyślnie dodany!");
+        model.addAttribute("successMessage", "Avatar pomyślnie dodany!");
         return "pages/editPage";
     }
 }

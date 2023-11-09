@@ -92,15 +92,28 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         minimumInputLength: 2
     });
-    $('.reply-button').on('click', function () {
-        const sender = $(this).data('sender');
-        const title = $(this).data('title');
-        $('#create-header').trigger('click');
-        $('[name="title"]', $('#create-message')).val("Re: " + title);
-        const newOption = new Option(sender, sender, true, true);
-        $('[name="recipient"]').append(newOption).trigger('change');
-    })
 
+
+    // sprawdzenie czy jesteśmy na stronie prywatnych wiadomości
+    if ($('#create-header')) {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipient = urlParams.get('recipient');
+        if (recipient) {
+            $('#create-header').trigger('click');
+            const newOption = new Option(recipient, recipient, true, true);
+            $('[name="recipient"]').append(newOption).trigger('change');
+        }
+
+        $('.reply-button').on('click', function () {
+            const sender = $(this).data('sender');
+            const title = $(this).data('title');
+            $('#create-header').trigger('click');
+            $('[name="title"]', $('#create-message')).val("Re: " + title);
+            const newOption = new Option(sender, sender, true, true);
+            $('[name="recipient"]').append(newOption).trigger('change');
+        })
+    }
 });
 
 

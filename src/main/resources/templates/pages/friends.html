@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}">
+
+<h1 layout:fragment="header">Znajomi</h1>
+
+<div layout:fragment="content">
+
+    <div th:if="${successMessage}" class="successMessage" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${failedMessage}" class="expeditionError mb-2" role="alert">
+        <span th:text="${failedMessage}"></span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, 50%);">
+        <div class="card size-wide mb-2">
+            <form th:action="@{/friends/add}" method="POST">
+                <h2 class="m-0 mb-4">Dodaj znajomych</h2>
+                <div class="m-2">
+                    <label class="mb-4">
+                        <select class="select2" name="friendUsername"></select>
+                    </label>
+                </div>
+                <button type="submit" class="button mb-2">Wyślij zaproszenie</button>
+            </form>
+        </div>
+        <div class="card size-wide mb-2">
+            <h2 class="m-0 mb-4">Oczekujące zaproszenia</h2>
+            <div th:each="friendRequest : ${user.getReceivedFriendRequests()}" class="pending-request">
+                <div class="size-wide">
+                    <div class="card p-3 m-1">
+                        <div class="flex flex-row gap-4">
+                            <div class="flex flex-center flex-middle">
+                                <img th:src="@{'/media/' + ${friendRequest.getSender().getId()} + '.png'}" style="width: 50px"
+                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"/>
+                            </div>
+                            <div class="size-wide">
+                                <a th:href="@{/user/{id}(id=${friendRequest.getSender().getId()})}">
+                                    <div class="mb-1 username"
+                                         th:text="${friendRequest.getSender().getUsername()}"></div>
+                                </a>
+                                <div class="mb-1" th:text="${friendRequest.getSender().getRole().getName()}"
+                                     th:style="'color: ' + (${friendRequest.getSender().getRole().getColor() ?: ''})"></div>
+                            </div>
+                            <div class="flex flex-right flex-middle">
+                                <div style="margin-right: 10px;">
+                                    <form th:action="@{'/friends/' + ${friendRequest.getId()} + '/accept'}"
+                                          method="POST">
+                                        <button type="submit" class="button">
+                                            <i class="fa-solid fa-check fa-lg" style="color: #23d909;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <form th:action="@{'/friends/' + ${friendRequest.getId()} + '/delete'}" method="POST">
+                                    <button type="submit" class="button">
+                                        <i class="fa-solid fa-x fa-lg" style="color: #e90707;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="card size-wide mb-2">
+            <h2 class="m-0 mb-4">Lista znajomych</h2>
+            <div th:each="friend : ${friends}" class="pending-request">
+                <div class="size-wide">
+                    <div class="card p-3 m-1">
+                        <div class="flex flex-row gap-4">
+                            <div class="flex flex-center flex-middle">
+                                <img th:src="@{'/media/' + ${friend.getValue().getId()} + '.png'}" style="width: 50px"
+                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"/>
+                            </div>
+                            <div class="size-wide">
+                                <a th:href="@{/user/{id}(id=${friend.getValue().getId()})}">
+                                    <div class="mb-1 username"
+                                         th:text="${friend.getValue().getUsername()}"></div>
+                                </a>
+                                <div class="mb-1" th:text="${friend.getValue().getRole().getName()}"
+                                     th:style="'color: ' + (${friend.getValue().getRole().getColor() ?: ''})"></div>
+                            </div>
+                            <div class="flex flex-right flex-middle">
+                                <a th:href="@{'/private-message?recipient=' + ${friend.getValue().getUsername()}}" class="button"><i class="fa-solid fa-envelope fa-lg" style="margin-right: 10px;"></i></a>
+                                <form th:action="@{'/friends/' + ${friend.getKey()} + '/delete'}" method="POST">
+                                    <button type="submit" class="button">
+                                        <i class="fa-solid fa-x fa-lg" style="color: #e90707;"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</html>

@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/items").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/achievements").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/academy/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/friends/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/registration").permitAll();
                     auth.requestMatchers("/media/**").permitAll();
                 })

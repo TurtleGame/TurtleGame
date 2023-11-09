@@ -5,8 +5,8 @@
 <h1 layout:fragment="header">Edytuj profil</h1>
 
 <div layout:fragment="content">
-    <div th:if="${SuccessMessage}" class="successMessage" role="alert">
-        <span th:text="${SuccessMessage}"></span>
+    <div th:if="${successMessage}" class="successMessage" role="alert">
+        <span th:text="${successMessage}"></span>
     </div>
     <div th:if="${failedMessage}" class="expeditionError mb-2" role="alert">
         <span th:text="${failedMessage}"></span>

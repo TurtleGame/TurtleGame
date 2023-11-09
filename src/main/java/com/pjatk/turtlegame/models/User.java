@@ -108,6 +108,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<AchievementsEarned> achievementsEarnedList;
 
+    @OneToMany(mappedBy = "receiver")
+    private List<FriendRequest> receivedFriendRequests;
+
+    @OneToMany(mappedBy = "sender")
+    private List<FriendRequest> sentFriendRequests;
+
+
     public List<PrivateMessage> getRecipientPrivateMessageList() {
         return recipientPrivateMessageList.stream()
                 .sorted(Comparator.comparing(PrivateMessage::getSentAt).reversed())
@@ -135,25 +142,32 @@ public class User {
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
     }
 
-    public boolean isUserHaveUnreadMessage(){
+    public boolean isUserHaveUnreadMessage() {
         return recipientPrivateMessageList.stream().anyMatch(message -> !message.isRead());
     }
 
-    public boolean isUserHaveTurtleOnExpedition(){
-        for(Turtle turtle : turtles){
-            if(turtle.getCurrentExpedition() != null){
+    public boolean isUserHaveTurtleOnExpedition() {
+        for (Turtle turtle : turtles) {
+            if (turtle.getCurrentExpedition() != null) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isUserHaveTurtleOnTraining(){
-        for(Turtle turtle : turtles){
-            if(turtle.getCurrentTraining() != null){
+    public boolean isUserHaveTurtleOnTraining() {
+        for (Turtle turtle : turtles) {
+            if (turtle.getCurrentTraining() != null) {
                 return true;
             }
         }
         return false;
     }
+
+    public List<FriendRequest> getReceivedFriendRequests() {
+        return receivedFriendRequests.stream()
+                .filter(friendRequest -> friendRequest.getStatus().equals("Oczekuje"))
+                .toList();
+    }
+
 }
