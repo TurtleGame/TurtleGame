@@ -31,25 +31,39 @@ main {
     border-radius: 1.25rem 1.25rem 0 0;
   }
 
-  .expeditionError {
+  .errorMessage {
     background: #660000;
     color: gold;
+    text-decoration: solid;
     padding: 15px;
     border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
   }
 }
 
 .successMessage {
   background: #2e8f29;
   color: #070706;
-  text-decoration: solid;
   padding: 15px;
   border-radius: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 5px;
 }
 
+.closeButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  color: #070706;
+  font-size: 16px;
+  margin-left: 10px;
+}
 
 .sidebar {
   position: fixed;
@@ -401,7 +415,7 @@ main {
   bottom: 50%;
   background: var(--bg-light) !important;
   border-radius: 1.25rem;
-  box-shadow: 0px 8px 18px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 18px 0 rgba(0, 0, 0, 0.5);
   left: 50%;
   width: 300px;
   margin-left: -150px;
@@ -453,7 +467,6 @@ main {
       color: var(--text-bright);
     }
   }
-
 
 
 }

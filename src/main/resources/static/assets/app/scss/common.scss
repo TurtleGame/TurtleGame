@@ -142,7 +142,7 @@ a {
 }
 
 .p-0 {
-  padding: 0rem;
+  padding: 0;
 }
 
 .p-1 {
@@ -324,3 +324,14 @@ a {
     background-color: #0f2859;
   }
 }
+
+.closeButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  float: right;
+  margin-left: 10px;
+}
+
+

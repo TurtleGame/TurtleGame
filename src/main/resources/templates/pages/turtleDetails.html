@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/master.html}">
+      layout:decorate="~{layout/master.html}" lang="pl">
 
 <h1 layout:fragment="header">Szczegóły żółwia <span th:text="${turtle.getName()}"></span></h1>
 
 <div layout:fragment="content">
 
-    <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="expeditionError mb-2">
+    <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="errorMessage mb-2">
         <strong>Nie udało się wykonać tej akcji</strong>
         <ul>
             <li th:each="err : ${#fields.errors('feedTurtleDTO.*')}" th:text="${err}"/>
@@ -22,7 +22,7 @@
                 <div th:if="${!foods.isEmpty()}">
                     <ul>
                         <li th:each="food : ${foods}">
-                            <img src="/assets/images/items/scroll.png"/>
+                            <img src="/assets/images/items/scroll.png" alt="item"/>
                             <span th:text="${food.getName()}"></span> dodaje <span
                                 th:text="${food.getItemStatistic(food.getId()).getValue()}"></span> punkt do
                             umiejętności: <span
@@ -36,11 +36,13 @@
             </div>
             <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
                 <div class="flex flex-row gap-4 size-wide">
-                    <select class="select" name="foodId" required>
-                        <option disabled selected>Wybierz pokarm</option>
-                        <option th:each="food : ${foods}" th:value="${food.getId()}"
-                                th:text="${food.getName()}"></option>
-                    </select>
+                    <label>
+                        <select class="select" name="foodId" required>
+                            <option disabled selected>Wybierz pokarm</option>
+                            <option th:each="food : ${foods}" th:value="${food.getId()}"
+                                    th:text="${food.getName()}"></option>
+                        </select>
+                    </label>
                 </div>
                 <div class="flex flex-row" style="width: 220px;">
                     <input type="hidden" name="turtleId" th:value="${turtle.id}"/>

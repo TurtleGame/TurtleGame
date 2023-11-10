@@ -30,7 +30,7 @@ main .content {
   border-radius: 1.25rem 1.25rem 0 0;
 }
 
-main .expeditionError {
+main .errorMessage {
   background: #660000;
   color: gold;
   padding: 15px;

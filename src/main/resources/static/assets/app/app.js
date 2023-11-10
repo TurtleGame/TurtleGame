@@ -114,6 +114,11 @@ document.addEventListener("DOMContentLoaded", () => {
             $('[name="recipient"]').append(newOption).trigger('change');
         })
     }
+
+    $('.closeButton').on('click', function () {
+        const message = $(this).closest('.errorMessage, .successMessage');
+        message.hide();
+    });
 });
 
 

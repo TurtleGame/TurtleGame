@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/master.html}">
+      layout:decorate="~{layout/master.html}" lang="pl">
 
 <h1 layout:fragment="header">Legowisko</h1>
 
 <div layout:fragment="content">
 
-    <div th:if="${#fields.hasErrors('eggsForm.*')}" class="expeditionError mb-2">
+    <div th:if="${#fields.hasErrors('eggsForm.*')}" class="errorMessage mb-2">
         <strong>Nie udało się wykonać tej akcji</strong>
         <ul>
             <li th:each="err : ${#fields.errors('eggsForm.*')}" th:text="${err}"/>
@@ -21,7 +21,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
             <!-- egg -->
             <div class="card p-3 m-1 text-center" th:each="egg : ${user.getEggs()}">
-                <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
+                <img src="/assets/images/eggs/fire.png" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
                 <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany.</div>
@@ -45,7 +45,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
             <!-- egg -->
             <div class="card p-3 m-1 text-center" th:each="egg : ${eggs}">
-                <img src="/assets/images/eggs/fire.png" style="height: 120px;"/>
+                <img src="/assets/images/eggs/fire.png" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">

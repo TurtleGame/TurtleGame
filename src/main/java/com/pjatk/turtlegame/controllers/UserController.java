@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.io.IOException;
@@ -59,7 +60,8 @@ public class UserController {
     public String changePassword(@RequestParam("oldPassword") String oldPassword,
                                  @RequestParam("newPassword") String newPassword,
                                  @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                                 Model model) {
+                                 Model model,
+                                 RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
         try {
@@ -69,8 +71,8 @@ public class UserController {
             return "pages/editPage";
         }
 
-        model.addAttribute("successMessage", "Zmiana hasła udana");
-        return "pages/editPage";
+        redirectAttributes.addFlashAttribute("successMessage", "Zmiana hasła udana");
+        return "redirect:/editPage";
     }
 
     @PostMapping(path = "/change-username")
@@ -93,7 +95,8 @@ public class UserController {
     @PostMapping(path = "change-avatar")
     public String changeAvatar(@RequestParam("avatar") MultipartFile avatar,
                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                               Model model) {
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
 
         User user = userRepository.findById(turtleUserDetails.getId());
         try {
@@ -102,8 +105,8 @@ public class UserController {
             model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }
-        model.addAttribute("successMessage", "Avatar pomyślnie dodany!");
-        return "pages/editPage";
+        redirectAttributes.addFlashAttribute("successMessage", "Avatar pomyślnie dodany!");
+        return "redirect:/editPage";
     }
 }
 

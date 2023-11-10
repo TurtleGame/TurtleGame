@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/master.html}">
+      layout:decorate="~{layout/master.html}" lang="pl">
 
 <h1 layout:fragment="header">Prywatne wiadomości</h1>
 
 <div layout:fragment="content">
 
-    <div th:if="${#fields.hasErrors('newMessageDTO.*')}" class="expeditionError mb-2">
-        <strong>Nie udało się wykonać tej akcji</strong>
-        <ul>
-            <li th:each="err : ${#fields.errors('newMessageDTO.*')}" th:text="${err}"/>
-        </ul>
-    </div>
-    <div th:if="${successMessage}" class="successMessage" role="alert">
-        <span th:text="${successMessage}"></span>
-    </div>
+    <div th:replace="fragments/messagesFragment :: messages"></div>
 
     <div class="card mb-2">
 
@@ -54,12 +46,12 @@
                                 class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
-                        <img src="/assets/images/gold.png" width="20" height="20">
+                        <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
                         <span th:text="${message.getGold()}"></span>
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="/assets/images/items/scroll.png" width="20" height="20">
+                            <img src="/assets/images/items/scroll.png" width="20" height="20" alt="item">
                             <span th:text="${attachment.getItem().getName()}"></span>: <span
                                 th:text="${attachment.getQuantity()}"></span>
                         </div>
@@ -98,12 +90,12 @@
                                 class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
-                        <img src="/assets/images/gold.png" width="20" height="20">
+                        <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
                         <span th:text="${message.getGold()}"></span>
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="/assets/images/items/scroll.png" width="20" height="20">
+                            <img src="/assets/images/items/scroll.png" width="20" height="20" alt="item">
                             <span th:text="${attachment.getItem().getName()}"></span>: <span
                                 th:text="${attachment.getQuantity()}"></span>
                         </div>
@@ -143,7 +135,7 @@
 
                 <div class="m-2">
                     <div class="mb-4">
-                        <label for="gold"><img src="/assets/images/gold.png" width="20" height="20"></label>
+                        <label for="gold"><img src="/assets/images/gold.png" width="20" height="20" alt="gold"></label>
                         <input class="input" id="gold" name="gold" style="width: 100px;">
                     </div>
                 </div>

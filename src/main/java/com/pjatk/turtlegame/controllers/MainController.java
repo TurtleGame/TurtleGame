@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @Controller
 @RequestMapping(path = "/")
@@ -58,7 +60,10 @@ public class MainController {
 
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userDTO") @Valid UserDTO userDTO, BindingResult bindingResult, Model model) {
+    public String registration(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
+                               BindingResult bindingResult,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
 
         model.addAttribute("context", "register");
 
@@ -75,9 +80,9 @@ public class MainController {
         }
 
         userService.addNewUser(userDTO);
-        model.addAttribute("registrationSuccessMessage", "Rejestracja zakończona pomyślnie. Możesz teraz się zalogować.");
+        redirectAttributes.addFlashAttribute("successMessage", "Rejestracja zakończona pomyślnie. Możesz teraz się zalogować.");
         model.addAttribute("context", "login");
-        return "pages/index";
+        return "redirect:/";
     }
 
     @GetMapping(path = "/main")

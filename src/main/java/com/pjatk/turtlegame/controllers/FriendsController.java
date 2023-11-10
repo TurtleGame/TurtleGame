@@ -3,12 +3,14 @@ package com.pjatk.turtlegame.controllers;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.services.FriendRequestService;
 import com.pjatk.turtlegame.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(path = "/friends")
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class FriendsController {
     private final UserRepository userRepository;
     private final UserService userService;
+    private final FriendRequestService friendRequestService;
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -26,54 +29,57 @@ public class FriendsController {
     }
 
     @PostMapping("/add")
-    public String addFriend(@RequestParam("friendUsername") String username,
+    public String addFriend(@RequestParam(value = "friendUsername", required = false) String username,
                             Model model,
-                            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+                            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                            RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
         try {
-            userService.sendFriendRequest(user, username);
+            friendRequestService.sendFriendRequest(user, username);
         } catch (Exception e) {
-            model.addAttribute("failedMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
             model.addAttribute("friends", userService.getFriends(user));
-            return "pages/friends";
+            return "redirect:/friends";
         }
-        model.addAttribute("successMessage", "Zaproszenie wysłano pomyślnie!");
+        redirectAttributes.addFlashAttribute("successMessage", "Zaproszenie wysłano pomyślnie!");
         model.addAttribute("friends", userService.getFriends(user));
-        return "pages/friends";
+        return "redirect:/friends";
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteFriendRequest(@PathVariable int id,
-                         Model model,
-                         @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+    public String deleteFriendRequest(@PathVariable(required = false) int id,
+                                      Model model,
+                                      @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                      RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
         try {
-            userService.deleteFromFriendsList(id);
+            friendRequestService.deleteFromFriendsList(id, user);
         } catch (Exception e) {
-            model.addAttribute("failedMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
             model.addAttribute("friends", userService.getFriends(user));
-            return "pages/friends";
+            return "redirect:/friends";
         }
-        model.addAttribute("successMessage", "Usunięto!");
+        redirectAttributes.addFlashAttribute("successMessage", "Usunięto!");
         model.addAttribute("friends", userService.getFriends(user));
-        return "pages/friends";
+        return "redirect:/friends";
     }
 
     @PostMapping("/{id}/accept")
     public String addFriends(@PathVariable int id,
-                         Model model,
-                         @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+                             Model model,
+                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                             RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
         try {
-            userService.acceptFriendRequest(id);
+            friendRequestService.acceptFriendRequest(id, user);
         } catch (Exception e) {
-            model.addAttribute("failedMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
             model.addAttribute("friends", userService.getFriends(user));
-            return "pages/friends";
+            return "redirect:/friends";
         }
-        model.addAttribute("successMessage", "Dodano znajomego!");
+        redirectAttributes.addFlashAttribute("successMessage", "Dodano znajomego!");
         model.addAttribute("friends", userService.getFriends(user));
-        return "pages/friends";
+        return "redirect:/friends";
     }
 
 }

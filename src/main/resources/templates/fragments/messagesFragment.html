@@ -1,0 +1,10 @@
+<!-- messagesFragment.html -->
+<div th:fragment="messages" class="successMessage" th:if="${successMessage}" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="closeButton">&times;</button>
+</div>
+
+<div th:fragment="messages" class="errorMessage mb-2" th:if="${failedMessage}" role="alert">
+    <span th:text="${failedMessage}"></span>
+    <button type="button" class="closeButton">&times;</button>
+</div>

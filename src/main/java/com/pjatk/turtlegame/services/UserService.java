@@ -166,41 +166,11 @@ public class UserService {
             throw new IOException("Nie udało się zapisać pliku!");
         }
     }
-
-    public void sendFriendRequest(User sender, String receiverUsername) throws Exception {
-        User receiver = userRepository.findUserByUsername(receiverUsername);
-        List<FriendRequest> friendRequestList = receiver
-                .getReceivedFriendRequests()
-                .stream()
-                .filter(friendRequest -> friendRequest.getSender().getId() == sender.getId())
-                .toList();
-        if (!friendRequestList.isEmpty()) {
-            throw new Exception("Zaproszenie do znajomych zostało już wysłane wcześniej!");
-        }
-        FriendRequest friendRequest = new FriendRequest();
-        friendRequest.setSender(sender);
-        friendRequest.setStatus("Oczekuje");
-        friendRequest.setReceiver(receiver);
-        friendRequestRepository.save(friendRequest);
-
-    }
-
-    public void deleteFromFriendsList(int friendRequestId) {
-        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
-        friendRequestRepository.delete(friendRequest);
-    }
-
-    public void acceptFriendRequest(int friendRequestId) {
-        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
-        friendRequest.setStatus("Zaakceptowano");
-        friendRequestRepository.save(friendRequest);
-    }
-
     public Map<Integer, User> getFriends(User user) {
         List<FriendRequest> friendRequestList = friendRequestRepository.findBySenderOrReceiver(user, user);
 
         return friendRequestList.stream()
-                .filter(friendRequest -> "Zaakceptowano".equals(friendRequest.getStatus()))
+                .filter(FriendRequest::isStatus)
                 .collect(Collectors.toMap(
                         FriendRequest::getId,
                         friendRequest -> {

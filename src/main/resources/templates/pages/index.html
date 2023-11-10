@@ -13,18 +13,15 @@
 <body class="register">
 
 <div class="logo">
-    <img src="/assets/images/logo.png"/>
+    <img src="/assets/images/logo.png" alt="logo"/>
 </div>
 
 <div class="form card" id="login-form" th:classappend="${context == 'login' ? '' : 'hidden'}">
     <h2 class="text-center m-0">Zaloguj</h2>
     <div class="separator"></div>
-    <div th:if="${errorMessage}">
-        <p th:text="${errorMessage}" class="text-danger"></p>
-    </div>
-    <div th:if="${registrationSuccessMessage}" class="text-success" role="alert">
-        <span th:text="${registrationSuccessMessage}"></span>
-    </div>
+
+    <div th:replace="fragments/messagesFragment :: messages"></div>
+
     <form th:action="@{/login}" method="POST">
 
         <div class="m-2">

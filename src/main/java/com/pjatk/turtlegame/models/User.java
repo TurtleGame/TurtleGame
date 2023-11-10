@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -166,7 +165,7 @@ public class User {
 
     public List<FriendRequest> getReceivedFriendRequests() {
         return receivedFriendRequests.stream()
-                .filter(friendRequest -> friendRequest.getStatus().equals("Oczekuje"))
+                .filter(friendRequest -> !friendRequest.isStatus())
                 .toList();
     }
 

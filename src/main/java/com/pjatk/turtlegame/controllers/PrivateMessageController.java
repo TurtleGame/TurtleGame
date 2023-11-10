@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(path = "/private-message")
@@ -58,7 +59,8 @@ public class PrivateMessageController {
     public String createNewMessage(@ModelAttribute("newMessageDTO") NewMessageDTO newMessageDTO,
                                    @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                                    BindingResult bindingResult,
-                                   Model model
+                                   Model model,
+                                   RedirectAttributes redirectAttributes
     ) {
         User user = userRepository.findById(turtleUserDetails.getId());
         model.addAttribute("messages", user.getRecipientPrivateMessageList());
@@ -74,8 +76,8 @@ public class PrivateMessageController {
         } catch (Exception e) {
             bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
         }
-        model.addAttribute("successMessage", "Wysłałeś wiadomość!");
+        redirectAttributes.addFlashAttribute("successMessage", "Wysłałeś wiadomość!");
 
-        return "pages/privateMessage";
+        return "redirect:/private-message";
     }
 }
