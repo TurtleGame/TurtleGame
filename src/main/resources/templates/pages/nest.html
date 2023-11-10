@@ -12,6 +12,12 @@
             <li th:each="err : ${#fields.errors('eggsForm.*')}" th:text="${err}"/>
         </ul>
     </div>
+    <div th:if="${#fields.hasErrors('sellTurtle.*')}" class="errorMessage mb-2">
+        <strong>Nie udało się wykonać tej akcji</strong>
+        <ul>
+            <li th:each="err : ${#fields.errors('sellTurtle.*')}" th:text="${err}"/>
+        </ul>
+    </div>
 
     <!-- inkubacja -->
     <div class="card mb-2">
@@ -51,8 +57,8 @@
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
                     <button class="button mb-2" onclick="openForm()">Adoptuj</button>
                 </div>
-                <form th:action="@{'/nest/' + ${egg.getId()} + '/delete'}" method="post">
-                    <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć</button>
+                <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
+                    <button type="submit" class="button mb-2" onclick="openForm()">Sprzedaj</button>
                 </form>
                 <div class="form-popup" id="myForm">
                     <h1>Nadaj imię</h1>
@@ -60,6 +66,15 @@
                         <label for="Name"><b>Imię</b></label>
                         <input class="input" type="text" id="Name" name="Name" required>
                         <button type="submit" class="button mb-2" onclick="adoptEggConfirm(this)">Adoptuj</button>
+                    </form>
+                    <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                </div>
+                <div class="form-popup" id="myForm2">
+                    <h1>Ustal cenę</h1>
+                    <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
+                        <label for="Gold"><b>Ilość złota:</b></label>
+                        <input class="input" type="text" id="Gold" name="Gold" required>
+                        <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
                     </form>
                     <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
                 </div>

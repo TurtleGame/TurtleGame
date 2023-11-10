@@ -4,6 +4,7 @@ import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
+import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
@@ -28,6 +29,7 @@ public class TurtleController {
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("context", "turtles");
+        model.addAttribute("sellTurtle", new SellTurtle());
 
         return "pages/turtlePage";
     }
@@ -37,6 +39,22 @@ public class TurtleController {
         User user = userRepository.findById(turtleUserDetails.getId());
         turtleService.abandonTurtle(id, user);
 
+        return "redirect:/turtles";
+    }
+
+    @PostMapping("/{id}/sell")
+    public String sellTurtle(@ModelAttribute("sellTurtle") SellTurtle sellTurtle,
+                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                             @PathVariable int id,
+                             @RequestParam("Gold") int gold,
+                             Model model,
+                             BindingResult bindingResult) throws Exception {
+
+        if (bindingResult.hasErrors()) {
+            return "pages/turtles";
+        }
+
+        turtleService.sellTurtle(turtleUserDetails.getId(), id, gold);
         return "redirect:/turtles";
     }
 

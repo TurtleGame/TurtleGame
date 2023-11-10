@@ -8,6 +8,16 @@ function abandonTurtleConfirm(buttonElement) {
     }
 }
 
+function sellTurtleConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz sprzedać tego żółwia?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
 function deleteMessage(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
@@ -29,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 .classList
                 .toggle('hidden');
         });
-
 
     });
 
@@ -93,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
         minimumInputLength: 2
     });
 
-
     // sprawdzenie czy jesteśmy na stronie prywatnych wiadomości
     if ($('#create-header')) {
 
@@ -120,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
         message.hide();
     });
 });
-
 
 async function readMessage(element) {
     const messageId = element.getAttribute('data-message-id');
@@ -183,9 +190,6 @@ function updateCountdown() {
     });
 }
 
-
-
-
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");
     if (form) {
@@ -198,9 +202,12 @@ function adoptEggConfirm(buttonElement) {
 
 function openForm() {
     document.getElementById("myForm").style.display = "block";
+    document.getElementById("myForm2").style.display = "block";
 }
 
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
+    document.getElementById("myForm2").style.display = "none";
 }
+
 

@@ -22,6 +22,12 @@ public class TurtleOwnerHistory {
 
     private LocalDateTime endAt;
 
+    @NotNull
+    @Column(name = "isSelling", columnDefinition = "INT(1) DEFAULT 0")
+    private boolean isSelling;
+
+    private int howMuch;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -77,7 +77,7 @@ public class ItemService {
                 .toList();
     }
 
-    public void abandonEgg(int userId, int eggId) {
+    public void sellEgg(int userId, int eggId, int gold) {
         User user = userRepository.findById(userId);
 
         UserItem userItem = user.getUserItemList()

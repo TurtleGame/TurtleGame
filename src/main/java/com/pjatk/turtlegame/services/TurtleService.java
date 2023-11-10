@@ -76,4 +76,8 @@ public class TurtleService {
             }
         }
     }
+
+    public void sellTurtle(int userId, int turtleId, int gold) {
+
+    }
 }

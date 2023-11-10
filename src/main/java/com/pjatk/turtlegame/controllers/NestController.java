@@ -2,6 +2,7 @@ package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.DTOs.EggsForm;
+import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleEggService;
@@ -29,13 +30,26 @@ public class NestController {
         model.addAttribute("context", "nest");
         model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
         model.addAttribute("eggsForm", new EggsForm());
+        model.addAttribute("sellTurtle", new SellTurtle());
 
         return "pages/nest";
     }
 
-    @PostMapping("/{id}/delete")
-    public String abandonEgg(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws Exception {
-        itemService.abandonEgg(turtleUserDetails.getId(), id);
+    @PostMapping("/{id}/sell")
+    public String sellEgg(@ModelAttribute("sellTurtle") SellTurtle sellTurtle,
+                          @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                          @PathVariable int id,
+                          @RequestParam("Gold") int gold,
+                          Model model,
+                          BindingResult bindingResult) throws Exception {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
+
+            return "pages/nest";
+        }
+
+        itemService.sellEgg(turtleUserDetails.getId(), id, gold);
         return "redirect:/nest";
     }
 
