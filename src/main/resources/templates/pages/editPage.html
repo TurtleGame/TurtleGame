@@ -5,12 +5,8 @@
 <h1 layout:fragment="header">Edytuj profil</h1>
 
 <div layout:fragment="content">
-    <div th:if="${successMessage}" class="successMessage" role="alert">
-        <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${failedMessage}" class="errorMessage mb-2" role="alert">
-        <span th:text="${failedMessage}"></span>
-    </div>
+
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
     <!-- editPage -->
     <div class="edit-container">
 

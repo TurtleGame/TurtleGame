@@ -20,7 +20,7 @@
     <h2 class="text-center m-0">Zaloguj</h2>
     <div class="separator"></div>
 
-    <div th:replace="fragments/messagesFragment :: messages"></div>
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
 
     <form th:action="@{/login}" method="POST">
 

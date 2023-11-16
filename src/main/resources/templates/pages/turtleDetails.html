@@ -36,13 +36,11 @@
             </div>
             <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
                 <div class="flex flex-row gap-4 size-wide">
-                    <label>
                         <select class="select" name="foodId" required>
                             <option disabled selected>Wybierz pokarm</option>
                             <option th:each="food : ${foods}" th:value="${food.getId()}"
                                     th:text="${food.getName()}"></option>
                         </select>
-                    </label>
                 </div>
                 <div class="flex flex-row" style="width: 220px;">
                     <input type="hidden" name="turtleId" th:value="${turtle.id}"/>

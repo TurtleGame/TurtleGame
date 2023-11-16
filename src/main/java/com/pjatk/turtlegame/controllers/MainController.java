@@ -3,9 +3,11 @@ package com.pjatk.turtlegame.controllers;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
+import com.pjatk.turtlegame.services.NewsService;
 import com.pjatk.turtlegame.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +22,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(path = "/")
+@AllArgsConstructor
 public class MainController {
 
     @Autowired
     private UserService userService;
+    private final NewsService newsService;
 
 
     @GetMapping(path = {"", "/login"})
@@ -88,7 +92,7 @@ public class MainController {
     @GetMapping(path = "/main")
     public String mainPage(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("context", "home");
-
+        model.addAttribute("news",  newsService.getAll());
         return "pages/main";
     }
 

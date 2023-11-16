@@ -113,6 +113,9 @@ public class User {
     @OneToMany(mappedBy = "sender")
     private List<FriendRequest> sentFriendRequests;
 
+    @OneToMany(mappedBy = "author")
+    private List<News> newsList;
+
 
     public List<PrivateMessage> getRecipientPrivateMessageList() {
         return recipientPrivateMessageList.stream()

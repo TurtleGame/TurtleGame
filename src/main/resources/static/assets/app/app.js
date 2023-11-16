@@ -40,8 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 .toggle('hidden');
         });
 
+
     });
 
+    $(".new-news-button").click(function () {
+        $(".new-news-content").toggleClass("hidden");
+    })
+
+    if ($('.new-news-button').length) {
+        CKEDITOR.replace('content');
+    }
     const receivedHeader = document.getElementById('received-header');
     const sentHeader = document.getElementById('sent-header');
     const receivedMessage = document.getElementById('received-message');
@@ -102,8 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         minimumInputLength: 2
     });
 
-    // sprawdzenie czy jesteśmy na stronie prywatnych wiadomości
-    if ($('#create-header')) {
+    if ($('#create-header').length) {
 
         const urlParams = new URLSearchParams(window.location.search);
         const recipient = urlParams.get('recipient');
@@ -128,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         message.hide();
     });
 });
+
 
 async function readMessage(element) {
     const messageId = element.getAttribute('data-message-id');
@@ -154,8 +162,8 @@ async function readAllMessage() {
         }
     );
 
-    if(response.status === 204){
-    const messages = document.querySelectorAll('.message-unread')
+    if (response.status === 204) {
+        const messages = document.querySelectorAll('.message-unread')
         messages.forEach((message) => {
             message.classList.remove('message-unread');
             message.classList.add('message-read');
@@ -190,6 +198,7 @@ function updateCountdown() {
     });
 }
 
+
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");
     if (form) {
@@ -209,5 +218,6 @@ function closeForm() {
     document.getElementById("myForm").style.display = "none";
     document.getElementById("myForm2").style.display = "none";
 }
+
 
 

@@ -38,7 +38,6 @@
                 </div>
                 <div class="message-content hidden" style="margin-top: 1rem;">
                     <div class="card bg-light mb-1" th:text="${message.getContent()}">
-
                     </div>
                     <div class="text-primary mb-2"
                          th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">

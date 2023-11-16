@@ -44,6 +44,8 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/academy/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/friends/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/registration").permitAll();
+                    auth.requestMatchers("/news").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/news/create").hasAuthority("ADMIN");
                     auth.requestMatchers("/media/**").permitAll();
                 })
                 .formLogin(form -> form

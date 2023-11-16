@@ -3,10 +3,51 @@
       layout:decorate="~{layout/master.html}">
 
 <div layout:fragment="content">
-    <div class="card">
-        <h2 style="margin-top: 0;">Ogłoszenia</h2>
-        <div class="card-body">
-            sd
+
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
+
+    <div th:each="news : ${news}">
+        <div class="card" style="margin-bottom: 5px">
+            <div style="margin-top: 0; margin-bottom: 10px">
+                <div th:if="${user.getRole().getName() == 'ADMIN'}">
+                    <i class="fa-solid fa-pen-to-square" style="float: right"></i>
+                </div>
+                <h2 th:text="${news.getTitle()}" style="margin-bottom: 0; margin-top: 0"></h2>
+                <div>Autor: <span th:text="${news.getAuthor().getUsername()}"
+                                  th:style="'color: ' + (${news.getAuthor().getRole().getColor() ?: ''})"></span>, data:
+                    <span th:text="${#temporals.format(news.getReleaseDate(), 'dd.MM.yyyy')}"></span></div>
+                <div class="card-body" th:utext="${news.getContent()}"></div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${user.getRole().getName() == 'ADMIN'}">
+        <div class="card" style="margin-bottom: -15px;">
+            <div class="size-wide new-news-button">
+                <strong>
+                    Dodaj nowe ogłoszenie
+                </strong>
+            </div>
+            <div class="new-news-content hidden" style="margin-top: 1rem;">
+                <form th:action="@{/news/create}" method="POST">
+                    <div class="m-2">
+                        <div class="mb-4">
+                            <label>
+                                <b>Tytuł</b>
+                                <input class="input" autocomplete="off" name="title" minlength="2" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="m-2">
+                        <div class="mb-4">
+                            <label for="content"><b>Treść</b></label>
+                            <textarea class="textarea" id="content" name="content" required></textarea>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="button mb-2">Dodaj</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
