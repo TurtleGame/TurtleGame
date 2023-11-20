@@ -10,7 +10,7 @@
         <div class="card" style="margin-bottom: 5px">
             <div style="margin-top: 0; margin-bottom: 10px">
                 <div th:if="${user.getRole().getName() == 'ADMIN'}">
-                    <i class="fa-solid fa-pen-to-square" style="float: right"></i>
+                    <i class="fa-solid fa-pen-to-square edit-icon" style="float: right" th:attr="data-title=${news.getTitle()},data-content=${news.getContent()}, data-id=${news.getId()}"></i>
                 </div>
                 <h2 th:text="${news.getTitle()}" style="margin-bottom: 0; margin-top: 0"></h2>
                 <div>Autor: <span th:text="${news.getAuthor().getUsername()}"
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div th:if="${user.getRole().getName() == 'ADMIN'}">
-        <div class="card" style="margin-bottom: -15px;">
+        <div class="card">
             <div class="size-wide new-news-button">
                 <strong>
                     Dodaj nowe ogłoszenie
@@ -45,6 +45,32 @@
                     </div>
                     <div class="button-container">
                         <button type="submit" class="button mb-2">Dodaj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:if="${user.getRole().getName() == 'ADMIN'}" style="margin-top: 10px;">
+        <div class="card edit-news hidden">
+            <div class="edit-news-content" style="margin-top: 1rem;">
+                <form th:action="@{/news/edit}" method="POST">
+                    <div class="m-2">
+                        <div class="mb-4">
+                            <label>
+                                <b>Tytuł</b>
+                                <input class="input" autocomplete="off" name="edit-title" id="edit-title" minlength="2" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="m-2">
+                        <div class="mb-4">
+                            <label for="edit-content"><b>Treść</b></label>
+                            <textarea class="textarea" id="edit-content" name="edit-content" required></textarea>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <input type="hidden" name="news-id"/>
+                        <button type="submit" class="button mb-2">Zapisz zmiany</button>
                     </div>
                 </form>
             </div>

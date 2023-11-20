@@ -11,10 +11,7 @@ import com.pjatk.turtlegame.services.NewsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -27,16 +24,26 @@ public class NewsController {
 
     @PostMapping("/create")
     public String createNews(@ModelAttribute("newsDTO") NewsDTO newsDTO,
-                                   @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                                   RedirectAttributes redirectAttributes,
-                                   Model model
+                             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                             RedirectAttributes redirectAttributes,
+                             Model model
     ) {
         User user = userRepository.findById(turtleUserDetails.getId());
-
         newsService.addNews(user, newsDTO.getTitle(), newsDTO.getContent());
 
         model.addAttribute("news", newsService.getAll());
         redirectAttributes.addFlashAttribute("successMessage", "Dodałeś ogłoszenie!");
+        return "redirect:/main";
+    }
+
+    @PostMapping("/edit")
+    public String editNews(@RequestParam("edit-title") String editTitle,
+                           @RequestParam("edit-content") String editContent,
+                           @RequestParam("news-id") int id,
+                           @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                           Model model) {
+        newsService.editNews(editTitle, editContent, id);
+        model.addAttribute("news", newsService.getAll());
         return "redirect:/main";
     }
 

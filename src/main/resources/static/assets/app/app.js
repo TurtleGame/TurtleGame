@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if ($('.new-news-button').length) {
         CKEDITOR.replace('content');
     }
+
+
     const receivedHeader = document.getElementById('received-header');
     const sentHeader = document.getElementById('sent-header');
     const receivedMessage = document.getElementById('received-message');
@@ -134,6 +136,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = $(this).closest('.errorMessage, .successMessage');
         message.hide();
     });
+
+    if($('.edit-icon').length){
+        $('.edit-icon').on('click', function (){
+            $('.edit-news').removeClass('hidden');
+            const title = $(this).data('title');
+            const content = $(this).data('content');
+            const id = $(this).data('id');
+
+            $('[name ="edit-title"]', $('.edit-news-content')).val(title);
+            $('[name ="edit-content"]', $('.edit-news-content')).val(content);
+            $('[name ="news-id"]', $('.edit-news-content')).val(id);
+        })
+    }
 });
 
 

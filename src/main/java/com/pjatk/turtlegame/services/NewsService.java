@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +31,16 @@ public class NewsService {
     public List<News> getAll(){
         Sort sort = Sort.by(Sort.Direction.DESC, "releaseDate");
         return newsRepository.findAll(sort);
+    }
+
+    public void editNews(String title, String content, int id){
+
+        News news = newsRepository.findById(id).orElseThrow();
+
+        news.setContent(content);
+        news.setTitle(title);
+        newsRepository.save(news);
+
     }
 
 
