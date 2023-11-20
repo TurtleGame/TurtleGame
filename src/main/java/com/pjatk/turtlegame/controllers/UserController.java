@@ -25,9 +25,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(path = "/{id}")
-    public String getUserPage(Model model, @PathVariable int id) {
+    public String getUserPage(Model model, @PathVariable int id, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         User user = userRepository.findById(id);
+        User loggedUser = userRepository.findById(turtleUserDetails.getId());
+        if(user == null){
+            return "redirect:/main";
+        }
+
         boolean isOnline = userService.isUserOnline(user);
+        model.addAttribute("isFriends", userService.isUserOnFriendList(loggedUser, user));
         model.addAttribute("userInformation", user);
         model.addAttribute("turtles", user.getTurtles());
         model.addAttribute("isOnline", isOnline);

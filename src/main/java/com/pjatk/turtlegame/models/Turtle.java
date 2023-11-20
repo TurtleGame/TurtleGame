@@ -90,14 +90,6 @@ public class Turtle {
                 .orElse(null);
     }
 
-    public int getHP() {
-        OptionalInt hpValue = turtleStatisticList.stream()
-                .filter(turtleStatistic -> turtleStatistic.getStatistic().getName().equals("HP"))
-                .mapToInt(turtleStatistic -> turtleStatistic.getValue() * 4)
-                .findFirst();
-
-        return hpValue.orElse(0);
-    }
 
     public LocalDateTime getAvailableAt() {
         if (getCurrentExpedition() != null) {

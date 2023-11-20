@@ -182,6 +182,11 @@ public class UserService {
                         }
                 ));
     }
-//zamienic status na flage, walidacja czy mozsemy dodac usunac frienda
+
+    public boolean isUserOnFriendList(User loggedUser, User userToCheck){
+
+        return getFriends(loggedUser).containsValue(userToCheck);
+
+    }
 }
 

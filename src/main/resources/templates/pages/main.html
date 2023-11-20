@@ -10,7 +10,7 @@
         <div class="card" style="margin-bottom: 5px">
             <div style="margin-top: 0; margin-bottom: 10px">
                 <div th:if="${user.getRole().getName() == 'ADMIN'}">
-                    <i class="fa-solid fa-pen-to-square edit-icon" style="float: right" th:attr="data-title=${news.getTitle()},data-content=${news.getContent()}, data-id=${news.getId()}"></i>
+                    <i class="fa-solid fa-pen-to-square edit-icon" style="float: right; cursor:pointer" th:attr="data-title=${news.getTitle()},data-content=${news.getContent()}, data-id=${news.getId()}"></i>
                 </div>
                 <h2 th:text="${news.getTitle()}" style="margin-bottom: 0; margin-top: 0"></h2>
                 <div>Autor: <span th:text="${news.getAuthor().getUsername()}"

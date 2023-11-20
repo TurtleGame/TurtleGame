@@ -11,7 +11,7 @@
         <div class="card" style="width: 25%">
             <img th:src="@{'/media/' + ${userInformation.id} + '.png'}"
                  onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
-            class="card size-wide p-0">
+                 class="card size-wide p-0">
             <h2 class="text-primary mb-0" th:text="${userInformation.getUsername()}"></h2>
             <div th:text="${userInformation.getRole().getName()}"
                  th:style="'color: ' + (${userInformation.getRole().getColor() ?: ''})">
@@ -22,8 +22,13 @@
             </h5>
             <span class="text-muted text-sm">W grze od <span
                     th:text="${#temporals.format(userInformation.getRegistrationDate(), 'dd.MM.YYY')}"></span></span>
+            <div th:if="${userInformation.getUsername() != user.getUsername() && !isFriends}">
+                <form th:action="@{'/friends/add'}" method="post" style="margin-top: 5px">
+                    <input type="hidden" name="friendUsername" th:value="${userInformation.getUsername()}"/>
+                    <button class="button mb-2">Dodaj znajomego</button>
+                </form>
+            </div>
         </div>
-
         <pre class="card" style="width: 75%" th:text="${userInformation.getAbout()}">
         </pre>
     </div>
