@@ -31,6 +31,7 @@ public class PrivateMessage {
 
     private Integer gold;
 
+    private Integer shells;
 
     @Column(name = "is_read", columnDefinition = "INT(0)")
     private boolean isRead;

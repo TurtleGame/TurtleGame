@@ -26,6 +26,8 @@ public class TurtleExpeditionHistory {
 
     private int goldGained;
 
+    private int shellsGained;
+
     @OneToMany(mappedBy = "turtleExpeditionHistory")
     private List<PrivateMessageAttachment> privateMessageAttachments;
 

@@ -54,10 +54,10 @@ public class User {
     @NotNull
     private Integer gold;
 
-    private String about;
+    @NotNull
+    private Integer shells;
 
-    @Size(max = 50)
-    private String city;
+    private String about;
 
     private LocalDateTime registrationDate;
 

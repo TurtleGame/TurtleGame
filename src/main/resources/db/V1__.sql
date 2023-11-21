@@ -204,7 +204,6 @@ CREATE TABLE user
     avatar_path                VARCHAR(300)       NULL,
     gold                       INT    NOT NULL,
     about                      VARCHAR(255)       NULL,
-    city                       VARCHAR(50)        NULL,
     role_id                    INT                NULL,
     CONSTRAINT pk_user PRIMARY KEY (id)
 );

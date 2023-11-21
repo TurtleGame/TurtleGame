@@ -35,7 +35,8 @@ public class PrivateMessageService {
         report.setSentAt(LocalDateTime.now());
         report.setTitle("Twój żółw " + turtle.getName() + " wrócił z wyprawy!");
         report.setGold(expeditionHistory.getGoldGained());
-        report.setContent("Twój żółw " + turtle.getName() + " wrócił z wyprawy. \n Przyniósł " + expeditionHistory.getGoldGained() + " golda.");
+        report.setShells(expeditionHistory.getShellsGained());
+        report.setContent("Twój żółw " + turtle.getName() + " wrócił z wyprawy. \n Zobacz co przyniósł!");
 
         privateMessageRepository.save(report);
 
@@ -104,16 +105,24 @@ public class PrivateMessageService {
     }
 
     @Transactional
-    public void createNewMessage(User user, String username, String title, String content, Integer gold) {
+    public void createNewMessage(User user, String username, String title, String content, Integer gold, Integer shells) {
 
         if (gold == null) {
             gold = 0;
         }
 
+        if(shells == null){
+            shells = 0;
+        }
+
         if (user.getGold() < gold) {
             throw new IllegalArgumentException("Posiadasz za mało złota!");
         }
+        if (user.getShells() < shells) {
+            throw new IllegalArgumentException("Posiadasz za mało muszelek!");
+        }
         user.setGold(user.getGold() - gold);
+        user.setShells(user.getShells() - shells);
         userRepository.save(user);
 
         User recipient = userRepository.findUserByUsername(username.trim());
@@ -121,11 +130,13 @@ public class PrivateMessageService {
             throw new IllegalArgumentException("Użytkownik nie znaleziony");
         }
         recipient.setGold(recipient.getGold() + gold);
+        recipient.setShells(recipient.getShells() + shells);
         userRepository.save(recipient);
 
         PrivateMessage privateMessage = new PrivateMessage();
         privateMessage.setSender(user);
         privateMessage.setGold(gold);
+        privateMessage.setShells(shells);
         privateMessage.setRecipient(recipient);
         privateMessage.setTitle(title);
         privateMessage.setContent(content);

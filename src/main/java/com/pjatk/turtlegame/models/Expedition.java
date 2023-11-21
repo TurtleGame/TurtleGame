@@ -30,6 +30,12 @@ public class Expedition {
     private int maxGold;
 
     @NotNull
+    private int maxShells;
+
+    @NotNull
+    private int shellChance;
+
+    @NotNull
     private int minLevel;
 
     @OneToMany(mappedBy = "expedition")

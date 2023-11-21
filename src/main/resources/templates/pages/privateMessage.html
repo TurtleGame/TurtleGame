@@ -48,6 +48,10 @@
                         <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
                         <span th:text="${message.getGold()}"></span>
                     </div>
+                    <div th:if="${message.getShells()}">
+                        <img src="/assets/images/shell.png" width="20" height="20" alt="shell">
+                        <span th:text="${message.getShells()}"></span>
+                    </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
                             <img src="/assets/images/items/scroll.png" width="20" height="20" alt="item">
@@ -91,6 +95,10 @@
                     <div th:if="${message.getGold()}">
                         <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
                         <span th:text="${message.getGold()}"></span>
+                    </div>
+                    <div th:if="${message.getShells()}">
+                        <img src="/assets/images/shell.png" width="20" height="20" alt="shell">
+                        <span th:text="${message.getShells()}"></span>
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
@@ -136,6 +144,10 @@
                     <div class="mb-4">
                         <label for="gold"><img src="/assets/images/gold.png" width="20" height="20" alt="gold"></label>
                         <input class="input" id="gold" name="gold" style="width: 100px;">
+                    </div>
+                    <div class="mb-4">
+                        <label for="shells"><img src="/assets/images/shell.png" width="20" height="20" alt="shell"></label>
+                        <input class="input" id="shells" name="shells" style="width: 100px;">
                     </div>
                 </div>
                 <div class="button-container">

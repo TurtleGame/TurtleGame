@@ -35,6 +35,7 @@ public class ExpeditionService {
         turtleExpedition.setTurtle(turtle);
         turtleExpedition.setExpedition(expedition);
         turtleExpedition.setGoldGained(getGoldFromExpedition(expedition, durationTime));
+        turtleExpedition.setShellsGained(getShellsFromExpedition(expedition));
         turtleExpedition.setStartAt(LocalDateTime.now());
         turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusSeconds(durationTime));
         turtleExpeditionHistoryRepository.save(turtleExpedition);
@@ -52,6 +53,17 @@ public class ExpeditionService {
             gold += random.nextInt(expedition.getMaxGold()) + 1;
         }
         return gold;
+    }
+
+    public int getShellsFromExpedition(Expedition expedition) {
+        int shell = 0;
+        Random random = new Random();
+        int randomChance = random.nextInt(100) + 1;
+        if (randomChance <= expedition.getShellChance()) {
+            shell += random.nextInt(expedition.getMaxShells()) + 1;
+
+        }
+        return shell;
     }
 
     public List<PrivateMessageAttachment> getItemsFromExpedition(Expedition expedition, int durationTime) {
@@ -93,6 +105,7 @@ public class ExpeditionService {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
                 User user = history.getTurtle().getOwner();
                 user.setGold(user.getGold() + history.getGoldGained());
+                user.setShells(user.getShells() + history.getShellsGained());
                 userRepository.save(user);
                 history.setWasRewarded(true);
                 turtleExpeditionHistoryRepository.save(history);

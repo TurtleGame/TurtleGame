@@ -120,10 +120,10 @@ public class UserService {
         if (userRepository.findUserByUsername(username) != null) {
             throw new Exception("Nick jest już zajęty");
         }
-        if (user.getGold() < 100) {
-            throw new Exception("Nie masz wystarczającej ilości golda!");
+        if (user.getShells() < 1) {
+            throw new Exception("Nie masz wystarczającej ilości muszelek!");
         }
-        user.setGold(user.getGold() - 100);
+        user.setShells(user.getShells() - 1);
         user.setUsername(username);
         userRepository.save(user);
 
