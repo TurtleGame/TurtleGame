@@ -172,4 +172,8 @@ public class User {
                 .toList();
     }
 
+    public List<FriendRequest> getAllFriendRequests(){
+        return receivedFriendRequests.stream().toList();
+    }
+
 }

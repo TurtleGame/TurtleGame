@@ -19,14 +19,27 @@ public class FriendRequestService {
 
         if (receiver == null) {
             throw new Exception("Nie znaleziono takiego użytkownika");
+
         }
 
-        if (receiver.getReceivedFriendRequests().stream()
+        if (sender.getId() == receiver.getId()) {
+            throw new Exception("Nie możesz wysłać zaproszenia do samego siebie");
+        }
+
+        if (receiver.getAllFriendRequests().stream()
                 .anyMatch(request ->
-                        (request.getSender().getId() == sender.getId() || request.getReceiver().getId() == sender.getId())
+                        (request.getSender().getId() == sender.getId() && request.getReceiver().getId() == receiver.getId())
                 )) {
             throw new Exception("Zaproszenie do znajomych zostało już wysłane wcześniej!");
         }
+
+        if (sender.getAllFriendRequests().stream()
+                .anyMatch(request ->
+                        (request.getSender().getId() == receiver.getId() && request.getReceiver().getId() == sender.getId())
+                )) {
+            throw new Exception("Zaproszenie do znajomych zostało już wysłane wcześniej!");
+        }
+
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setSender(sender);
         friendRequest.setStatus(false);
@@ -36,22 +49,20 @@ public class FriendRequestService {
     }
 
     public void deleteFromFriendsList(int friendRequestId, User user) throws Exception {
-        if(user.getReceivedFriendRequests().stream()
-                .noneMatch(friendRequest ->
-                        (friendRequest.getSender().getId() == user.getId() || friendRequest.getReceiver().getId() == user.getId()))){
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+        if(friendRequest.getSender().getId() != user.getId() && friendRequest.getReceiver().getId() != user.getId()){
             throw new Exception("Brak autoryzacji");
         }
-        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+
         friendRequestRepository.delete(friendRequest);
     }
 
     public void acceptFriendRequest(int friendRequestId, User user) throws Exception {
-        if(user.getReceivedFriendRequests().stream()
-                .noneMatch(friendRequest ->
-                        (friendRequest.getSender().getId() == user.getId() || friendRequest.getReceiver().getId() == user.getId()))){
+        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+        if(friendRequest.getSender().getId() != user.getId() && friendRequest.getReceiver().getId() != user.getId()){
             throw new Exception("Brak autoryzacji");
         }
-        FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId).orElseThrow();
+
         friendRequest.setStatus(true);
         friendRequestRepository.save(friendRequest);
     }
