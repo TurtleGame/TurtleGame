@@ -36,8 +36,11 @@
                             <td style="width: 40%;">
                                 <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.price(turtle)}"></span></div>
                                 <br/>
-                                <form th:action="@{'/turtles/' + ${turtle.getId()} + '/buy'}" method="post">
+                                <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${turtle.getId()} + '/buy'}" method="post">
                                     <button type="submit" class="button mb-2" onclick="buyTurtleConfirm(this)">Kup żółwia</button>
+                                </form>
+                                <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? '' : 'hidden'}" th:action="@{'/market/' + ${turtle.getId()} + '/undo'}" method="post">
+                                    <button type="submit" class="button mb-2" onclick="undoTurtleConfirm(this)">Wycofaj żółwia</button>
                                 </form>
                             </td>
                         </tr>

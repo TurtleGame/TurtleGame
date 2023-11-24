@@ -28,6 +28,16 @@ function buyTurtleConfirm(buttonElement) {
     }
 }
 
+function undoTurtleConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz wycofać tego żółwia ze sprzedaży?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
 function deleteMessage(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {

@@ -1,12 +1,15 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
+import com.pjatk.turtlegame.models.DTOs.BuyTurtle;
+import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.MarketService;
 import com.pjatk.turtlegame.services.TurtleService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +32,19 @@ public class MarketController {
     }
 
     @PostMapping("/{id}/buy")
-    public String buyTurtle(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws Exception {
-        User user = userRepository.findById(turtleUserDetails.getId());
+    public String buyTurtle(@AuthenticationPrincipal UserDetails userDetails,
+                            @PathVariable int id) {
+        User user = userRepository.findUserByUsername(userDetails.getUsername());
         marketService.buyTurtle(id, user);
+
+        return "redirect:/market";
+    }
+
+    @PostMapping("/{id}/undo")
+    public String undoTurtle(@AuthenticationPrincipal UserDetails userDetails,
+                            @PathVariable int id) {
+        User user = userRepository.findUserByUsername(userDetails.getUsername());
+        marketService.undoTurtle(id, user);
 
         return "redirect:/market";
     }

@@ -14,6 +14,6 @@ public class BuyTurtle {
     @NotNull
     private Integer turtleId;
 
-    @NotNull(message = "Brak wybranego pokarmu")
-    private Integer foodId;
+    @NotNull
+    private Integer userId;
 }

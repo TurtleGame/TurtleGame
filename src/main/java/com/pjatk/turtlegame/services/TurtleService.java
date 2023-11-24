@@ -88,5 +88,9 @@ public class TurtleService {
                 turtleOwnerHistoryRepository.save(selling);
             }
         }
+        turtle.setOwner(null);
+        turtleRepository.save(turtle);
     }
+
+
 }
