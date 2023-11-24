@@ -1,12 +1,8 @@
 package com.pjatk.turtlegame.controllers;
 
-import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.models.DTOs.BuyTurtle;
-import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.MarketService;
-import com.pjatk.turtlegame.services.TurtleService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

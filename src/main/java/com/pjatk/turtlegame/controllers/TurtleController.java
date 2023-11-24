@@ -51,7 +51,7 @@ public class TurtleController {
                              BindingResult bindingResult) throws Exception {
 
         if (bindingResult.hasErrors()) {
-            return "pages/turtles";
+            return "pages/turtlePage";
         }
 
         turtleService.sellTurtle(turtleUserDetails.getId(), id/*, gold*/);

@@ -4,7 +4,6 @@ import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
