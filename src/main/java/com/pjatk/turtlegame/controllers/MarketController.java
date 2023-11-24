@@ -21,7 +21,9 @@ public class MarketController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("context", "market");
-        model.addAttribute("turtles", marketService.getAll());
+        model.addAttribute("turtles", marketService.getAllTurtles());
+        model.addAttribute("items", marketService.getAllItems());
+        model.addAttribute("eggs", marketService.getAllEggs());
         model.addAttribute("marketService", marketService);
 
         return "pages/market";

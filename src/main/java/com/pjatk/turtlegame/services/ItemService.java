@@ -16,6 +16,7 @@ public class ItemService {
     private final UserItemRepository userItemRepository;
     private final TurtleEggRepository turtleEggRepository;
     private final TurtleTypeRepository turtleTypeRepository;
+    private final ItemOwnerMarketRepository itemOwnerMarketRepository;
 
     public List<Item> getFood(User user) {
         return user.getUserItemList().stream()
@@ -78,6 +79,7 @@ public class ItemService {
 
     public void sellEgg(int userId, int eggId, int gold) {
         User user = userRepository.findById(userId);
+        ItemOwnerMarket selling = new ItemOwnerMarket();
 
         UserItem userItem = user.getUserItemList()
                 .stream()
@@ -93,6 +95,14 @@ public class ItemService {
         } else {
             throw new IllegalArgumentException("Brak jajka");
         }
+
+        selling.setSelling(true);
+        selling.setHowMuch(gold);
+        selling.setUser(user);
+        selling.setItem(userItem.getItem());
+        itemOwnerMarketRepository.save(selling);
+
+        System.out.println(gold);
     }
 
     public void adoptEgg(User user, int eggId, String name) {

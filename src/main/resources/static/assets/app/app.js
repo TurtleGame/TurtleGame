@@ -79,6 +79,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const createHeader = document.getElementById('create-header');
     const createMessage = document.getElementById('create-message');
     const readAllButton = document.getElementById('read-all');
+    const turtlesHeader = document.getElementById('turtles-header');
+    const itemsHeader = document.getElementById('items-header');
+    const turtlesSelling = document.getElementById('turtles-selling');
+    const itemsSelling = document.getElementById('items-selling');
+
+    turtlesHeader?.addEventListener('click', function () {
+        turtlesSelling.style.display = 'block';
+        itemsSelling.style.display = 'none';
+        turtlesHeader.classList.add('active-header');
+        itemsHeader.classList.remove('active-header');
+    });
+    itemsHeader?.addEventListener('click', function () {
+        itemsSelling.style.display = 'block';
+        turtlesSelling.style.display = 'none';
+        itemsHeader.classList.add('active-header');
+        turtlesHeader.classList.remove('active-header');
+    });
 
     receivedHeader?.addEventListener('click', function () {
         receivedMessage.style.display = 'block';
@@ -244,8 +261,21 @@ function adoptEggConfirm(buttonElement) {
     }
 }
 
+function sellEggConfirm(buttonElement) {
+    var form = buttonElement.closest("form");
+    if (form) {
+        var confirmation = confirm("Czy na pewno chcesz sprzedać to jajko?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
+}
+
+function openForm2() {
     document.getElementById("myForm2").style.display = "block";
 }
 

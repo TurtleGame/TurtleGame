@@ -36,10 +36,8 @@
                         <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
                             <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
                         </form>
-                        <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
-                            <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj żółwia</button>
-                        </form>
-                        <div class="form-popup" id="myForm">
+                        <button type="submit" class="button mb-2" onclick="openForm2()">Sprzedaj żółwia</button>
+                        <div class="form-popup" id="myForm2">
                             <h1>Ustal cenę</h1>
                             <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
                                 <label for="Gold"><b>Ilość złota:</b></label>

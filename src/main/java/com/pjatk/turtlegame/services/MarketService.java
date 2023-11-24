@@ -1,8 +1,7 @@
 package com.pjatk.turtlegame.services;
 
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleOwnerHistory;
-import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.models.*;
+import com.pjatk.turtlegame.repositories.ItemOwnerMarketRepository;
 import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
@@ -19,8 +18,9 @@ public class MarketService {
     private TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     private TurtleRepository turtleRepository;
     private UserRepository userRepository;
+    private ItemOwnerMarketRepository itemOwnerMarketRepository;
 
-    public List<Turtle> getAll(){
+    public List<Turtle> getAllTurtles(){
         List<TurtleOwnerHistory> history = turtleOwnerHistoryRepository.findAll();
         List<Turtle> turtles = new ArrayList<>();
 
@@ -31,6 +31,25 @@ public class MarketService {
         }
 
         return turtles;
+    }
+
+    public List<Item> getAllItems() {
+        List<Item> items = new ArrayList<>();
+
+        return items;
+    }
+
+    public List<Item> getAllEggs() {
+        List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
+        List<Item> eggs = new ArrayList<>();
+
+        for(ItemOwnerMarket selling : history) {
+            if (selling.getItem().getItemType().getName().equals("Jajko")) {
+                eggs.add(selling.getItem());
+            }
+        }
+
+        return eggs;
     }
 
     public int sellerIsBuyer (User user, Turtle turtle){
@@ -58,6 +77,12 @@ public class MarketService {
                 gold = selling.getHowMuch();
             }
         }
+
+        return gold;
+    }
+
+    public int price(Item item) {
+        int gold = 100;
 
         return gold;
     }

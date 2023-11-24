@@ -50,6 +50,60 @@
             </div>
         </div>
 
+        <div id="items-selling" class="hidden">
+            <div class="p-3">
+                <h3>Jajka</h3>
+                    <div class="card mb-2" th:each="egg : ${eggs}">
+                        <h2 class="text-center m-0 mb-4" th:text="${egg.getName()}"></h2>
+                        <div class="flex flex-row gap-4">
+                            <div class="flex flex-middle flex-center">
+                                <img src="/assets/images/eggs/light.png" style="width: 155px; border-radius: 0.25rem;"/>
+                            </div>
+                            <table class="size-wide">
+                                <tr>
+                                    <td style="width: 30%; vertical-align: top;">
+                                        <div class="mb-1">Żywioł <span class="text-primary">Światło</span></div>
+                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${item.getRarity().getName()}"></span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 40%;">
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.price(item)}"></span></div>
+                                        <br/>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+            <div class="p-3">
+                <h3>Przedmioty</h3>
+                    <div class="card mb-2" th:each="item : ${items}">
+                        <h2 class="text-center m-0 mb-4" th:text="${item.getName()}"></h2>
+                        <div class="flex flex-row gap-4">
+                            <div class="flex flex-middle flex-center">
+                                <img src="/assets/images/academyItems/diamondRuby.png" style="width: 155px; border-radius: 0.25rem;"/>
+                            </div>
+                            <table class="size-wide">
+                                <tr>
+                                    <td style="width: 30%; vertical-align: top;">
+                                        <div class="mb-1">Typ przedmiotu: <span class="text-primary" th:text="${item.getItemType().getName()}"></span></div>
+                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${item.getRarity().getName()}"></span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 40%;">
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.price(item)}"></span></div>
+                                        <br/>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+
     </div>
 
 </div>

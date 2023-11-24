@@ -57,9 +57,7 @@
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
                     <button class="button mb-2" onclick="openForm()">Adoptuj</button>
                 </div>
-                <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
-                    <button type="submit" class="button mb-2" onclick="openForm()">Sprzedaj</button>
-                </form>
+                <button type="submit" class="button mb-2" onclick="openForm2()">Sprzedaj</button>
                 <div class="form-popup" id="myForm">
                     <h1>Nadaj imię</h1>
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/adopt'}" method="post">
