@@ -18,6 +18,16 @@ function sellTurtleConfirm(buttonElement) {
     }
 }
 
+function buyTurtleConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz kupić tego żółwia?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
 function deleteMessage(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {

@@ -8,7 +8,6 @@
 
     <div class="card mb-2">
 
-
         <div class="private-message-header">
             <div class="header-container">
                 <h2 id="turtles-header" class="active-header">Żółwie</h2>
@@ -16,7 +15,36 @@
             </div>
         </div>
         <div id="turtles-selling">
+            <div class="card mb-2" th:each="turtle : ${turtles}">
+                <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
+                <div class="flex flex-row gap-4">
+                    <div class="flex flex-middle flex-center">
+                        <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                    </div>
+                    <table class="size-wide">
+                        <tr>
+                            <td style="width: 30%; vertical-align: top;">
+                                <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
+                                </div>
+                                <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
+                               </td>
+                            <td style="width: 30%; vertical-align: top;">
+                                <div th:each="stat : ${turtle.getTurtleStatisticList()}">
+                                    <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
+                                </div>
+                            </td>
+                            <td style="width: 40%;">
+                                <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.price(turtle)}"></span></div>
+                                <br/>
+                                <form th:action="@{'/turtles/' + ${turtle.getId()} + '/buy'}" method="post">
+                                    <button type="submit" class="button mb-2" onclick="buyTurtleConfirm(this)">Kup żółwia</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
+            </div>
         </div>
 
     </div>

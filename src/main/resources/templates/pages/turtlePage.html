@@ -37,21 +37,22 @@
                             <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
                         </form>
                         <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
-                            <button type="submit" class="button mb-2" onclick="openForm()">Sprzedaj żółwia</button>
+                            <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj żółwia</button>
                         </form>
+                        <div class="form-popup" id="myForm">
+                            <h1>Ustal cenę</h1>
+                            <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
+                                <label for="Gold"><b>Ilość złota:</b></label>
+                                <input class="input" type="text" id="Gold" name="Gold" required>
+                                <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
+                            </form>
+                            <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                        </div>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="form-popup" id="myForm">
-            <h1>Ustal cenę</h1>
-            <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
-                <label for="Gold"><b>Ilość złota:</b></label>
-                <input class="input" type="text" id="Gold" name="Gold" required>
-                <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
-            </form>
-            <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
-        </div>
+
     </div>
     <a href="/nest">
         <button class="button mb-2">Zaadoptuj żółwia</button>

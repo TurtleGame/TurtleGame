@@ -4,8 +4,10 @@ import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.TurtleEgg;
+import com.pjatk.turtlegame.models.TurtleOwnerHistory;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.TurtleEggRepository;
+import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ public class TurtleEggService {
     TurtleEggRepository turtleEggRepository;
     TurtleRepository turtleRepository;
     TurtleStatisticService turtleStatisticService;
+    TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
 
     @Transactional
     public void warmEgg(int userId, int eggId) throws TurtleNotFoundException, UnauthorizedAccessException {
@@ -40,6 +43,8 @@ public class TurtleEggService {
 
     @org.springframework.transaction.annotation.Transactional
     public void transformEgg(TurtleEgg egg, User user) {
+        LocalDateTime now = LocalDateTime.now();
+
         Turtle turtle = new Turtle();
         turtle.setAvailable(true);
         turtle.setLevel(0);
@@ -51,9 +56,18 @@ public class TurtleEggService {
         turtle.setEnergy(100);
 
         turtle.setFed(false);
-        turtleRepository.save(turtle);
-        turtleStatisticService.addBasicStats(turtle);
 
+        turtleRepository.save(turtle);
+
+        TurtleOwnerHistory history = new TurtleOwnerHistory();
+        history.setEndAt(null);
+        history.setStartAt(now);
+        history.setTurtle(turtle);
+        history.setUser(user);
+        history.setHowMuch(0);
+
+        turtleOwnerHistoryRepository.save(history);
+        turtleStatisticService.addBasicStats(turtle);
         turtleEggRepository.deleteById(egg.getId());
     }
 }
