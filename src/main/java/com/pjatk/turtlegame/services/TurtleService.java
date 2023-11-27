@@ -75,14 +75,14 @@ public class TurtleService {
         }
     }
 
-    public void sellTurtle(int userId, int turtleId, int gold) {
+    public void sellTurtle(int userId, int turtleId, int shells) {
         User user = userRepository.findById(userId);
         Turtle turtle = user.getTurtle(turtleId);
 
         for (TurtleOwnerHistory selling : turtle.getTurtleOwnerHistoryList()) {
             if (selling.getEndAt() == null) {
                 selling.setSelling(true);
-                selling.setHowMuch(gold);
+                selling.setHowMuch(shells);
                 turtleOwnerHistoryRepository.save(selling);
             }
         }

@@ -46,7 +46,7 @@ public class TurtleController {
     public String sellTurtle(@ModelAttribute("sellTurtle") SellTurtle sellTurtle,
                              @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                              @PathVariable int id,
-                             @RequestParam("Gold") int gold,
+                             @RequestParam("Gold") int shells,
                              Model model,
                              BindingResult bindingResult) throws Exception {
 
@@ -54,7 +54,7 @@ public class TurtleController {
             return "pages/turtlePage";
         }
 
-        turtleService.sellTurtle(turtleUserDetails.getId(), id, gold);
+        turtleService.sellTurtle(turtleUserDetails.getId(), id, shells);
         return "redirect:/turtles";
     }
 

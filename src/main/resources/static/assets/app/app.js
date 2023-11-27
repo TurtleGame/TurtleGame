@@ -271,6 +271,56 @@ function sellEggConfirm(buttonElement) {
     }
 }
 
+function buyEggConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz kupić to jajko?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
+function undoEggConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz wycofać to jajko ze sprzedaży?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
+function sellItemConfirm(buttonElement) {
+    var form = buttonElement.closest("form");
+    if (form) {
+        var confirmation = confirm("Czy na pewno chcesz sprzedać ten przedmiot?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
+function buyItemConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz kupić ten przedmiot?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
+function undoItemConfirm(buttonElement) {
+    const form = buttonElement.closest("form");
+    if (form) {
+        const confirmation = confirm("Czy na pewno chcesz wycofać ten przedmiot ze sprzedaży?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+}
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
 }

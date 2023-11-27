@@ -40,7 +40,7 @@
                         <div class="form-popup" id="myForm2">
                             <h1>Ustal cenę</h1>
                             <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
-                                <label for="Gold"><b>Ilość złota:</b></label>
+                                <label for="Gold"><b>Ilość muszelek:</b></label>
                                 <input class="input" type="text" id="Gold" name="Gold" required>
                                 <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
                             </form>

@@ -29,7 +29,7 @@ public class MarketController {
         return "pages/market";
     }
 
-    @PostMapping("/{id}/buy")
+    @PostMapping("/{id}/buyTurtle")
     public String buyTurtle(@AuthenticationPrincipal UserDetails userDetails,
                             @PathVariable int id) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
@@ -38,11 +38,29 @@ public class MarketController {
         return "redirect:/market";
     }
 
-    @PostMapping("/{id}/undo")
+    @PostMapping("/{id}/undoTurtle")
     public String undoTurtle(@AuthenticationPrincipal UserDetails userDetails,
                             @PathVariable int id) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
         marketService.undoTurtle(id, user);
+
+        return "redirect:/market";
+    }
+
+    @PostMapping("/{id}/buyItem")
+    public String buyItem(@AuthenticationPrincipal UserDetails userDetails,
+                            @PathVariable int id) {
+        User user = userRepository.findUserByUsername(userDetails.getUsername());
+        //marketService.buy(id, user);
+
+        return "redirect:/market";
+    }
+
+    @PostMapping("/{id}/undoItem")
+    public String undoItem(@AuthenticationPrincipal UserDetails userDetails,
+                             @PathVariable int id) {
+        User user = userRepository.findUserByUsername(userDetails.getUsername());
+        //marketService.undo(id, user);
 
         return "redirect:/market";
     }

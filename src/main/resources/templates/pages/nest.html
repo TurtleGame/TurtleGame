@@ -72,7 +72,7 @@
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
                         <label for="Gold"><b>Ilość złota:</b></label>
                         <input class="input" type="text" id="Gold" name="Gold" required>
-                        <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
+                        <button type="submit" class="button mb-2" onclick="sellEggConfirm(this)">Sprzedaj</button>
                     </form>
                     <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
                 </div>

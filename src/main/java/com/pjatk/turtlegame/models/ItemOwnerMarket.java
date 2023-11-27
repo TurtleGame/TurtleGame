@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "turtle_owner_history")
+@Table(name = "item_owner_market")
 @Setter
 @Getter
 public class ItemOwnerMarket {
@@ -16,6 +16,8 @@ public class ItemOwnerMarket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
+
+    private LocalDateTime endAt;
 
     @NotNull
     @Column(name = "isSelling", columnDefinition = "INT(1) DEFAULT 0")
