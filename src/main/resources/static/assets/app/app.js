@@ -321,17 +321,20 @@ function undoItemConfirm(buttonElement) {
     }
 }
 
-function openForm() {
-    document.getElementById("myForm").style.display = "block";
+function openForm(id) {
+    document.getElementById("myForm-" + id).style.display = "block";
 }
 
-function openForm2() {
-    document.getElementById("myForm2").style.display = "block";
+function openForm2(id) {
+    document.getElementById("myForm2-" + id).style.display = "block";
 }
 
-function closeForm() {
-    document.getElementById("myForm").style.display = "none";
-    document.getElementById("myForm2").style.display = "none";
+function closeForm(id) {
+    document.getElementById("myForm-" + id).style.display = "none";
+}
+
+function closeForm2(id) {
+    document.getElementById("myForm2-" + id).style.display = "none";
 }
 
 

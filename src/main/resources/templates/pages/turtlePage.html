@@ -36,15 +36,15 @@
                         <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
                             <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
                         </form>
-                        <button type="submit" class="button mb-2" onclick="openForm2()">Sprzedaj żółwia</button>
-                        <div class="form-popup" id="myForm2">
+                        <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${turtle.getId()} + ')'">Sprzedaj żółwia</button>
+                        <div class="form-popup" th:id="'myForm2-' + ${turtle.getId()}">
                             <h1>Ustal cenę</h1>
                             <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
                                 <label for="Gold"><b>Ilość muszelek:</b></label>
                                 <input class="input" type="text" id="Gold" name="Gold" required>
                                 <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
                             </form>
-                            <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                            <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${turtle.getId()} + ')'">Wyjdź</button>
                         </div>
                     </td>
                 </tr>

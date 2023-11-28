@@ -55,26 +55,26 @@
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
-                    <button class="button mb-2" onclick="openForm()">Adoptuj</button>
+                    <button class="button mb-2" th:onclick="'openForm(' + ${egg.getId()} + ')'">Adoptuj</button>
                 </div>
-                <button type="submit" class="button mb-2" onclick="openForm2()">Sprzedaj</button>
-                <div class="form-popup" id="myForm">
+                <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${egg.getId()} + ')'">Sprzedaj</button>
+                <div class="form-popup" th:id="'myForm-' + ${egg.getId()}">
                     <h1>Nadaj imię</h1>
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/adopt'}" method="post">
                         <label for="Name"><b>Imię</b></label>
                         <input class="input" type="text" id="Name" name="Name" required>
                         <button type="submit" class="button mb-2" onclick="adoptEggConfirm(this)">Adoptuj</button>
                     </form>
-                    <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                    <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm(' + ${egg.getId()} + ')'">Wyjdź</button>
                 </div>
-                <div class="form-popup" id="myForm2">
+                <div class="form-popup" th:id="'myForm2-' + ${egg.getId()}">
                     <h1>Ustal cenę</h1>
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
                         <label for="Gold"><b>Ilość złota:</b></label>
                         <input class="input" type="text" id="Gold" name="Gold" required>
                         <button type="submit" class="button mb-2" onclick="sellEggConfirm(this)">Sprzedaj</button>
                     </form>
-                    <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                    <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${egg.getId()} + ')'">Wyjdź</button>
                 </div>
             </div>
 

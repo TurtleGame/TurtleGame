@@ -25,8 +25,14 @@ public class TurtleType {
     @Size(min = 2, max = 250)
     private String description;
 
+    @NotNull
+    private int hatchingTime;
+
     @OneToMany(mappedBy = "turtleType")
     private List<SpeciesAttack> speciesAttackList;
+
+    @OneToMany(mappedBy = "turtleType")
+    private List<ItemTurtleType> itemTurtleTypeList;
 
     @ManyToOne
     @JoinColumn(name = "rarity_id")
