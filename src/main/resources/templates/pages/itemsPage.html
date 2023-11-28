@@ -25,6 +25,16 @@
                             <strong class="text-primary" th:text="${item.getQuantity()}"></strong>
                         </div>
                     </div>
+                    <button type="submit" class="button mb-2" onclick="openForm2()">Sprzedaj</button>
+                    <div class="form-popup" id="myForm2">
+                        <h1>Ustal cenę</h1>
+                        <form th:action="@{'/items/' + ${item.getId()} + '/sell'}" method="post">
+                            <label for="Gold"><b>Ilość złota:</b></label>
+                            <input class="input" type="text" id="Gold" name="Gold" required>
+                            <button type="submit" class="button mb-2" onclick="sellItemConfirm(this)">Sprzedaj</button>
+                        </form>
+                        <button type="submit" class="button button-danger mb-3" onclick="closeForm()">Wyjdź</button>
+                    </div>
                 </div>
                 <!-- end of item -->
             </div>

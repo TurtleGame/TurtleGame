@@ -1,5 +1,6 @@
 package com.pjatk.turtlegame.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -48,11 +49,14 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<ItemStatistic> itemStatisticList;
 
+    @OneToMany(mappedBy = "item")
+    @JsonIgnore
+    private List<ItemOwnerMarket> itemOwnerMarketList;
+
     public ItemStatistic getItemStatistic(int id) {
         return itemStatisticList.stream()
                 .filter(itemStatistic -> itemStatistic.getItem().getId() == id)
                 .findFirst()
                 .orElse(null);
-
     }
 }

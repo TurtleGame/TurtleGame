@@ -65,6 +65,34 @@ public class ItemService {
         userItemRepository.save(userItem);
     }
 
+    public void sellItem (int userId, int itemId, int gold) {
+        User user = userRepository.findById(userId);
+        ItemOwnerMarket selling = new ItemOwnerMarket();
+
+        UserItem userItem = user.getUserItemList()
+                .stream()
+                .filter(entry -> entry.getItem().getId() == itemId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć przedmiotu o podanym ID"));
+
+
+        selling.setSelling(true);
+        selling.setHowMuch(gold);
+        selling.setUser(user);
+        selling.setItem(userItem.getItem());
+        itemOwnerMarketRepository.save(selling);
+
+        if (userItem.getQuantity() > 1) {
+            userItem.setQuantity(userItem.getQuantity() - 1);
+            userItemRepository.save(userItem);
+        } else if (userItem.getQuantity() == 1) {
+            userItemRepository.delete(userItem);
+        } else {
+            throw new IllegalArgumentException("Brak przedmiotu");
+        }
+
+    }
+
     public List<ItemStatistic> getItemsStatistics() {
         return itemStatisticRepository.findAll();
     }
@@ -87,6 +115,13 @@ public class ItemService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć jajka o podanym ID"));
 
+
+        selling.setSelling(true);
+        selling.setHowMuch(gold);
+        selling.setUser(user);
+        selling.setItem(userItem.getItem());
+        itemOwnerMarketRepository.save(selling);
+
         if (userItem.getQuantity() > 1) {
             userItem.setQuantity(userItem.getQuantity() - 1);
             userItemRepository.save(userItem);
@@ -96,13 +131,6 @@ public class ItemService {
             throw new IllegalArgumentException("Brak jajka");
         }
 
-        selling.setSelling(true);
-        selling.setHowMuch(gold);
-        selling.setUser(user);
-        selling.setItem(userItem.getItem());
-        itemOwnerMarketRepository.save(selling);
-
-        System.out.println(gold);
     }
 
     public void adoptEgg(User user, int eggId, String name) {

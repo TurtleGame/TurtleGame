@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemOwnerMarketRepository extends JpaRepository<ItemOwnerMarket, Integer> {
+    ItemOwnerMarket findByItemIdAndEndAtIsNull(int itemId);
+    ItemOwnerMarket findByItemIdAndUserIdAndEndAtIsNull(int itemId, int ownerId);
 }

@@ -51,7 +51,7 @@ public class MarketController {
     public String buyItem(@AuthenticationPrincipal UserDetails userDetails,
                             @PathVariable int id) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
-        //marketService.buy(id, user);
+        marketService.buyItem(id, user);
 
         return "redirect:/market";
     }
@@ -60,7 +60,7 @@ public class MarketController {
     public String undoItem(@AuthenticationPrincipal UserDetails userDetails,
                              @PathVariable int id) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
-        //marketService.undo(id, user);
+        marketService.undoItem(id, user);
 
         return "redirect:/market";
     }

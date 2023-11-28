@@ -1,10 +1,7 @@
 package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
-import com.pjatk.turtlegame.repositories.ItemOwnerMarketRepository;
-import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +16,7 @@ public class MarketService {
     private TurtleRepository turtleRepository;
     private UserRepository userRepository;
     private ItemOwnerMarketRepository itemOwnerMarketRepository;
+    private UserItemRepository userItemRepository;
 
     public List<Turtle> getAllTurtles (){
         List<TurtleOwnerHistory> history = turtleOwnerHistoryRepository.findAll();
@@ -57,7 +55,6 @@ public class MarketService {
         for(ItemOwnerMarket selling : history) {
             if (selling.getItem().getItemType().getName().equals("Jajko")) {
                 eggs.add(selling.getItem());
-                System.out.println(selling.getItem().getRarity().getName());
             }
         }
 
@@ -92,8 +89,9 @@ public class MarketService {
             }
         }
 
-        if (user.getId() == userId)
+        if (user.getId() == userId) {
             return 1;
+        }
 
         return 0;
     }
@@ -112,6 +110,14 @@ public class MarketService {
 
     public int priceGold (Item item) {
         int gold = 100;
+
+
+
+        for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
+            if (selling.getEndAt() == null) {
+                gold = selling.getHowMuch();
+            }
+        }
 
         return gold;
     }
@@ -179,7 +185,83 @@ public class MarketService {
         turtleRepository.save(turtle);
     }
 
-    public void BuyItem (int itemId, User user) {
+    public void buyItem (int itemId, User newUser) {
+        User oldUser = itemOwnerMarketRepository.findByItemIdAndEndAtIsNull(itemId).getUser();
+        ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, oldUser.getId());
+        Item item = transaction.getItem();
 
+        if (newUser.getGold() > priceGold(item)) {
+
+            newUser.setGold(newUser.getGold() - priceGold(item));
+            userRepository.save(newUser);
+
+        } else if (newUser.getGold() == priceGold(item)) {
+
+            newUser.setGold(0);
+            userRepository.save(newUser);
+
+        } else {
+
+            throw new IllegalArgumentException("Brak wystarczającej ilości muszelek");
+
+        }
+
+        oldUser.setGold(oldUser.getGold() + priceGold(item));
+
+        userRepository.save(oldUser);
+
+        item.getItemOwnerMarketList().stream()
+                .filter(history -> history.getEndAt() == null)
+                .forEach(history -> {
+                    itemOwnerMarketRepository.delete(history);
+                });
+
+        List<UserItem> userItemList = newUser.getUserItemList();
+
+        UserItem userItem = userItemList
+                .stream()
+                .filter(entry -> entry.getItem().getId() == (item.getId()))
+                .findFirst().orElse(null);
+
+
+        if (userItem == null) {
+            userItem = new UserItem();
+            userItem.setItem(item);
+            userItem.setUser(newUser);
+            userItem.setQuantity(1);
+        } else {
+            userItem.setQuantity(userItem.getQuantity() + 1);
+        }
+
+        userItemRepository.save(userItem);
+    }
+
+    public void undoItem (int itemId, User user) {
+
+        Item item = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId()).getItem();
+
+        item.getItemOwnerMarketList().stream()
+                .filter(history -> history.getEndAt() == null)
+                .forEach(history -> {
+                    itemOwnerMarketRepository.delete(history);
+                });
+
+        List<UserItem> userItemList = user.getUserItemList();
+
+        UserItem userItem = userItemList
+                .stream()
+                .filter(entry -> entry.getItem().getId() == (item.getId()))
+                .findFirst().orElse(null);
+
+        if (userItem == null) {
+            userItem = new UserItem();
+            userItem.setItem(item);
+            userItem.setUser(user);
+            userItem.setQuantity(1);
+        } else {
+            userItem.setQuantity(userItem.getQuantity() + 1);
+        }
+
+        userItemRepository.save(userItem);
     }
 }
