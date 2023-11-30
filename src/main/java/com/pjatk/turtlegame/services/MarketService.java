@@ -17,6 +17,7 @@ public class MarketService {
     private UserRepository userRepository;
     private ItemOwnerMarketRepository itemOwnerMarketRepository;
     private UserItemRepository userItemRepository;
+    private PrivateMessageRepository privateMessageRepository;
 
     public List<Turtle> getAllTurtles (){
         List<TurtleOwnerHistory> history = turtleOwnerHistoryRepository.findAll();
@@ -189,6 +190,7 @@ public class MarketService {
         User oldUser = itemOwnerMarketRepository.findByItemIdAndEndAtIsNull(itemId).getUser();
         ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, oldUser.getId());
         Item item = transaction.getItem();
+        PrivateMessage privateMessage = new PrivateMessage();
 
         if (newUser.getGold() > priceGold(item)) {
 
@@ -202,11 +204,16 @@ public class MarketService {
 
         } else {
 
-            throw new IllegalArgumentException("Brak wystarczającej ilości muszelek");
+            throw new IllegalArgumentException("Brak wystarczającej ilości golda");
 
         }
 
         oldUser.setGold(oldUser.getGold() + priceGold(item));
+        privateMessage.setTitle("Przedmiot został sprzedany!");
+        privateMessage.setContent("Przedmiot: " + item.getName() + " został sprzedany za " + priceGold(item) + " golda.");
+        privateMessage.setRecipient(oldUser);
+        privateMessage.setSentAt(LocalDateTime.now());
+        privateMessageRepository.save(privateMessage);
 
         userRepository.save(oldUser);
 
