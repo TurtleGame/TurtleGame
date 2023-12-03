@@ -3,6 +3,7 @@ package com.pjatk.turtlegame.controllers;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.DTOs.EggsForm;
 import com.pjatk.turtlegame.models.DTOs.SellTurtle;
+import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleEggService;
@@ -60,18 +61,19 @@ public class NestController {
                            @RequestParam("Name") String name,
                            Model model,
                            BindingResult bindingResult) throws Exception {
+        User user = userRepository.findById(turtleUserDetails.getId());
         //TODO
         if (name.length() < 2 || name.length() > 50) {
             bindingResult.rejectValue("Name", "error.wrongName", "Nieprawidłowe imię");
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
+            model.addAttribute("eggs", itemService.getEggs(user.getId()));
 
             return "pages/nest";
         }
 
-        itemService.adoptEgg(turtleUserDetails.user(), id, name);
+        itemService.adoptEgg(user, id, name);
 
         return "redirect:/nest";
     }

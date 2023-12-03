@@ -30,6 +30,7 @@ public class PrivateMessageController {
         model.addAttribute("messages", user.getRecipientPrivateMessageList());
         model.addAttribute("sentMessages", user.getSendPrivateMessageList());
         model.addAttribute("newMessageDTO", new NewMessageDTO());
+        model.addAttribute("context", "private-messages");
 
         return "pages/privateMessage";
     }
@@ -67,6 +68,7 @@ public class PrivateMessageController {
         model.addAttribute("sentMessages", user.getSendPrivateMessageList());
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("context", "private-messages");
             return "pages/privateMessage";
 
         }

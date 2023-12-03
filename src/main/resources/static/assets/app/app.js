@@ -1,3 +1,122 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const context = $("meta[name=context]").attr('content');
+
+
+    if (['home'].includes(context)) {
+        if ($('.new-news-button').length) {
+            $(".new-news-button").on('click', function() {
+                $(".new-news-content").toggleClass("hidden")
+            });
+            CKEDITOR.replace('content');
+        }
+
+        $('.edit-icon').on('click', function (){
+            $('.edit-news').removeClass('hidden');
+            const title = $(this).data('title');
+            const content = $(this).data('content');
+            const id = $(this).data('id');
+
+            $('[name="edit-title"]', $('.edit-news-content')).val(title);
+            $('[name="edit-content"]', $('.edit-news-content')).val(content);
+            $('[name="news-id"]', $('.edit-news-content')).val(id);
+        })
+    }
+
+
+    if (['academy', 'expeditions'].includes(context)) {
+        updateCountdown();
+    }
+
+
+    if (['private-messages'].includes(context)) {
+        document.querySelectorAll('.message-title').forEach((el) => {
+            el.addEventListener('click', () => {
+                el.closest('.message-container').querySelector(".message-content").classList.toggle('hidden');
+            });
+        });
+
+        $('h2', $('.header-container')).on('click', function() {
+            $('h2', $('.header-container')).removeClass('active-header');
+            $(this).addClass('active-header');
+            $('#received-message').css('display', 'none');
+            $('#sent-message').css('display', 'none');
+            $('#create-message').css('display', 'none');
+
+            if ($(this).attr('id') === 'received-header') {
+                $('#received-message').css('display', 'block');
+            }
+            if ($(this).attr('id') === 'sent-header') {
+                $('#sent-message').css('display', 'block');
+            }
+            if ($(this).attr('id') === 'create-header') {
+                $('#create-message').css('display', 'block');
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipient = urlParams.get('recipient');
+        if (recipient) {
+            $('#create-header').trigger('click');
+            const newOption = new Option(recipient, recipient, true, true);
+            $('[name="recipient"]').append(newOption).trigger('change');
+        }
+
+        $('.reply-button').on('click', function () {
+            const sender = $(this).data('sender');
+            const title = $(this).data('title');
+            $('#create-header').trigger('click');
+            $('[name="title"]', $('#create-message')).val("Re: " + title);
+            const newOption = new Option(sender, sender, true, true);
+            $('[name="recipient"]').append(newOption).trigger('change');
+        })
+    }
+
+
+    if (['market'].includes(context)) {
+        $('#turtles-header').on('click', function () {
+            $('#turtles-selling').css('display', 'block');
+            $('#items-selling').css('display', 'none');
+            $('#turtles-header').addClass('active-header');
+            $('#items-header').removeClass('active-header');
+        });
+        $('#items-header').on('click', function () {
+            $('#turtles-selling').css('display', 'none');
+            $('#items-selling').css('display', 'block');
+            $('#items-header').addClass('active-header');
+            $('#turtles-header').removeClass('active-header');
+        });
+    }
+
+
+    $('.select2').select2({
+        language: "pl",
+        ajax: {
+            url: 'user/search-by-keyword',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    keyword: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(function (item) {
+                        return {id: item, text: item}
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2
+    });
+
+    $('.closeButton').on('click', function () {
+        const message = $(this).closest('.errorMessage, .successMessage');
+        message.hide();
+    });
+});
+
 function abandonTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
@@ -48,147 +167,6 @@ function deleteMessage(buttonElement) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    updateCountdown();
-
-    document.querySelectorAll('.message-title').forEach((el) => {
-        el.addEventListener('click', () => {
-            el.closest('.message-container')
-                .querySelector(".message-content")
-                .classList
-                .toggle('hidden');
-        });
-
-
-    });
-
-    $(".new-news-button").click(function () {
-        $(".new-news-content").toggleClass("hidden");
-    })
-
-    if ($('.new-news-button').length) {
-        CKEDITOR.replace('content');
-    }
-
-
-    const receivedHeader = document.getElementById('received-header');
-    const sentHeader = document.getElementById('sent-header');
-    const receivedMessage = document.getElementById('received-message');
-    const sentMessage = document.getElementById('sent-message');
-    const createHeader = document.getElementById('create-header');
-    const createMessage = document.getElementById('create-message');
-    const readAllButton = document.getElementById('read-all');
-    const turtlesHeader = document.getElementById('turtles-header');
-    const itemsHeader = document.getElementById('items-header');
-    const turtlesSelling = document.getElementById('turtles-selling');
-    const itemsSelling = document.getElementById('items-selling');
-
-    turtlesHeader?.addEventListener('click', function () {
-        turtlesSelling.style.display = 'block';
-        itemsSelling.style.display = 'none';
-        turtlesHeader.classList.add('active-header');
-        itemsHeader.classList.remove('active-header');
-    });
-    itemsHeader?.addEventListener('click', function () {
-        itemsSelling.style.display = 'block';
-        turtlesSelling.style.display = 'none';
-        itemsHeader.classList.add('active-header');
-        turtlesHeader.classList.remove('active-header');
-    });
-
-    receivedHeader?.addEventListener('click', function () {
-        receivedMessage.style.display = 'block';
-        sentMessage.style.display = 'none';
-        receivedHeader.classList.add('active-header');
-        sentHeader.classList.remove('active-header');
-        createHeader.classList.remove('active-header');
-        createMessage.style.display = 'none';
-        readAllButton.style.display = 'block';
-
-    });
-    sentHeader?.addEventListener('click', function () {
-        receivedMessage.style.display = 'none';
-        sentMessage.style.display = 'block';
-        sentHeader.classList.add('active-header');
-        receivedHeader.classList.remove('active-header');
-        createHeader.classList.remove('active-header');
-        createMessage.style.display = 'none';
-        readAllButton.style.display = 'none';
-    });
-    $('#create-header').on('click', function () {
-        createHeader.classList.add('active-header');
-        receivedHeader.classList.remove('active-header');
-        sentHeader.classList.remove('active-header');
-        createMessage.style.display = 'block';
-        receivedMessage.style.display = 'none';
-        sentMessage.style.display = 'none';
-        readAllButton.style.display = 'none';
-    });
-
-    $('.select2').select2({
-        language: "pl",
-        ajax: {
-            url: 'user/search-by-keyword',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    keyword: params.term
-                };
-            },
-            processResults: function (data) {
-                return {
-                    results: data.map(function (item) {
-                        return {id: item, text: item}
-                    })
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 2
-    });
-
-    if ($('#create-header').length) {
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const recipient = urlParams.get('recipient');
-        if (recipient) {
-            $('#create-header').trigger('click');
-            const newOption = new Option(recipient, recipient, true, true);
-            $('[name="recipient"]').append(newOption).trigger('change');
-        }
-
-        $('.reply-button').on('click', function () {
-            const sender = $(this).data('sender');
-            const title = $(this).data('title');
-            $('#create-header').trigger('click');
-            $('[name="title"]', $('#create-message')).val("Re: " + title);
-            const newOption = new Option(sender, sender, true, true);
-            $('[name="recipient"]').append(newOption).trigger('change');
-        })
-    }
-
-    $('.closeButton').on('click', function () {
-        const message = $(this).closest('.errorMessage, .successMessage');
-        message.hide();
-    });
-
-    if($('.edit-icon').length){
-        $('.edit-icon').on('click', function (){
-            $('.edit-news').removeClass('hidden');
-            const title = $(this).data('title');
-            const content = $(this).data('content');
-            const id = $(this).data('id');
-
-            $('[name ="edit-title"]', $('.edit-news-content')).val(title);
-            $('[name ="edit-content"]', $('.edit-news-content')).val(content);
-            $('[name ="news-id"]', $('.edit-news-content')).val(id);
-        })
-    }
-});
-
-
 async function readMessage(element) {
     const messageId = element.getAttribute('data-message-id');
     const response = await fetch(`/private-message/${messageId}/read`, {
@@ -208,20 +186,13 @@ async function readMessage(element) {
 }
 
 async function readAllMessage() {
-
     const response = await fetch(`/private-message/read-all`, {
-            method: "POST"
-        }
-    );
-
+        method: "POST"
+    });
     if (response.status === 204) {
-        const messages = document.querySelectorAll('.message-unread')
-        messages.forEach((message) => {
-            message.classList.remove('message-unread');
-            message.classList.add('message-read');
-        })
+        $('.message-unread').removeClass('message-unread').addClass('message-read');
+        $('.icon-messages').removeClass('fa-bounce');
     }
-    document.querySelector('.icon-messages').classList.remove('fa-bounce');
 }
 
 function updateCountdown() {
@@ -336,6 +307,3 @@ function closeForm(id) {
 function closeForm2(id) {
     document.getElementById("myForm2-" + id).style.display = "none";
 }
-
-
-
