@@ -6,7 +6,7 @@
 
 <div layout:fragment="content">
 
-    <div th:replace="fragments/messagesFragment :: messages"></div>
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
 
     <div class="card mb-2">
 
@@ -61,7 +61,8 @@
                     </div>
                     <div class="buttons">
                         <span th:if="${message.getSender()}">
-                            <button class="button mb-2 reply-button" th:attr="data-sender=${message.getSender().getUsername()},data-title=${message.getTitle()}">Odpowiedz</button>
+                            <button class="button mb-2 reply-button"
+                                    th:attr="data-sender=${message.getSender().getUsername()},data-title=${message.getTitle()}">Odpowiedz</button>
                         </span>
                         <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
                             <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
@@ -146,7 +147,8 @@
                         <input class="input" id="gold" name="gold" style="width: 100px;">
                     </div>
                     <div class="mb-4">
-                        <label for="shells"><img src="/assets/images/shell.png" width="20" height="20" alt="shell"></label>
+                        <label for="shells"><img src="/assets/images/shell.png" width="20" height="20"
+                                                 alt="shell"></label>
                         <input class="input" id="shells" name="shells" style="width: 100px;">
                     </div>
                 </div>

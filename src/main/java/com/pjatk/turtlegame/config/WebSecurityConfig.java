@@ -1,9 +1,11 @@
 package com.pjatk.turtlegame.config;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -15,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
 
     @Bean
@@ -43,7 +46,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/market/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/academy/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/friends/**").hasAnyAuthority("ADMIN", "USER");
-                    auth.requestMatchers("/registration").permitAll();
+                    auth.requestMatchers("/registration/**").permitAll();
                     auth.requestMatchers("/news").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/news/create").hasAuthority("ADMIN");
                     auth.requestMatchers("/news/edit").hasAuthority("ADMIN");

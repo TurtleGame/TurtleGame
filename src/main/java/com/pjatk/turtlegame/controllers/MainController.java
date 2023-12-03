@@ -10,8 +10,10 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +34,7 @@ public class MainController {
 
     @GetMapping(path = {"", "/login"})
     public String indexLogin(
-            @RequestParam(name = "error", required = false) String error,
+            HttpServletRequest request,
             @ModelAttribute("userDTO") UserDTO userDTO,
             Model model,
             @AuthenticationPrincipal TurtleUserDetails turtleUserDetails
@@ -41,15 +43,18 @@ public class MainController {
         if (turtleUserDetails != null) {
             return "pages/main";
         }
-
         model.addAttribute("context", "login");
 
-        if (error != null) {
-            model.addAttribute("errorMessage", "Niepoprawna nazwa użytkownika lub hasło");
+
+        Object authenticationException = request.getSession().getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        if (authenticationException instanceof AuthenticationException authException) {
+            model.addAttribute("failedMessage", authException.getMessage());
+            request.getSession().invalidate();
         }
 
         return "pages/index";
     }
+
 
     @GetMapping(path = {"/registration"})
     public String indexRegister(
@@ -89,10 +94,22 @@ public class MainController {
         return "redirect:/";
     }
 
+
+    @GetMapping("/registration/confirm")
+    public String confirm(@RequestParam("token") String token, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.confirmToken(token);
+        } catch (Exception e) {
+            model.addAttribute("failedMessage", e.getMessage());
+        }
+        redirectAttributes.addFlashAttribute("successMessage", "Konto aktywowane. Możesz się zalogować.");
+        return "redirect:/";
+    }
+
     @GetMapping(path = "/main")
     public String mainPage(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("context", "home");
-        model.addAttribute("news",  newsService.getAll());
+        model.addAttribute("news", newsService.getAll());
         return "pages/main";
     }
 

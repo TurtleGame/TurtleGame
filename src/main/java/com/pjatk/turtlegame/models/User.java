@@ -44,12 +44,9 @@ public class User {
     private String email;
 
     @NotNull
-    private int isEmailConfirmed;
+    private boolean isEmailConfirmed;
 
     private LocalDateTime birthdate;
-
-    @Size(max = 300)
-    private String avatarPath;
 
     @NotNull
     private Integer gold;

@@ -31,17 +31,19 @@ main {
     border-radius: 1.25rem 1.25rem 0 0;
   }
 
-  .errorMessage {
-    background: #660000;
-    color: gold;
-    text-decoration: solid;
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-  }
+
+}
+
+.errorMessage {
+  background: #660000;
+  color: gold;
+  text-decoration: solid;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
 }
 
 .successMessage {
