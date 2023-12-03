@@ -75,7 +75,7 @@ public class ExpeditionService {
                 int randomNumber = random.nextInt(100) + 1;
 
                 if (randomNumber <= expeditionItem.getChance()) {
-                    int randomQuantity = random.nextInt(expeditionItem.getItem().getMaxQuantity() - expeditionItem.getItem().getMinQuantity() + 1) + expeditionItem.getItem().getMinQuantity();
+                    int randomQuantity = random.nextInt(expeditionItem.getMaxQuantity() - expeditionItem.getMinQuantity() + 1) + expeditionItem.getMinQuantity();
                     boolean rewardFound = false;
 
                     for (PrivateMessageAttachment privateMessageAttachment : privateMessageAttachments) {

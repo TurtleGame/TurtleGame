@@ -52,7 +52,7 @@ public class PrivateMessage {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @OneToMany(mappedBy = "privateMessage")
+    @OneToMany(mappedBy = "privateMessage", fetch = FetchType.EAGER)
     private List<PrivateMessageAttachment> attachment;
 
 }

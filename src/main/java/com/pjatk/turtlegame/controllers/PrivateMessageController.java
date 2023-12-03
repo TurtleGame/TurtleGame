@@ -74,7 +74,8 @@ public class PrivateMessageController {
             privateMessageService.createNewMessage(user, newMessageDTO.getRecipient(), newMessageDTO.getTitle(), newMessageDTO.getContent(), newMessageDTO.getGold(), newMessageDTO.getShells());
 
         } catch (Exception e) {
-            bindingResult.rejectValue("recipient", "error.notFound", e.getMessage());
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            return "redirect:/private-message";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Wysłałeś wiadomość!");
 

@@ -114,7 +114,9 @@ public class PrivateMessageService {
         if(shells == null){
             shells = 0;
         }
-
+        if(user.getUsername().equals(username)){
+            throw new IllegalArgumentException("Nie możesz wysłać wiadomości do siebie!");
+        }
         if (user.getGold() < gold) {
             throw new IllegalArgumentException("Posiadasz za mało złota!");
         }

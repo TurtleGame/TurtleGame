@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "expedition_equipment")
+@Table(name = "expedition_item")
 @Setter
 @Getter
 public class ExpeditionItem {
@@ -17,6 +17,10 @@ public class ExpeditionItem {
 
     @NotNull
     private double chance;
+
+    private int minQuantity;
+
+    private int maxQuantity;
 
     @ManyToOne
     @JoinColumn(name = "equipment_id")

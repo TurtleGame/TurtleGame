@@ -97,8 +97,8 @@ public class ItemService {
         return itemStatisticRepository.findAll();
     }
 
-    public List<Item> getEggs(int id) {
-        User user = userRepository.findById(id);
+    public List<Item> getEggs(int userId) {
+        User user = userRepository.findById(userId);
         return user.getUserItemList().stream()
                 .map(UserItem::getItem)
                 .filter(item -> "Jajko".equals(item.getItemType().getName()))
