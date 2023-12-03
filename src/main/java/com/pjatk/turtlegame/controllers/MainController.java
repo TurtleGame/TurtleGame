@@ -67,6 +67,33 @@ public class MainController {
         return "pages/index";
     }
 
+    @PostMapping("/remind-password")
+    public String sendLinkToChangePassword(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes) {
+        userService.sendChangePasswordMail(email);
+        model.addAttribute("context", "login");
+        redirectAttributes.addFlashAttribute("successMessage", "Mail do odzyskania hasła wysłany!");
+        return "redirect:/";
+    }
+
+    @GetMapping("/change-password")
+    public String changePasswordIndex(@RequestParam("token") String token, Model model) {
+        model.addAttribute("token", token);
+        return "pages/changePassword";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam("token") String token, @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            userService.changePasswordFromMail(token, password, confirmPassword);
+        } catch (Exception e) {
+            model.addAttribute("token", token);
+            model.addAttribute("failedMessage", e.getMessage());
+            return "pages/changePassword";
+        }
+        redirectAttributes.addFlashAttribute("successMessage", "Hasło zmienione. Możesz teraz się zalogować.");
+        model.addAttribute("context", "login");
+        return "redirect:/";
+    }
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userDTO") @Valid UserDTO userDTO,

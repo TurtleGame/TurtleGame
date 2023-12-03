@@ -54,6 +54,29 @@
     </form>
 </div>
 
+<div class="form card" id="remind-password">
+    <h2 class="text-center m-0">Przypomnij hasło</h2>
+    <div class="separator"></div>
+    <form th:action="@{/remind-password}" method="post">
+        <div class="m-2">
+            <div class="mb-4">
+                <label>
+                    Adres email
+                    <input class="input" name="email"/>
+                </label>
+            </div>
+        </div>
+        <div class="separator"></div>
+
+        <div class="m-2">
+            <div class="text-center mb-4">
+                <input type="submit" class="button" value="Przypomnij hasło"/>
+            </div>
+        </div>
+    </form>
+
+</div>
+
 <div class="form card" id="registration-form" th:classappend="${context == 'register' ? '' : 'hidden'}">
     <h2 class="text-center m-0">Zarejestruj</h2>
 

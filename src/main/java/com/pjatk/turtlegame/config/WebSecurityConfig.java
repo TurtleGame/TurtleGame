@@ -51,6 +51,8 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/news/create").hasAuthority("ADMIN");
                     auth.requestMatchers("/news/edit").hasAuthority("ADMIN");
                     auth.requestMatchers("/media/**").permitAll();
+                    auth.requestMatchers("/remind-password").permitAll();
+                    auth.requestMatchers("/change-password").permitAll();
                 })
                 .formLogin(form -> form
                         .loginPage("/login")

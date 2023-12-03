@@ -28,15 +28,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserService {
 
-  private final  TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
-  private final  UserRepository userRepository;
-  private final  ItemRepository itemRepository;
-  private final  RoleRepository roleRepository;
-  private final  FriendRequestRepository friendRequestRepository;
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-  private final  ItemService itemService;
-  private final EmailService  emailService;
+    private final TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
+    private final RoleRepository roleRepository;
+    private final FriendRequestRepository friendRequestRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    private final ItemService itemService;
+    private final EmailService emailService;
 
     @Transactional
     public void addNewUser(UserDTO userDTO) {
@@ -60,17 +60,52 @@ public class UserService {
         user.setUserItemList(newList);
         itemService.addItem(user, item, 5);
         itemService.addItem(user, egg, 1);
-        emailService.send(userDTO.getEmail().trim(), buildEmail(userDTO.getUsername(), link));
+        emailService.send(userDTO.getEmail().trim(), buildActivationEmail(userDTO.getUsername(), link), "Potwierdź swój adres mailowy");
+    }
+
+    public void sendChangePasswordMail(String email) {
+        User user = userRepository.findUserByEmail(email);
+
+        String token = UUID.randomUUID().toString();
+        user.setActivationToken(token);
+        user.setActivationTokenExpireAt(LocalDateTime.now().plusWeeks(1));
+        userRepository.save(user);
+        String link = "http://localhost:8080/change-password?token=" + token;
+        emailService.send(user.getEmail(), buildChangePasswordEmail(user.getUsername(), link), "Zmień hasło");
+
     }
 
     @Transactional
-    public void confirmToken(String token){
+    public void changePasswordFromMail(String token, String newPassword, String confirmPassword) throws Exception {
         User user = userRepository.findByActivationToken(token);
-        if(user.getActivationTokenExpireAt().isBefore(LocalDateTime.now())){
+        if (user.getActivationTokenExpireAt().isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("Token wygasł");
         }
 
-     user.setEmailConfirmed(true);
+        if (!newPassword.equals(confirmPassword)) {
+            throw new Exception("Hasła nie pasują");
+        }
+        if (newPassword.length() < 6) {
+            throw new Exception("Hasło jest za krótkie!");
+        }
+        if (!user.isEmailConfirmed()) {
+            user.setEmailConfirmed(true);
+        }
+        user.setActivationTokenExpireAt(LocalDateTime.now());
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+    }
+
+    @Transactional
+    public void confirmToken(String token) {
+        User user = userRepository.findByActivationToken(token);
+        if (user.getActivationTokenExpireAt().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Token wygasł");
+        }
+        user.setActivationTokenExpireAt(LocalDateTime.now());
+        user.setEmailConfirmed(true);
+        userRepository.save(user);
     }
 
     public boolean isUsernameAlreadyTaken(String username) {
@@ -182,6 +217,7 @@ public class UserService {
             throw new IOException("Nie udało się zapisać pliku!");
         }
     }
+
     public Map<Integer, User> getFriends(User user) {
         List<FriendRequest> friendRequestList = friendRequestRepository.findBySenderOrReceiver(user, user);
 
@@ -199,13 +235,13 @@ public class UserService {
                 ));
     }
 
-    public boolean isUserOnFriendList(User loggedUser, User userToCheck){
+    public boolean isUserOnFriendList(User loggedUser, User userToCheck) {
 
         return getFriends(loggedUser).containsValue(userToCheck);
 
     }
 
-    private String buildEmail(String name, String link) {
+    private String buildActivationEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -262,6 +298,75 @@ public class UserService {
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
                 "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "        \n" +
+                "      </td>\n" +
+                "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "      <td height=\"30\"><br></td>\n" +
+                "    </tr>\n" +
+                "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
+                "\n" +
+                "</div></div>";
+    }
+
+    private String buildChangePasswordEmail(String name, String link) {
+        return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
+                "\n" +
+                "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
+                "\n" +
+                "  <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n" +
+                "    <tbody><tr>\n" +
+                "      <td width=\"100%\" height=\"53\" bgcolor=\"#0b0c0c\">\n" +
+                "        \n" +
+                "        <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;max-width:580px\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n" +
+                "          <tbody><tr>\n" +
+                "            <td width=\"70\" bgcolor=\"#0b0c0c\" valign=\"middle\">\n" +
+                "                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
+                "                  <tbody><tr>\n" +
+                "                    <td style=\"padding-left:10px\">\n" +
+                "                  \n" +
+                "                    </td>\n" +
+                "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
+                "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Zmień hasło</span>\n" +
+                "                    </td>\n" +
+                "                  </tr>\n" +
+                "                </tbody></table>\n" +
+                "              </a>\n" +
+                "            </td>\n" +
+                "          </tr>\n" +
+                "        </tbody></table>\n" +
+                "        \n" +
+                "      </td>\n" +
+                "    </tr>\n" +
+                "  </tbody></table>\n" +
+                "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
+                "    <tbody><tr>\n" +
+                "      <td width=\"10\" height=\"10\" valign=\"middle\"></td>\n" +
+                "      <td>\n" +
+                "        \n" +
+                "                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
+                "                  <tbody><tr>\n" +
+                "                    <td bgcolor=\"#1D70B8\" width=\"100%\" height=\"10\"></td>\n" +
+                "                  </tr>\n" +
+                "                </tbody></table>\n" +
+                "        \n" +
+                "      </td>\n" +
+                "      <td width=\"10\" valign=\"middle\" height=\"10\"></td>\n" +
+                "    </tr>\n" +
+                "  </tbody></table>\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
+                "    <tbody><tr>\n" +
+                "      <td height=\"30\"><br></td>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
+                "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
+                "        \n" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Oto twój link do zmiany hasła: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Zmień hasło</a> </p></blockquote>\n <p>Do zobaczenia w turtle blast!</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

@@ -52,7 +52,7 @@ public class UserController {
         User user = userRepository.findById(turtleUserDetails.getId());
 
         userService.editAbout(content, user);
-        return "pages/editPage";
+        return "redirect:/user/edit";
     }
 
     @GetMapping("/search-by-keyword")
@@ -78,7 +78,7 @@ public class UserController {
         }
 
         redirectAttributes.addFlashAttribute("successMessage", "Zmiana hasła udana");
-        return "redirect:/editPage";
+        return "redirect:/user/edit";
     }
 
     @PostMapping(path = "/change-username")
@@ -112,7 +112,7 @@ public class UserController {
             return "pages/editPage";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Avatar pomyślnie dodany!");
-        return "redirect:/editPage";
+        return "redirect:/user/edit";
     }
 }
 
