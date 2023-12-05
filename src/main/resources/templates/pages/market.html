@@ -15,6 +15,14 @@
             </div>
         </div>
         <div id="turtles-selling">
+            <div class="card mb-2">
+                <h2 class="text-center m-0 sp">
+                    <a><button class="but">Nazwa</button></a>
+                    <a><button class="but">Gatunek</button></a>
+                    <a><button class="but">Poziom</button></a>
+                    <a><button class="but">Cena</button></a>
+                </h2>
+            </div>
             <div class="card mb-2" th:each="turtle : ${turtles}">
                 <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
                 <div class="flex flex-row gap-4">

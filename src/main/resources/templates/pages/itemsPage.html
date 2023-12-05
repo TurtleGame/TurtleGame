@@ -18,22 +18,14 @@
                             <img src="assets/images/items/scroll.png"/>
                         </div>
                         <div class="size-wide">
-                            <div class="mb-1" th:text="${item.getItem().getName()}"></div>
+                            <a th:href="@{/items/{id}/details(id = ${item.getItem().getId()})}">
+                            <button class="but mb-1" th:text="${item.getItem().getName()}"></button>
+                            </a>
                             <div class="text-muted text-sm"  th:text="${item.getItem().getItemType().getName()}"></div>
                         </div>
                         <div class="flex flex-right flex-middle">
                             <strong class="text-primary" th:text="${item.getQuantity()}"></strong>
                         </div>
-                    </div>
-                    <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${item.getItem().getId()} + ')'">Sprzedaj</button>
-                    <div class="form-popup" th:id="'myForm2-' + ${item.getItem().getId()}">
-                        <h1>Ustal cenę</h1>
-                        <form th:action="@{'/items/' + ${item.getItem().getId()} + '/sell'}" method="post">
-                            <label for="Gold"><b>Ilość złota:</b></label>
-                            <input class="input" type="text" id="Gold" name="Gold" required>
-                            <button type="submit" class="button mb-2" onclick="sellItemConfirm(this)">Sprzedaj</button>
-                        </form>
-                        <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${item.getItem().getId()} + ')'">Wyjdź</button>
                     </div>
                 </div>
                 <!-- end of item -->

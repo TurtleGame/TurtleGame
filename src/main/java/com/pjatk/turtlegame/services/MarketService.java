@@ -3,7 +3,9 @@ package com.pjatk.turtlegame.services;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -62,6 +64,13 @@ public class MarketService {
         return eggs;
     }
 
+    public List<Turtle> findSortTurtle(String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        return this.turtleRepository.findAll(sort);
+    }
+
     public int sellerIsBuyer (User user, Turtle turtle){
         List<TurtleOwnerHistory> history = turtleOwnerHistoryRepository.findAll();
         int userId = 0;
@@ -112,8 +121,6 @@ public class MarketService {
     public int priceGold (Item item) {
         int gold = 100;
 
-
-
         for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
             if (selling.getEndAt() == null) {
                 gold = selling.getHowMuch();
@@ -123,30 +130,31 @@ public class MarketService {
         return gold;
     }
 
+    @Transactional
     public void buyTurtle (int turtleId, User newUser) {
         LocalDateTime now = LocalDateTime.now();
         User oldUser = turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtleId).getUser();
         TurtleOwnerHistory transaction = turtleOwnerHistoryRepository.findByTurtleIdAndUserIdAndEndAtIsNull(turtleId, oldUser.getId());
         Turtle turtle = transaction.getTurtle();
         TurtleOwnerHistory turtleOwnerHistory = new TurtleOwnerHistory();
+        PrivateMessage privateMessage = new PrivateMessage();
 
-        if (newUser.getShells() > priceShells(turtle)) {
-
-            newUser.setShells(newUser.getShells() - priceShells(turtle));
-            userRepository.save(newUser);
-
-        } else if (newUser.getShells() == priceShells(turtle)) {
-
-            newUser.setShells(0);
-            userRepository.save(newUser);
-
-        } else {
+        if (newUser.getShells() < priceShells(turtle)) {
 
             throw new IllegalArgumentException("Brak wystarczającej ilości muszelek");
 
         }
 
+        newUser.setShells(newUser.getShells() - priceShells(turtle));
+        userRepository.save(newUser);
+
         oldUser.setShells(oldUser.getShells() + priceShells(turtle));
+        privateMessage.setTitle("Żółw został sprzedany!");
+        privateMessage.setContent("Żółw: " + turtle.getName() + " został sprzedany za " + priceShells(turtle) + " muszelek.");
+        privateMessage.setRecipient(oldUser);
+        privateMessage.setSentAt(LocalDateTime.now());
+        privateMessage.setGold(0);
+        privateMessageRepository.save(privateMessage);
 
         userRepository.save(oldUser);
 
@@ -186,67 +194,44 @@ public class MarketService {
         turtleRepository.save(turtle);
     }
 
+    @Transactional
     public void buyItem (int itemId, User newUser) {
         User oldUser = itemOwnerMarketRepository.findByItemIdAndEndAtIsNull(itemId).getUser();
         ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, oldUser.getId());
         Item item = transaction.getItem();
         PrivateMessage privateMessage = new PrivateMessage();
 
-        if (newUser.getGold() > priceGold(item)) {
-
-            newUser.setGold(newUser.getGold() - priceGold(item));
-            userRepository.save(newUser);
-
-        } else if (newUser.getGold() == priceGold(item)) {
-
-            newUser.setGold(0);
-            userRepository.save(newUser);
-
-        } else {
+        if (newUser.getGold() < priceGold(item)) {
 
             throw new IllegalArgumentException("Brak wystarczającej ilości golda");
 
         }
+
+        newUser.setGold(newUser.getGold() - priceGold(item));
+        userRepository.save(newUser);
 
         oldUser.setGold(oldUser.getGold() + priceGold(item));
         privateMessage.setTitle("Przedmiot został sprzedany!");
         privateMessage.setContent("Przedmiot: " + item.getName() + " został sprzedany za " + priceGold(item) + " golda.");
         privateMessage.setRecipient(oldUser);
         privateMessage.setSentAt(LocalDateTime.now());
+        privateMessage.setGold(0);
         privateMessageRepository.save(privateMessage);
 
         userRepository.save(oldUser);
 
-        item.getItemOwnerMarketList().stream()
-                .filter(history -> history.getEndAt() == null)
-                .forEach(history -> {
-                    itemOwnerMarketRepository.delete(history);
-                });
-
-        List<UserItem> userItemList = newUser.getUserItemList();
-
-        UserItem userItem = userItemList
-                .stream()
-                .filter(entry -> entry.getItem().getId() == (item.getId()))
-                .findFirst().orElse(null);
-
-
-        if (userItem == null) {
-            userItem = new UserItem();
-            userItem.setItem(item);
-            userItem.setUser(newUser);
-            userItem.setQuantity(1);
-        } else {
-            userItem.setQuantity(userItem.getQuantity() + 1);
-        }
-
-        userItemRepository.save(userItem);
+        addItem(newUser, item);
     }
 
+    @Transactional
     public void undoItem (int itemId, User user) {
 
         Item item = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId()).getItem();
 
+        addItem(user, item);
+    }
+
+    private void addItem(User user, Item item) {
         item.getItemOwnerMarketList().stream()
                 .filter(history -> history.getEndAt() == null)
                 .forEach(history -> {

@@ -1,5 +1,7 @@
 package com.pjatk.turtlegame.services;
 
+import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
+import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
@@ -18,14 +20,27 @@ public class ItemService {
     private final TurtleTypeRepository turtleTypeRepository;
     private final ItemOwnerMarketRepository itemOwnerMarketRepository;
 
-    public List<Item> getFood(User user) {
+    public List<Item> getFood (User user) {
         return user.getUserItemList().stream()
                 .map(UserItem::getItem)
                 .filter(item -> "Jedzenie".equals(item.getItemType().getName()))
                 .toList();
     }
 
-    public void removeItem(User user, int itemId, int quantity) {
+    public boolean getItem (int itemId, int ownerId) {
+        if (userItemRepository.findByItemIdAndUserId(itemId, ownerId).isPresent())
+            return true;
+        return false;
+    }
+
+    public UserItem getItemDetails (int itemId, int ownerId) throws TurtleNotFoundException, UnauthorizedAccessException {
+
+        return userItemRepository.findByItemIdAndUserId(itemId, ownerId)
+                .orElseThrow(() -> new TurtleNotFoundException("Item not found"));
+
+    }
+
+    public void removeItem (User user, int itemId, int quantity) {
         UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == itemId)

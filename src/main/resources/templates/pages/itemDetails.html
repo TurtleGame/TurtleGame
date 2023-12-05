@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}" lang="pl">
+
+<h1 layout:fragment="header">Szczegóły przedmiotu <span th:text="${item.getItem().getName()}"></span></h1>
+
+<div layout:fragment="content">
+
+  <form method="post" th:action="@{'/items/' + ${item.getItem().getId()} + '/details'}">
+    <div class="card mb-2">
+      <h2 style="margin-top: 0;"><span th:text="${item.getItem().getName()}"></span></h2>
+
+      <div class="flex flex-row mb-4 gap-4">
+        <div class="flex flex-middle flex-center">
+          <img src="/assets/images/food/apple.png" style="width: 155px; border-radius: 0.25rem;"/>
+        </div>
+        <table class="size-wide">
+          <tr>
+            <td style="width: 30%; vertical-align: top;">
+              <div class="mb-1">Opis: <span class="text-primary" th:text="${item.getItem().getDescription()}"></span></div>
+              <br/>
+              <div class="mb-1">Typ: <span class="text-primary" th:text="${item.getItem().getItemType().getName()}"></span></div>
+              <br/>
+              <div class="mb-1">Rzadkość: <span class="text-primary" th:text="${item.getItem().getRarity().getName()}"></span></div>
+            </td>
+            <td style="width: 30%; vertical-align: top;">
+              <div th:if="${item.getItem().getItemType().getName() != 'Jajko'}" th:each="stat : ${item.getItem().getItemStatisticList()}">
+                <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
+              </div>
+              <div th:if="${item.getItem().getItemType().getName() == 'Jajko'}">
+                <div class="mb-1">Typ jajka: <span class="text-primary">Ogień</span></div>
+                <div class="mb-1">Rodzaj jajka: <span class="text-primary">Dym</span></div>
+              </div>
+            </td>
+            <td style="width: 40%;">
+              <div class="mb-1">Ilość: <span class="text-primary" th:text="${item.getQuantity()}"></span></div>
+              <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${item.getItem().getId()} + ')'">Sprzedaj</button>
+              <div class="form-popup" th:id="'myForm2-' + ${item.getItem().getId()}">
+                <h1>Ustal cenę</h1>
+                <form th:action="@{'/items/' + ${item.getItem().getId()} + '/details'}" method="post">
+                  <label for="Gold"><b>Ilość złota:</b></label>
+                  <input class="input" type="text" id="Gold" name="Gold" required>
+                  <button type="submit" class="button mb-2" onclick="sellItemConfirm(this)">Sprzedaj</button>
+                </form>
+                <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${item.getItem().getId()} + ')'">Wyjdź</button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </form>
+</div>
