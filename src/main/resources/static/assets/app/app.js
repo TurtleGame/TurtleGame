@@ -1,38 +1,83 @@
 document.addEventListener("DOMContentLoaded", () => {
     const context = $("meta[name=context]").attr('content');
 
+    initAlerts();
+    initCountdowns();
+    initSelect2();
 
-    if (['home'].includes(context)) {
-        if ($('.new-news-button').length) {
-            $(".new-news-button").on('click', function() {
-                $(".new-news-content").toggleClass("hidden")
-            });
-            CKEDITOR.replace('content');
-        }
+    document.getElementById('logout').addEventListener('click', function () {
+        localStorage.removeItem('activeTab');
+    });
 
-        $('.edit-icon').on('click', function (){
+    if (context === 'home') {
+        $('.act-add-post').on('click', function() {
+            if (!CKEDITOR.instances['content']) {
+                CKEDITOR.replace('content');
+            }
+            CKEDITOR.instances['content'].setData("");
+            $('.new-news-content').toggleClass("hidden");
+        });
+
+        $('.act-edit-post').on('click', function (){
+            if (!CKEDITOR.instances['edit-content']) {
+                CKEDITOR.replace('edit-content');
+            }
             $('.edit-news').removeClass('hidden');
             const title = $(this).data('title');
             const content = $(this).data('content');
             const id = $(this).data('id');
-
-            $('[name="edit-title"]', $('.edit-news-content')).val(title);
-            $('[name="edit-content"]', $('.edit-news-content')).val(content);
-            $('[name="news-id"]', $('.edit-news-content')).val(id);
+            $('[name="edit-title"]', $('.edit-news')).val(title);
+            $('[name="edit-content"]', $('.edit-news')).val(content);
+            $('[name="news-id"]', $('.edit-news')).val(id);
+            CKEDITOR.instances['edit-content'].setData(content);
         })
     }
 
+    if (context === 'private-messages') {
 
-    if (['academy', 'expeditions'].includes(context)) {
-        updateCountdown();
-    }
+        $('.message-title').on('click', function() {
+            $('.message-content', $(this).parent()).toggleClass('hidden');
+        });
 
-
-    if (['private-messages'].includes(context)) {
-        document.querySelectorAll('.message-title').forEach((el) => {
-            el.addEventListener('click', () => {
-                el.closest('.message-container').querySelector(".message-content").classList.toggle('hidden');
+        $('.act-read-message').on('click', function() {
+            const messageId = $(this).attr('data-message-id');
+            fetch('/private-message/' + messageId + '/read', {
+                method: "POST"
+            }).then((response) => {
+                if (response.status === 204) {
+                    $(this).removeClass('message-unread');
+                    $(this).addClass('message-read');
+                }
+                if ($('.message-unread').length === 0) {
+                    $('.icon-messages').removeClass('fa-bounce');
+                }
             });
+        });
+
+        $('.act-read-all').on('click', function() {
+            fetch('/private-message/read-all', {
+                method: "POST"
+            }).then((response) => {
+                if (response.status === 204) {
+                    $('.message-unread').removeClass('message-unread').addClass('message-read');
+                    $('.icon-messages').removeClass('fa-bounce');
+                }
+            });
+        });
+
+        $('.act-reply').on('click', function () {
+            const sender = $(this).data('sender');
+            const title = $(this).data('title');
+            $('#create-header').trigger('click');
+            $('[name="title"]', $('#create-message')).val("Re: " + title);
+            const newOption = new Option(sender, sender, true, true);
+            $('[name="recipient"]').append(newOption).trigger('change');
+        });
+
+        $('.act-delete').on('click', function() {
+            if (!confirm("Czy na pewno chcesz usunąć tą wiadomość?")) {
+                event.preventDefault();
+            }
         });
 
         $('h2', $('.header-container')).on('click', function() {
@@ -57,22 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const recipient = urlParams.get('recipient');
         if (recipient) {
             $('#create-header').trigger('click');
-            const newOption = new Option(recipient, recipient, true, true);
-            $('[name="recipient"]').append(newOption).trigger('change');
+            $('[name="recipient"]').append(new Option(recipient, recipient, true, true)).trigger('change');
         }
-
-        $('.reply-button').on('click', function () {
-            const sender = $(this).data('sender');
-            const title = $(this).data('title');
-            $('#create-header').trigger('click');
-            $('[name="title"]', $('#create-message')).val("Re: " + title);
-            const newOption = new Option(sender, sender, true, true);
-            $('[name="recipient"]').append(newOption).trigger('change');
-        })
     }
 
+    if (context === 'market') {
 
-    if (['market'].includes(context)) {
         function setActiveState() {
             const activeTab = localStorage.getItem('activeTab') || 'turtles';
             if (activeTab === 'turtles') {
@@ -107,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem('activeTab', 'turtles');
         });
-
         $('#items-header').on('click', function () {
             $('#turtles-selling').css('display', 'none');
             $('#items-selling').css('display', 'block');
@@ -116,13 +150,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem('activeTab', 'items');
         });
-
     }
+});
 
-    document.getElementById('logout').addEventListener('click', function () {
-        resetActiveState();
+function initCountdowns() {
+    const countdownElements = document.querySelectorAll("[id^='countdown-']");
+
+    countdownElements.forEach(countdownElement => {
+        const targetDate = new Date(countdownElement.getAttribute("data-target-date")).getTime();
+
+        function update() {
+            const currentDate = new Date().getTime();
+            const timeLeft = targetDate - currentDate;
+
+            if (timeLeft <= 0) {
+                countdownElement.innerHTML = "00:00:00";
+            } else {
+                const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                countdownElement.innerHTML = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        update();
+        setInterval(update, 1000);
     });
+}
 
+function initAlerts() {
+    $('.closeButton').on('click', function () {
+        const message = $(this).closest('.errorMessage, .successMessage');
+        message.hide();
+    });
+}
+
+function initSelect2() {
     $('.select2').select2({
         language: "pl",
         ajax: {
@@ -145,12 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         minimumInputLength: 2
     });
-
-    $('.closeButton').on('click', function () {
-        const message = $(this).closest('.errorMessage, .successMessage');
-        message.hide();
-    });
-});
+}
 
 function abandonTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
@@ -191,71 +250,6 @@ function undoTurtleConfirm(buttonElement) {
         }
     }
 }
-
-function deleteMessage(buttonElement) {
-    const form = buttonElement.closest("form");
-    if (form) {
-        const confirmation = confirm("Czy na pewno chcesz usunąć tą wiadomość?");
-        if (!confirmation) {
-            event.preventDefault();
-        }
-    }
-}
-
-async function readMessage(element) {
-    const messageId = element.getAttribute('data-message-id');
-    const response = await fetch(`/private-message/${messageId}/read`, {
-            method: "POST"
-        }
-    );
-
-    if (response.status === 204) {
-        element.classList.remove('message-unread');
-        element.classList.add('message-read');
-    }
-
-    const numberOfUnreadMessages = document.querySelectorAll('.message-unread').length;
-    if (numberOfUnreadMessages === 0) {
-        document.querySelector('.icon-messages').classList.remove('fa-bounce');
-    }
-}
-
-async function readAllMessage() {
-    const response = await fetch(`/private-message/read-all`, {
-        method: "POST"
-    });
-    if (response.status === 204) {
-        $('.message-unread').removeClass('message-unread').addClass('message-read');
-        $('.icon-messages').removeClass('fa-bounce');
-    }
-}
-
-function updateCountdown() {
-    const countdownElements = document.querySelectorAll("[id^='countdown-']");
-
-    countdownElements.forEach(countdownElement => {
-        const targetDate = new Date(countdownElement.getAttribute("data-target-date")).getTime();
-
-        function update() {
-            const currentDate = new Date().getTime();
-            const timeLeft = targetDate - currentDate;
-
-            if (timeLeft <= 0) {
-                countdownElement.innerHTML = "00:00:00";
-            } else {
-                const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
-
-                countdownElement.innerHTML = `${hours}:${minutes}:${seconds}`;
-            }
-        }
-
-        update();
-        setInterval(update, 1000);
-    });
-}
-
 
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");

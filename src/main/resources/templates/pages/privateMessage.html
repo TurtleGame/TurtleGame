@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/master.html}" lang="pl">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/master.html}" lang="pl">
 
 <h1 layout:fragment="header">Prywatne wiadomości</h1>
 
@@ -9,9 +8,6 @@
     <div th:replace="~{fragments/messagesFragment :: messages}"></div>
 
     <div class="card mb-2">
-
-
-        <!-- aktywna wyprawa -->
         <div class="private-message-header">
             <div class="header-container">
                 <h2 id="received-header" class="active-header">Odebrane</h2>
@@ -20,12 +16,14 @@
             </div>
         </div>
         <div id="received-message">
-            <div class="m-1">
-                <button class="button" onclick="readAllMessage()">Przeczytaj wszystkie</button>
+            <div class="m-1 mb-4">
+                <button class="button act-read-all">Przeczytaj wszystkie</button>
             </div>
-            <div class="card p-3 m-1 message-container" th:each="message : ${messages}"
+            <div class="card message-container act-read-message p-3 m-1"
+                 th:each="message : ${messages}"
                  th:classappend="${message.isRead} ? 'message-read' : 'message-unread'"
-                 th:data-message-id="${message.getId()}" onclick="readMessage(this)">
+                 th:data-message-id="${message.getId()}"
+            >
                 <div class="flex flex-row gap-4 message-title">
                     <div class="size-wide">
                         <strong>
@@ -33,16 +31,12 @@
                             <span th:text="${message.getTitle()}"></span>
                         </strong>
                     </div>
-                    <div class="flex flex-right flex-middle message-date"
-                         th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
+                    <div class="flex flex-right flex-middle message-date" th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
                 </div>
                 <div class="message-content hidden" style="margin-top: 1rem;">
-                    <div class="card bg-light mb-1" th:text="${message.getContent()}">
-                    </div>
-                    <div class="text-primary mb-2"
-                         th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
-                        <i
-                                class="fa-solid fa-paperclip"></i> Załączniki:
+                    <div class="card bg-light mb-1" th:text="${message.getContent()}"></div>
+                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
+                        <i class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
                         <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
@@ -55,17 +49,17 @@
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
                             <img src="/assets/images/items/scroll.png" width="20" height="20" alt="item">
-                            <span th:text="${attachment.getItem().getName()}"></span>: <span
-                                th:text="${attachment.getQuantity()}"></span>
+                            <span th:text="${attachment.getItem().getName()}"></span>: <span th:text="${attachment.getQuantity()}"></span>
                         </div>
                     </div>
                     <div class="buttons">
                         <span th:if="${message.getSender()}">
-                            <button class="button mb-2 reply-button"
-                                    th:attr="data-sender=${message.getSender().getUsername()},data-title=${message.getTitle()}">Odpowiedz</button>
+                            <button class="button mb-2 act-reply" th:attr="data-sender=${message.getSender().getUsername()},data-title=${message.getTitle()}">
+                                Odpowiedz
+                            </button>
                         </span>
                         <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
-                            <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
+                            <button class="button button-danger mb-2 act-delete">Usuń</button>
                         </form>
                     </div>
                 </div>
@@ -76,22 +70,19 @@
                 <div class="flex flex-row gap-4 message-title">
                     <div class="size-wide">
                         <strong>
-                            <i class="fa-solid fa-paper-plane"></i> <span
-                                th:text="${message.getRecipient() != null ? message.getRecipient().getUsername() : 'Użytkownik nieznaleziony'}"></span>:
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span th:text="${message.getRecipient() != null ? message.getRecipient().getUsername() : 'Użytkownik nieznaleziony'}"></span>:
                             <span th:text="${message.getTitle()}"></span>
                         </strong>
                     </div>
-                    <div class="flex flex-right flex-middle message-date"
-                         th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
+                    <div class="flex flex-right flex-middle message-date" th:text="${#temporals.format(message.getSentAt(), 'dd.MM.yyyy HH:mm')}"></div>
                 </div>
                 <div class="message-content hidden" style="margin-top: 1rem;">
                     <div class="card bg-light mb-1" th:text="${message.getContent()}">
 
                     </div>
-                    <div class="text-primary mb-2"
-                         th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
-                        <i
-                                class="fa-solid fa-paperclip"></i> Załączniki:
+                    <div class="text-primary mb-2" th:if="${message.getGold() > 0 or !message.getAttachment().isEmpty()}">
+                        <i class="fa-solid fa-paperclip"></i> Załączniki:
                     </div>
                     <div th:if="${message.getGold()}">
                         <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
@@ -104,13 +95,13 @@
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
                             <img src="/assets/images/items/scroll.png" width="20" height="20" alt="item">
-                            <span th:text="${attachment.getItem().getName()}"></span>: <span
-                                th:text="${attachment.getQuantity()}"></span>
+                            <span th:text="${attachment.getItem().getName()}"></span>:
+                            <span th:text="${attachment.getQuantity()}"></span>
                         </div>
                     </div>
                     <div class="buttons">
                         <form th:action="@{'/private-message/' + ${message.getId()} + '/delete'}" method="post">
-                            <button class="button button-danger mb-2" onclick="deleteMessage(this)">Usuń</button>
+                            <button class="button button-danger mb-2 act-delete">Usuń</button>
                         </form>
                     </div>
                 </div>
@@ -141,24 +132,25 @@
                     </div>
                 </div>
 
-                <div class="m-2">
-                    <div class="mb-4">
-                        <label for="gold"><img src="/assets/images/gold.png" width="20" height="20" alt="gold"></label>
-                        <input class="input" id="gold" name="gold" style="width: 100px;">
+                <div class="m-2 flex flex-row gap-4">
+                    <div class="flex flex-row" style="width: 220px;">
+                        <label for="gold" class="flex flex-middle me-2">
+                            <img src="/assets/images/gold.png" width="20" height="20" alt="gold">
+                        </label>
+                        <input class="input" id="gold" name="gold" placeholder="0">
                     </div>
-                    <div class="mb-4">
-                        <label for="shells"><img src="/assets/images/shell.png" width="20" height="20"
-                                                 alt="shell"></label>
-                        <input class="input" id="shells" name="shells" style="width: 100px;">
+                    <div class="flex flex-row" style="width: 220px;">
+                        <label for="shells" class="flex flex-middle me-2">
+                            <img src="/assets/images/shell.png" width="20" height="20" alt="shell">
+                        </label>
+                        <input class="input" id="shells" name="shells" placeholder="0">
                     </div>
-                </div>
-                <div class="button-container">
-                    <button type="submit" class="button mb-2">Wyślij</button>
+                    <div class="flex flex-row size-wide"></div>
+                    <div class="flex flex-row" style="width: 220px;">
+                        <input class="button" type="submit" value="Wyślij">
+                    </div>
                 </div>
             </form>
         </div>
-
-
     </div>
-
 </div>
