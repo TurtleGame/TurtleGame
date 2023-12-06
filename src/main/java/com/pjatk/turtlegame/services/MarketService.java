@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -21,9 +20,20 @@ public class MarketService {
     private UserItemRepository userItemRepository;
     private PrivateMessageRepository privateMessageRepository;
 
-    public List<Turtle> getAllTurtles (){
-        List<TurtleOwnerHistory> history = turtleOwnerHistoryRepository.findAll();
+    public List<Turtle> getAllTurtles (String sortField, Sort.Direction sortDir){
         List<Turtle> turtles = new ArrayList<>();
+        List<TurtleOwnerHistory> history = new ArrayList<>();
+        Sort.Order order = new Sort.Order(sortDir, sortField);
+
+        history = switch (sortField) {
+            case "turtle_id" -> turtleOwnerHistoryRepository.findAll(Sort.by(order));
+            case "price" -> turtleOwnerHistoryRepository.findAll(Sort.by(sortDir, "howMuch"));
+            default -> history;
+        };
+
+        if (history.isEmpty()) {
+            history = turtleOwnerHistoryRepository.findAll();
+        }
 
         for (TurtleOwnerHistory selling : history) {
             if (selling.isSelling()) {
@@ -31,11 +41,36 @@ public class MarketService {
             }
         }
 
+        switch (sortField) {
+            case "name":
+                if (sortDir.isDescending()) {
+                    turtles.sort(Comparator.comparing(Turtle::getName).reversed());
+                } else {
+                    turtles.sort(Comparator.comparing(Turtle::getName));
+                }
+               break;
+            case "type":
+                if (sortDir.isDescending()) {
+                    turtles.sort(Comparator.comparing((Turtle turtle) -> turtle.getTurtleType().getName()).reversed());
+                } else {
+                    turtles.sort(Comparator.comparing((Turtle turtle) -> turtle.getTurtleType().getName()));
+                }
+               break;
+            case "level":
+                if (sortDir.isDescending()) {
+                    turtles.sort(Comparator.comparing(Turtle::getLevel).reversed());
+                } else {
+                    turtles.sort(Comparator.comparing(Turtle::getLevel));
+                }
+               break;
+        }
+
         return turtles;
     }
 
-    public List<Item> getAllItems () {
+    public List<Item> getAllItems (String sortField, Sort.Direction sortDir) {
         List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
+        List<ItemOwnerMarket> itemsOwn = new ArrayList<>();
         List<Item> items = new ArrayList<>();
 
         if (history.isEmpty()) return items;
@@ -43,14 +78,58 @@ public class MarketService {
         for(ItemOwnerMarket selling : history) {
             if (!selling.getItem().getItemType().getName().equals("Jajko")) {
                 items.add(selling.getItem());
+                itemsOwn.add(selling);
             }
+        }
+
+        switch (sortField) {
+            case "turtle_id":
+                if (sortDir.isDescending()) {
+                    items.sort(Comparator.comparing(Item::getId).reversed());
+                } else {
+                    items.sort(Comparator.comparing(Item::getId));
+                }
+                break;
+            case "name":
+                if (sortDir.isDescending()) {
+                    items.sort(Comparator.comparing(Item::getName).reversed());
+                } else {
+                    items.sort(Comparator.comparing(Item::getName));
+                }
+                break;
+            case "type":
+                if (sortDir.isDescending()) {
+                    items.sort(Comparator.comparing((Item item) -> item.getItemType().getName()).reversed());
+                } else {
+                    items.sort(Comparator.comparing((Item item) -> item.getItemType().getName()));
+                }
+                break;
+            case "rarity":
+                if (sortDir.isDescending()) {
+                    items.sort(Comparator.comparing((Item item) -> item.getRarity().getName()).reversed());
+                } else {
+                    items.sort(Comparator.comparing((Item item) -> item.getRarity().getName()));
+                }
+                break;
+            case "price":
+                if (sortDir.isDescending()) {
+                    itemsOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch).reversed());
+                } else {
+                    itemsOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch));
+                }
+                items.clear();
+                for (ItemOwnerMarket item : itemsOwn) {
+                    items.add(item.getItem());
+                }
+                break;
         }
 
         return items;
     }
 
-    public List<Item> getAllEggs () {
+    public List<Item> getAllEggs (String sortField, Sort.Direction sortDir) {
         List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
+        List<ItemOwnerMarket> eggOwn = new ArrayList<>();
         List<Item> eggs = new ArrayList<>();
 
         if (history.isEmpty()) return eggs;
@@ -58,17 +137,53 @@ public class MarketService {
         for(ItemOwnerMarket selling : history) {
             if (selling.getItem().getItemType().getName().equals("Jajko")) {
                 eggs.add(selling.getItem());
+                eggOwn.add(selling);
             }
         }
 
+        switch (sortField) {
+            case "turtle_id":
+                if (sortDir.isDescending()) {
+                    eggs.sort(Comparator.comparing(Item::getId).reversed());
+                } else {
+                    eggs.sort(Comparator.comparing(Item::getId));
+                }
+                break;
+            case "name":
+                if (sortDir.isDescending()) {
+                    eggs.sort(Comparator.comparing(Item::getName).reversed());
+                } else {
+                    eggs.sort(Comparator.comparing(Item::getName));
+                }
+                break;
+            case "type":
+                if (sortDir.isDescending()) {
+                    eggs.sort(Comparator.comparing((Item egg) -> egg.getItemType().getName()).reversed());
+                } else {
+                    eggs.sort(Comparator.comparing((Item egg) -> egg.getItemType().getName()));
+                }
+                break;
+            case "rarity":
+                if (sortDir.isDescending()) {
+                    eggs.sort(Comparator.comparing((Item egg) -> egg.getRarity().getName()).reversed());
+                } else {
+                    eggs.sort(Comparator.comparing((Item egg) -> egg.getRarity().getName()));
+                }
+                break;
+            case "price":
+                if (sortDir.isDescending()) {
+                    eggOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch).reversed());
+                } else {
+                    eggOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch));
+                }
+                eggs.clear();
+                for (ItemOwnerMarket egg : eggOwn) {
+                    eggs.add(egg.getItem());
+                }
+                break;
+        }
+
         return eggs;
-    }
-
-    public List<Turtle> findSortTurtle(String sortField, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
-                Sort.by(sortField).descending();
-
-        return this.turtleRepository.findAll(sort);
     }
 
     public int sellerIsBuyer (User user, Turtle turtle){
@@ -234,9 +349,7 @@ public class MarketService {
     private void addItem(User user, Item item) {
         item.getItemOwnerMarketList().stream()
                 .filter(history -> history.getEndAt() == null)
-                .forEach(history -> {
-                    itemOwnerMarketRepository.delete(history);
-                });
+                .forEach(history -> itemOwnerMarketRepository.delete(history));
 
         List<UserItem> userItemList = user.getUserItemList();
 

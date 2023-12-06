@@ -73,20 +73,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     if (['market'].includes(context)) {
+        function setActiveState() {
+            const activeTab = localStorage.getItem('activeTab') || 'turtles';
+            if (activeTab === 'turtles') {
+                $('#turtles-selling').css('display', 'block');
+                $('#items-selling').css('display', 'none');
+                $('#turtles-header').addClass('active-header');
+                $('#items-header').removeClass('active-header');
+            } else {
+                $('#turtles-selling').css('display', 'none');
+                $('#items-selling').css('display', 'block');
+                $('#items-header').addClass('active-header');
+                $('#turtles-header').removeClass('active-header');
+            }
+        }
+
+        function resetActiveState() {
+            localStorage.removeItem('activeTab');
+
+            $('#turtles-selling').css('display', 'block');
+            $('#items-selling').css('display', 'none');
+            $('#turtles-header').addClass('active-header');
+            $('#items-header').removeClass('active-header');
+        }
+
+        setActiveState();
+
         $('#turtles-header').on('click', function () {
             $('#turtles-selling').css('display', 'block');
             $('#items-selling').css('display', 'none');
             $('#turtles-header').addClass('active-header');
             $('#items-header').removeClass('active-header');
+
+            localStorage.setItem('activeTab', 'turtles');
         });
+
         $('#items-header').on('click', function () {
             $('#turtles-selling').css('display', 'none');
             $('#items-selling').css('display', 'block');
             $('#items-header').addClass('active-header');
             $('#turtles-header').removeClass('active-header');
+
+            localStorage.setItem('activeTab', 'items');
         });
+
     }
 
+    document.getElementById('logout').addEventListener('click', function () {
+        resetActiveState();
+    });
 
     $('.select2').select2({
         language: "pl",

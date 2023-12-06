@@ -1,14 +1,20 @@
 package com.pjatk.turtlegame.controllers;
 
+import com.pjatk.turtlegame.models.Item;
+import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.MarketService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -19,12 +25,41 @@ public class MarketController {
     private UserRepository userRepository;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model,
+                        @RequestParam(defaultValue = "") String sortType,
+                        @RequestParam(defaultValue = "turtle_id") String sortField,
+                        @RequestParam(defaultValue = "asc") String sortDir) {
         model.addAttribute("context", "market");
-        model.addAttribute("turtles", marketService.getAllTurtles());
-        model.addAttribute("items", marketService.getAllItems());
-        model.addAttribute("eggs", marketService.getAllEggs());
         model.addAttribute("marketService", marketService);
+
+        List<Turtle> turtles = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
+        List<Item> eggs = new ArrayList<>();
+
+        Sort.Direction direction = sortDir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        switch (sortType) {
+            case "":
+                turtles = marketService.getAllTurtles(sortField, direction);
+                items = marketService.getAllItems(sortField, direction);
+                eggs = marketService.getAllEggs(sortField, direction);
+                break;
+            case "Turtle":
+                turtles = marketService.getAllTurtles(sortField, direction);
+                break;
+            case "Item":
+                items = marketService.getAllItems(sortField, direction);
+                eggs = marketService.getAllEggs(sortField, direction);
+                break;
+        }
+
+        model.addAttribute("sortType", sortType);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("turtles", turtles);
+        model.addAttribute("items", items);
+        model.addAttribute("eggs", eggs);
 
         return "pages/market";
     }

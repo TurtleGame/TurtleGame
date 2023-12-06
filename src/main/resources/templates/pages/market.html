@@ -10,18 +10,20 @@
 
         <div class="private-message-header">
             <div class="header-container">
-                <h2 id="turtles-header" class="active-header">Żółwie</h2>
-                <h2 id="items-header">Przedmioty</h2>
+                <h2 id="turtles-header" class="active-header"><a th:href="@{'/market?sortType=Turtle&sortField=turtle_id&sortDir=asc'}">Żółwie</a></h2>
+                <h2 id="items-header"><a th:href="@{'/market?sortType=Item&sortField=turtle_id&sortDir=asc'}">Przedmioty</a></h2>
             </div>
         </div>
         <div id="turtles-selling">
-            <div class="card mb-2">
-                <h2 class="text-center m-0 sp">
-                    <a><button class="but">Nazwa</button></a>
-                    <a><button class="but">Gatunek</button></a>
-                    <a><button class="but">Poziom</button></a>
-                    <a><button class="but">Cena</button></a>
-                </h2>
+            <div class="card mb-2 text-center m-0 sp">
+                    <a th:href="@{'/market?sortType=Turtle&sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
+                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Turtle&sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Gatunek
+                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Turtle&sortField=level&sortDir=' + ${reverseSortDir}}"><button class="but">Poziom
+                        <span th:if="${sortField == 'level'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Turtle&sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
+                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
             </div>
             <div class="card mb-2" th:each="turtle : ${turtles}">
                 <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
@@ -59,6 +61,18 @@
         </div>
 
         <div id="items-selling" class="hidden">
+            <div class="card mb-2">
+                <h2 class="text-center m-0 sp">
+                    <a th:href="@{'/market?sortType=Item&sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
+                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Item&sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Typ
+                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Item&sortField=rarity&sortDir=' + ${reverseSortDir}}"><button class="but">Unikalność
+                        <span th:if="${sortField == 'rarity'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortType=Item&sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
+                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                </h2>
+            </div>
             <div class="p-3">
                 <h3>Jajka</h3>
                     <div class="card mb-2" th:each="egg : ${eggs}">

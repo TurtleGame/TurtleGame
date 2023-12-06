@@ -25,6 +25,13 @@
   box-sizing: border-box;
 }
 
+h2 a {
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
 a {
   text-decoration: none;
 }
