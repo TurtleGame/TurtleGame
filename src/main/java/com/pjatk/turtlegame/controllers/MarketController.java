@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,34 +25,17 @@ public class MarketController {
 
     @GetMapping
     public String index(Model model,
-                        @RequestParam(defaultValue = "") String sortType,
                         @RequestParam(defaultValue = "turtle_id") String sortField,
                         @RequestParam(defaultValue = "asc") String sortDir) {
         model.addAttribute("context", "market");
         model.addAttribute("marketService", marketService);
 
-        List<Turtle> turtles = new ArrayList<>();
-        List<Item> items = new ArrayList<>();
-        List<Item> eggs = new ArrayList<>();
-
         Sort.Direction direction = sortDir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
-        switch (sortType) {
-            case "":
-                turtles = marketService.getAllTurtles(sortField, direction);
-                items = marketService.getAllItems(sortField, direction);
-                eggs = marketService.getAllEggs(sortField, direction);
-                break;
-            case "Turtle":
-                turtles = marketService.getAllTurtles(sortField, direction);
-                break;
-            case "Item":
-                items = marketService.getAllItems(sortField, direction);
-                eggs = marketService.getAllEggs(sortField, direction);
-                break;
-        }
+        List<Turtle> turtles = marketService.getAllTurtles(sortField, direction);
+        List<Item> items = marketService.getAllItems(sortField, direction);
+        List<Item> eggs = marketService.getAllEggs(sortField, direction);
 
-        model.addAttribute("sortType", sortType);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");

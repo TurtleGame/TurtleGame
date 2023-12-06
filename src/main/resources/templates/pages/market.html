@@ -10,71 +10,77 @@
 
         <div class="private-message-header">
             <div class="header-container">
-                <h2 id="turtles-header" class="active-header"><a th:href="@{'/market?sortType=Turtle&sortField=turtle_id&sortDir=asc'}">Żółwie</a></h2>
-                <h2 id="items-header"><a th:href="@{'/market?sortType=Item&sortField=turtle_id&sortDir=asc'}">Przedmioty</a></h2>
+                <h2 id="turtles-header" class="active-header">Żółwie</h2>
+                <h2 id="items-header">Przedmioty</h2>
             </div>
         </div>
         <div id="turtles-selling">
             <div class="card mb-2 text-center m-0 sp">
-                    <a th:href="@{'/market?sortType=Turtle&sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
-                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Turtle&sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Gatunek
-                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Turtle&sortField=level&sortDir=' + ${reverseSortDir}}"><button class="but">Poziom
-                        <span th:if="${sortField == 'level'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Turtle&sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
-                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
+                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Gatunek
+                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=level&sortDir=' + ${reverseSortDir}}"><button class="but">Poziom
+                        <span th:if="${sortField == 'level' or sortField == 'rarity'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
+                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
             </div>
-            <div class="card mb-2" th:each="turtle : ${turtles}">
-                <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
-                <div class="flex flex-row gap-4">
-                    <div class="flex flex-middle flex-center">
-                        <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+            <div th:if="${turtles.size() > 0}">
+                <div class="card mb-2" th:each="turtle : ${turtles}">
+                    <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
+                    <div class="flex flex-row gap-4">
+                        <div class="flex flex-middle flex-center">
+                            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                        </div>
+                        <table class="size-wide">
+                            <tr>
+                                <td style="width: 30%; vertical-align: top;">
+                                    <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
+                                    </div>
+                                    <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
+                                   </td>
+                                <td style="width: 30%; vertical-align: top;">
+                                    <div th:each="stat : ${turtle.getTurtleStatisticList()}">
+                                        <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
+                                    </div>
+                                </td>
+                                <td style="width: 40%;">
+                                    <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceShells(turtle)}"> muszelek</span></div>
+                                    <br/>
+                                    <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${turtle.getId()} + '/buyTurtle'}" method="post">
+                                        <button type="submit" class="button mb-2" onclick="buyTurtleConfirm(this)">Kup żółwia</button>
+                                    </form>
+                                    <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? '' : 'hidden'}" th:action="@{'/market/' + ${turtle.getId()} + '/undoTurtle'}" method="post">
+                                        <button type="submit" class="button mb-2" onclick="undoTurtleConfirm(this)">Wycofaj żółwia</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <table class="size-wide">
-                        <tr>
-                            <td style="width: 30%; vertical-align: top;">
-                                <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
-                                </div>
-                                <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
-                               </td>
-                            <td style="width: 30%; vertical-align: top;">
-                                <div th:each="stat : ${turtle.getTurtleStatisticList()}">
-                                    <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
-                                </div>
-                            </td>
-                            <td style="width: 40%;">
-                                <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceShells(turtle)}"> muszelek</span></div>
-                                <br/>
-                                <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${turtle.getId()} + '/buyTurtle'}" method="post">
-                                    <button type="submit" class="button mb-2" onclick="buyTurtleConfirm(this)">Kup żółwia</button>
-                                </form>
-                                <form th:classappend="${@marketService.sellerIsBuyer(user, turtle) == 1 ? '' : 'hidden'}" th:action="@{'/market/' + ${turtle.getId()} + '/undoTurtle'}" method="post">
-                                    <button type="submit" class="button mb-2" onclick="undoTurtleConfirm(this)">Wycofaj żółwia</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
 
+                </div>
+            </div>
+            <div th:unless="${turtles.size() > 0}">
+                <h2 class="text-center text-primary">Brak żółwi na sprzedaż</h2>
             </div>
         </div>
 
         <div id="items-selling" class="hidden">
             <div class="card mb-2">
                 <h2 class="text-center m-0 sp">
-                    <a th:href="@{'/market?sortType=Item&sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
-                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Item&sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Typ
-                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Item&sortField=rarity&sortDir=' + ${reverseSortDir}}"><button class="but">Unikalność
-                        <span th:if="${sortField == 'rarity'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
-                    <a th:href="@{'/market?sortType=Item&sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
-                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=name&sortDir=' + ${reverseSortDir}}"><button class="but">Nazwa
+                        <span th:if="${sortField == 'name'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=type&sortDir=' + ${reverseSortDir}}"><button class="but">Typ
+                        <span th:if="${sortField == 'type'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=rarity&sortDir=' + ${reverseSortDir}}"><button class="but">Unikalność
+                        <span th:if="${sortField == 'level' or sortField == 'rarity'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
+                    <a th:href="@{'/market?sortField=price&sortDir=' + ${reverseSortDir}}"><button class="but">Cena
+                        <span th:if="${sortField == 'price'}" th:class="${sortDir == 'asc' ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'}"></span></button></a>
                 </h2>
             </div>
             <div class="p-3">
                 <h3>Jajka</h3>
+                <div th:if="${eggs.size() > 0}">
                     <div class="card mb-2" th:each="egg : ${eggs}">
                         <h2 class="text-center m-0 mb-4" th:text="${egg.getName()}"></h2>
                         <div class="flex flex-row gap-4">
@@ -102,9 +108,14 @@
                             </table>
                         </div>
                     </div>
+                </div>
+                <div th:unless="${eggs.size() > 0}">
+                    <h2 class="text-center text-primary">Brak jajek na sprzedaż</h2>
+                </div>
             </div>
             <div class="p-3">
                 <h3>Przedmioty</h3>
+                <div th:if="${items.size() > 0}">
                     <div class="card mb-2" th:each="item : ${items}">
                         <h2 class="text-center m-0 mb-4" th:text="${item.getName()}"></h2>
                         <div class="flex flex-row gap-4">
@@ -133,6 +144,10 @@
                         </div>
 
                     </div>
+                </div>
+                <div th:unless="${items.size() > 0}">
+                    <h2 class="text-center text-primary">Brak przedmiotów na sprzedaż</h2>
+                </div>
             </div>
         </div>
 

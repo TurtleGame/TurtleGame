@@ -31,12 +31,13 @@ public class TurtleType {
     @OneToMany(mappedBy = "turtleType")
     private List<SpeciesAttack> speciesAttackList;
 
-    @OneToMany(mappedBy = "turtleType")
-    private List<ItemTurtleType> itemTurtleTypeList;
-
     @ManyToOne
     @JoinColumn(name = "rarity_id")
     private Rarity rarity;
+
+    /*@ManyToOne
+    @JoinColumn(name = "egg_item_id")
+    private Item egg;*/
 
     @OneToMany(mappedBy = "turtleType")
     private List<Turtle> turtleList;

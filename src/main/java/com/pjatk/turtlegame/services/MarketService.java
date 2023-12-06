@@ -56,6 +56,7 @@ public class MarketService {
                     turtles.sort(Comparator.comparing((Turtle turtle) -> turtle.getTurtleType().getName()));
                 }
                break;
+            case "rarity":
             case "level":
                 if (sortDir.isDescending()) {
                     turtles.sort(Comparator.comparing(Turtle::getLevel).reversed());
@@ -82,6 +83,27 @@ public class MarketService {
             }
         }
 
+        return sortItems(sortField, sortDir, items, itemsOwn);
+    }
+
+    public List<Item> getAllEggs (String sortField, Sort.Direction sortDir) {
+        List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
+        List<ItemOwnerMarket> eggOwn = new ArrayList<>();
+        List<Item> eggs = new ArrayList<>();
+
+        if (history.isEmpty()) return eggs;
+
+        for(ItemOwnerMarket selling : history) {
+            if (selling.getItem().getItemType().getName().equals("Jajko")) {
+                eggs.add(selling.getItem());
+                eggOwn.add(selling);
+            }
+        }
+
+        return sortItems(sortField, sortDir, eggs, eggOwn);
+    }
+
+    public List<Item> sortItems(String sortField, Sort.Direction sortDir, List<Item> items, List<ItemOwnerMarket> itemsOwn) {
         switch (sortField) {
             case "turtle_id":
                 if (sortDir.isDescending()) {
@@ -104,6 +126,7 @@ public class MarketService {
                     items.sort(Comparator.comparing((Item item) -> item.getItemType().getName()));
                 }
                 break;
+            case "level":
             case "rarity":
                 if (sortDir.isDescending()) {
                     items.sort(Comparator.comparing((Item item) -> item.getRarity().getName()).reversed());
@@ -125,65 +148,6 @@ public class MarketService {
         }
 
         return items;
-    }
-
-    public List<Item> getAllEggs (String sortField, Sort.Direction sortDir) {
-        List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
-        List<ItemOwnerMarket> eggOwn = new ArrayList<>();
-        List<Item> eggs = new ArrayList<>();
-
-        if (history.isEmpty()) return eggs;
-
-        for(ItemOwnerMarket selling : history) {
-            if (selling.getItem().getItemType().getName().equals("Jajko")) {
-                eggs.add(selling.getItem());
-                eggOwn.add(selling);
-            }
-        }
-
-        switch (sortField) {
-            case "turtle_id":
-                if (sortDir.isDescending()) {
-                    eggs.sort(Comparator.comparing(Item::getId).reversed());
-                } else {
-                    eggs.sort(Comparator.comparing(Item::getId));
-                }
-                break;
-            case "name":
-                if (sortDir.isDescending()) {
-                    eggs.sort(Comparator.comparing(Item::getName).reversed());
-                } else {
-                    eggs.sort(Comparator.comparing(Item::getName));
-                }
-                break;
-            case "type":
-                if (sortDir.isDescending()) {
-                    eggs.sort(Comparator.comparing((Item egg) -> egg.getItemType().getName()).reversed());
-                } else {
-                    eggs.sort(Comparator.comparing((Item egg) -> egg.getItemType().getName()));
-                }
-                break;
-            case "rarity":
-                if (sortDir.isDescending()) {
-                    eggs.sort(Comparator.comparing((Item egg) -> egg.getRarity().getName()).reversed());
-                } else {
-                    eggs.sort(Comparator.comparing((Item egg) -> egg.getRarity().getName()));
-                }
-                break;
-            case "price":
-                if (sortDir.isDescending()) {
-                    eggOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch).reversed());
-                } else {
-                    eggOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch));
-                }
-                eggs.clear();
-                for (ItemOwnerMarket egg : eggOwn) {
-                    eggs.add(egg.getItem());
-                }
-                break;
-        }
-
-        return eggs;
     }
 
     public int sellerIsBuyer (User user, Turtle turtle){
@@ -209,15 +173,17 @@ public class MarketService {
 
         for (ItemOwnerMarket selling : market) {
             if(item.getId() == selling.getItem().getId()) {
-                if (selling.getEndAt() == null)
+                if(selling.getUser().getId() == user.getId()) {
                     userId = selling.getUser().getId();
+                }
             }
         }
 
         if (user.getId() == userId) {
+            System.out.println(1);
             return 1;
         }
-
+        System.out.println(0);
         return 0;
     }
 

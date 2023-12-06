@@ -49,9 +49,6 @@ public class Item {
     @JsonIgnore
     private List<ItemOwnerMarket> itemOwnerMarketList;
 
-    @OneToMany(mappedBy = "item")
-    private List<ItemTurtleType> itemTurtleTypeList;
-
     public ItemStatistic getItemStatistic(int id) {
         return itemStatisticList.stream()
                 .filter(itemStatistic -> itemStatistic.getItem().getId() == id)
