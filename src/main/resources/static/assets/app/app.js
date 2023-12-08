@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initAlerts();
     initCountdowns();
     initSelect2();
+    initPopups();
 
     document.getElementById('logout').addEventListener('click', function () {
         localStorage.removeItem('activeTab');
@@ -211,6 +212,14 @@ function initSelect2() {
     });
 }
 
+function initPopups() {
+    $('.popup-backdrop').on('click', function(e) {
+        if (e.target.classList.contains('popup-backdrop')) {
+            $(this).fadeOut();
+        }
+    });
+}
+
 function abandonTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
@@ -291,16 +300,6 @@ function undoEggConfirm(buttonElement) {
     }
 }
 
-function sellItemConfirm(buttonElement) {
-    var form = buttonElement.closest("form");
-    if (form) {
-        var confirmation = confirm("Czy na pewno chcesz sprzedać ten przedmiot?");
-        if (!confirmation) {
-            event.preventDefault();
-        }
-    }
-}
-
 function buyItemConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
@@ -325,14 +324,17 @@ function openForm(id) {
     document.getElementById("myForm-" + id).style.display = "block";
 }
 
-function openForm2(id) {
-    document.getElementById("myForm2-" + id).style.display = "block";
+function openPopupSellItem(id) {
+    const $popup = $('#popup-sell-item');
+    const route = '/items/' + id + '/details';
+    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
+        if (!confirm("Czy na pewno chcesz sprzedać ten przedmiot?")) {
+            event.preventDefault();
+        }
+    });
+    $popup.fadeIn();
 }
 
 function closeForm(id) {
     document.getElementById("myForm-" + id).style.display = "none";
-}
-
-function closeForm2(id) {
-    document.getElementById("myForm2-" + id).style.display = "none";
 }

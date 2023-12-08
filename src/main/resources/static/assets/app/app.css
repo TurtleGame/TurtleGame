@@ -25,13 +25,6 @@
   box-sizing: border-box;
 }
 
-h2 a {
-  text-decoration: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
-}
-
 a {
   text-decoration: none;
 }
@@ -243,14 +236,6 @@ a {
 }
 .button.button-danger:hover {
   color: rgba(0, 0, 0, 0.6666666667);
-}
-
-.but {
-  border: none;
-  background-color: inherit;
-  color: white;
-  cursor: pointer;
-  display: inline-block;
 }
 
 .input {
@@ -727,6 +712,52 @@ main .content {
   color: var(--text-bright);
 }
 
+.but {
+  border: none;
+  background-color: inherit;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.popup-backdrop {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: rgba(31, 36, 49, 0.7529411765);
+  justify-content: center;
+  align-self: center;
+}
+.popup-backdrop .popup {
+  background: var(--bg-default);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  margin: auto;
+  min-width: 500px;
+  box-shadow: 0px 5px 15px rgba(24, 25, 26, 0.5411764706);
+}
+.popup-backdrop .popup h3 {
+  border-bottom: 1px solid #292e36;
+  padding: 1.25rem 1.5rem;
+  margin: 0;
+}
+.popup-backdrop .popup .popup-content {
+  padding: 1.25rem 1.5rem;
+}
+.popup-backdrop .popup .popup-buttons {
+  border-top: 1px solid #292e36;
+  padding: 1.25rem 1.5rem;
+  text-align: right;
+}
+.popup-backdrop .popup .popup-buttons .button {
+  width: auto;
+  margin-left: 0.25rem;
+}
+
 .register {
   background-image: url("../images/bg-4.png") !important;
   letter-spacing: 1px;
@@ -786,10 +817,6 @@ main .content {
 }
 .register .text-success {
   color: #38e85b;
-}
-
-.sp {
-  word-spacing: 100px;
 }
 
 /*# sourceMappingURL=app.css.map */

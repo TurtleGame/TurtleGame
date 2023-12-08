@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/media/**").permitAll();
                     auth.requestMatchers("/remind-password").permitAll();
                     auth.requestMatchers("/change-password").permitAll();
+                    auth.requestMatchers("/guards/**").hasAnyAuthority("ADMIN", "USER");
                 })
                 .formLogin(form -> form
                         .loginPage("/login")

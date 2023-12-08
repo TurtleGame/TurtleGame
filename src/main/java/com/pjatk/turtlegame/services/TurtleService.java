@@ -21,6 +21,7 @@ public class TurtleService {
     private final ItemService itemService;
     private final TurtleStaticsRepository turtleStaticsRepository;
     private final ItemStatisticRepository itemStatisticRepository;
+    private final GuardsRepository guardsRepository;
 
 
     public void abandonTurtle(int turtleId, User user) {
@@ -88,6 +89,23 @@ public class TurtleService {
         }
         turtle.setOwner(null);
         turtleRepository.save(turtle);
+    }
+
+    public void fightWithGuards(int turtleId, int guardsId) {
+        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow();
+        Guard guard = guardsRepository.findById(guardsId).orElseThrow();
+        int turtleHP = turtle.getTurtleStatisticList().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1).map(TurtleStatistic::getValue).findFirst().orElseThrow();
+        int guardHP = guard.getGuardStatistics().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1).map(GuardStatistic::getValue).findFirst().orElseThrow();
+
+        int turtleAgility = turtle.getTurtleStatisticList().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3).map(TurtleStatistic::getValue).findFirst().orElseThrow();
+        int guardAgility = guard.getGuardStatistics().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3).map(GuardStatistic::getValue).findFirst().orElseThrow();
+
+        while (turtleHP > 0 && guardHP > 0) {
+            if (turtleAgility > guardAgility) {
+                    
+            }
+        }
+
     }
 
 
