@@ -36,16 +36,7 @@
                         <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
                             <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
                         </form>
-                        <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${turtle.getId()} + ')'">Sprzedaj żółwia</button>
-                        <div class="form-popup" th:id="'myForm2-' + ${turtle.getId()}">
-                            <h1>Ustal cenę</h1>
-                            <form th:action="@{'/turtles/' + ${turtle.getId()} + '/sell'}" method="post">
-                                <label for="Gold"><b>Ilość muszelek:</b></label>
-                                <input class="input" type="text" id="Gold" name="Gold" required>
-                                <button type="submit" class="button mb-2" onclick="sellTurtleConfirm(this)">Sprzedaj</button>
-                            </form>
-                            <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${turtle.getId()} + ')'">Wyjdź</button>
-                        </div>
+                        <button type="button" class="button mb-2" th:onclick="'openPopupSellTurtle(' + ${turtle.getId()} + ')'">Sprzedaj żółwia</button>
                     </td>
                 </tr>
             </table>
@@ -55,5 +46,21 @@
     <a href="/nest">
         <button class="button mb-2">Zaadoptuj żółwia</button>
     </a>
+
+</div>
+
+<div layout:fragment="popups">
+    <div id="popup-sell-turtle" class="popup-backdrop" style="display: none;">
+        <form class="popup" action="" method="post">
+            <h3>Ustal cenę</h3>
+            <div class="popup-content">
+                <label for="sell-turtle-popup-gold"><b>Ilość muszelek:</b></label>
+                <input class="input" type="text" id="sell-turtle-popup-gold" name="Gold" required="">
+            </div>
+            <div class="popup-buttons">
+                <button type="submit" class="button">Sprzedaj</button>
+            </div>
+        </form>
+    </div>
 
 </div>

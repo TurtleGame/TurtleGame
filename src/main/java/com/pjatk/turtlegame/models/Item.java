@@ -45,6 +45,9 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<ItemStatistic> itemStatisticList;
 
+    @OneToOne(mappedBy = "item")
+    private TurtleType turtleType;
+
     @OneToMany(mappedBy = "item")
     @JsonIgnore
     private List<ItemOwnerMarket> itemOwnerMarketList;

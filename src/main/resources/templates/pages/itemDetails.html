@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}" lang="pl">
 
+<div th:if="${errorMessage}" class="errorMessage mb-2">
+  <strong>Nie udało się wykonać tej akcji</strong>
+  <span th:text="${errorMessage}"></span>
+</div>
+
 <h1 layout:fragment="header">Szczegóły przedmiotu <span th:text="${item.getItem().getName()}"></span></h1>
 
 <div layout:fragment="content">
@@ -28,8 +33,8 @@
                 <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
               </div>
               <div th:if="${item.getItem().getItemType().getName() == 'Jajko'}">
-                <div class="mb-1">Typ jajka: <span class="text-primary">Ogień</span></div>
-                <div class="mb-1">Rodzaj jajka: <span class="text-primary">Dym</span></div>
+                <div class="mb-1">Typ jajka: <span class="text-primary" th:text="${item.getItem().getTurtleType().getDescription()}"></span></div>
+                <div class="mb-1">Rodzaj jajka: <span class="text-primary" th:text="${item.getItem().getTurtleType().getName()}"></span></div>
               </div>
             </td>
             <td style="width: 40%;">
@@ -43,7 +48,6 @@
   </form>
 </div>
 
-
 <div layout:fragment="popups">
   <div id="popup-sell-item" class="popup-backdrop" style="display: none;">
     <form class="popup" action="" method="post">
@@ -51,6 +55,8 @@
       <div class="popup-content">
         <label for="sell-item-popup-gold"><b>Ilość złota:</b></label>
         <input class="input" type="text" id="sell-item-popup-gold" name="Gold" required="">
+        <label for="sell-item-popup-quantity"><b>Ilość:</b></label>
+        <input class="input" type="number" min="1" id="sell-item-popup-quantity" name="Quantity" required>
       </div>
       <div class="popup-buttons">
         <button type="submit" class="button">Sprzedaj</button>

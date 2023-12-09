@@ -27,6 +27,8 @@ public class ItemOwnerMarket {
 
     private int howMuch;
 
+    private int quantity;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

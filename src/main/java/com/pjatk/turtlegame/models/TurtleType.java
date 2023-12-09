@@ -35,9 +35,9 @@ public class TurtleType {
     @JoinColumn(name = "rarity_id")
     private Rarity rarity;
 
-    /*@ManyToOne
+    @OneToOne
     @JoinColumn(name = "egg_item_id")
-    private Item egg;*/
+    private Item item;
 
     @OneToMany(mappedBy = "turtleType")
     private List<Turtle> turtleList;

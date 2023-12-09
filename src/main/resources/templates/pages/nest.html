@@ -53,11 +53,11 @@
             <div class="card p-3 m-1 text-center" th:each="egg : ${eggs}">
                 <img src="/assets/images/eggs/fire.png" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
-                <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
+                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
                     <button class="button mb-2" th:onclick="'openForm(' + ${egg.getId()} + ')'">Adoptuj</button>
                 </div>
-                <button type="submit" class="button mb-2" th:onclick="'openForm2(' + ${egg.getId()} + ')'">Sprzedaj</button>
+                <button type="button" class="button mb-2" th:onclick="'openPopupSellEgg(' + ${egg.getId()} + ')'">Sprzedaj</button>
                 <div class="form-popup" th:id="'myForm-' + ${egg.getId()}">
                     <h1>Nadaj imię</h1>
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/adopt'}" method="post">
@@ -72,6 +72,8 @@
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
                         <label for="Gold"><b>Ilość złota:</b></label>
                         <input class="input" type="text" id="Gold" name="Gold" required>
+                        <label for="Quantity"><b>Ilość:</b></label>
+                        <input class="input" type="number" min="1" id="Quantity" name="Quantity" required>
                         <button type="submit" class="button mb-2" onclick="sellEggConfirm(this)">Sprzedaj</button>
                     </form>
                     <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${egg.getId()} + ')'">Wyjdź</button>
@@ -84,5 +86,23 @@
 
     </div>
     <!-- end of adopcja -->
+
+</div>
+
+<div layout:fragment="popups">
+    <div id="popup-sell-egg" class="popup-backdrop" style="display: none;">
+        <form class="popup" action="" method="post">
+            <h3>Ustal cenę</h3>
+            <div class="popup-content">
+                <label for="sell-egg-popup-gold"><b>Ilość złota:</b></label>
+                <input class="input" type="text" id="sell-egg-popup-gold" name="Gold" required="">
+                <label for="sell-egg-popup-quantity"><b>Ilość:</b></label>
+                <input class="input" type="number" min="1" id="sell-egg-popup-quantity" name="Quantity" required>
+            </div>
+            <div class="popup-buttons">
+                <button type="submit" class="button">Sprzedaj</button>
+            </div>
+        </form>
+    </div>
 
 </div>

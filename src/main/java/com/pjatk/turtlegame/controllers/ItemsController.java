@@ -6,6 +6,7 @@ import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
 import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.repositories.ItemOwnerMarketRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ItemsController {
     private final UserRepository userRepository;
+    ItemOwnerMarketRepository itemOwnerMarketRepository;
     private final ItemService itemService;
 
     @GetMapping
@@ -51,6 +53,7 @@ public class ItemsController {
                           @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                           @PathVariable int id,
                           @RequestParam("Gold") int gold,
+                          @RequestParam("Quantity") int quantity,
                           BindingResult bindingResult) throws Exception {
 
         User user = userRepository.findById(turtleUserDetails.getId());
@@ -59,7 +62,19 @@ public class ItemsController {
             return "pages/itemDetails";
         }
 
-        itemService.sellItem(user.getId(), id, gold);
+        if (!itemOwnerMarketRepository.existsByItemIdAndUserId(id, user.getId())) {
+            itemService.sellItem(user.getId(), id, gold, quantity);
+        }
+        else {
+            model.addAttribute("errorMessage", "Już sprzedajesz ten przedmiot!");
+            model.addAttribute("context", "items");
+            model.addAttribute("item", itemService.getItemDetails(id, user.getId()));
+            model.addAttribute("statistics", itemService.getItemsStatistics());
+
+            return "redirect:/items/{id}/details";
+        }
+
+
 
         if (itemService.getItem(id, user.getId())) {
 

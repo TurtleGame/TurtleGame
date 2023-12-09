@@ -90,13 +90,16 @@
                             <table class="size-wide">
                                 <tr>
                                     <td style="width: 30%; vertical-align: top;">
-                                        <div class="mb-1">Żywioł <span class="text-primary">Światło</span></div>
+                                        <div class="mb-1">Typ <span class="text-primary" th:text="${egg.getTurtleType().getDescription()}"></span></div>
+                                        <div class="mb-1">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></div>
                                         <div class="mb-1">Unikalność: <span class="text-primary" th:text="${egg.getRarity().getName()}"></span>
                                         </div>
                                     </td>
                                     <td style="width: 40%;">
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(egg)}"> złota</span></div>
-                                        <br/>
+                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" >f</span></div>
+                                        <br>
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" > złota</span></div>
+                                        <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, egg) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${egg.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyEggConfirm(this)">Kup jajko</button>
                                         </form>
@@ -130,8 +133,10 @@
                                         </div>
                                     </td>
                                     <td style="width: 40%;">
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(item)}"> złota</span></div>
-                                        <br/>
+                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" >f</span></div>
+                                        <br>
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" > złota</span></div>
+                                        <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, item) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${item.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyItemConfirm(this)">Kup przedmiot</button>
                                         </form>

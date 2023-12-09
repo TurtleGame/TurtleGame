@@ -16,8 +16,8 @@ public class MarketService {
     private TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     private TurtleRepository turtleRepository;
     private UserRepository userRepository;
+    private ItemService itemService;
     private ItemOwnerMarketRepository itemOwnerMarketRepository;
-    private UserItemRepository userItemRepository;
     private PrivateMessageRepository privateMessageRepository;
 
     public List<Turtle> getAllTurtles (String sortField, Sort.Direction sortDir){
@@ -168,23 +168,27 @@ public class MarketService {
     }
 
     public int sellerIsBuyerItem (User user, Item item) {
-        List<ItemOwnerMarket> market = itemOwnerMarketRepository.findAll();
-        int userId = 0;
+        Optional<ItemOwnerMarket> selling = itemOwnerMarketRepository.findByItemIdAndUserId(item.getId(), user.getId());
 
-        for (ItemOwnerMarket selling : market) {
-            if(item.getId() == selling.getItem().getId()) {
-                if(selling.getUser().getId() == user.getId()) {
-                    userId = selling.getUser().getId();
-                }
+        return selling.map(record -> {
+            System.out.println(1);
+            return 1;
+        }).orElseGet(() -> {
+            System.out.println(0);
+            return 0;
+        });
+    }
+
+    public int getQuantity(Item item, User user) {
+        int quantity = 0;
+
+        for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
+            if (selling.getEndAt() == null && selling.getUser().getId() == user.getId()) {
+                quantity = selling.getQuantity();
             }
         }
 
-        if (user.getId() == userId) {
-            System.out.println(1);
-            return 1;
-        }
-        System.out.println(0);
-        return 0;
+        return quantity;
     }
 
     public int priceShells (Turtle turtle) {
@@ -199,11 +203,11 @@ public class MarketService {
         return shells;
     }
 
-    public int priceGold (Item item) {
-        int gold = 100;
+    public int priceGold (Item item, User user) {
+        int gold = 0;
 
         for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
-            if (selling.getEndAt() == null) {
+            if (selling.getEndAt() == null && selling.getUser().getId() == user.getId()) {
                 gold = selling.getHowMuch();
             }
         }
@@ -282,18 +286,18 @@ public class MarketService {
         Item item = transaction.getItem();
         PrivateMessage privateMessage = new PrivateMessage();
 
-        if (newUser.getGold() < priceGold(item)) {
+        if (newUser.getGold() < priceGold(item, oldUser)) {
 
             throw new IllegalArgumentException("Brak wystarczającej ilości golda");
 
         }
 
-        newUser.setGold(newUser.getGold() - priceGold(item));
+        newUser.setGold(newUser.getGold() - priceGold(item, oldUser));
         userRepository.save(newUser);
 
-        oldUser.setGold(oldUser.getGold() + priceGold(item));
+        oldUser.setGold(oldUser.getGold() + priceGold(item, oldUser));
         privateMessage.setTitle("Przedmiot został sprzedany!");
-        privateMessage.setContent("Przedmiot: " + item.getName() + " został sprzedany za " + priceGold(item) + " golda.");
+        privateMessage.setContent("Przedmiot: " + item.getName() + " (" + getQuantity(item, oldUser) + ") został sprzedany za " + priceGold(item, oldUser) + " golda.");
         privateMessage.setRecipient(oldUser);
         privateMessage.setSentAt(LocalDateTime.now());
         privateMessage.setGold(0);
@@ -301,38 +305,25 @@ public class MarketService {
 
         userRepository.save(oldUser);
 
-        addItem(newUser, item);
+        addItem(newUser, item, transaction.getQuantity());
     }
 
     @Transactional
     public void undoItem (int itemId, User user) {
 
         Item item = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId()).getItem();
+        ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId());
 
-        addItem(user, item);
+        addItem(user, item, transaction.getQuantity());
     }
 
-    private void addItem(User user, Item item) {
+    private void addItem(User user, Item item, int quantity) {
         item.getItemOwnerMarketList().stream()
-                .filter(history -> history.getEndAt() == null)
+                .filter(history -> {
+                    return history.getEndAt() == null && history.getUser().getId() == user.getId();
+                })
                 .forEach(history -> itemOwnerMarketRepository.delete(history));
 
-        List<UserItem> userItemList = user.getUserItemList();
-
-        UserItem userItem = userItemList
-                .stream()
-                .filter(entry -> entry.getItem().getId() == (item.getId()))
-                .findFirst().orElse(null);
-
-        if (userItem == null) {
-            userItem = new UserItem();
-            userItem.setItem(item);
-            userItem.setUser(user);
-            userItem.setQuantity(1);
-        } else {
-            userItem.setQuantity(userItem.getQuantity() + 1);
-        }
-
-        userItemRepository.save(userItem);
+        itemService.addItem(user, item, quantity);
     }
 }

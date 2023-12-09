@@ -84,6 +84,7 @@ public class User {
     private List<PrivateMessage> recipientPrivateMessageList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OrderBy("item.id ASC")
     private List<UserItem> userItemList;
 
     @OneToMany(mappedBy = "pastOwner")

@@ -335,6 +335,28 @@ function openPopupSellItem(id) {
     $popup.fadeIn();
 }
 
+function openPopupSellEgg(id) {
+    const $popup = $('#popup-sell-egg');
+    const route = '/nest/' + id + '/sell';
+    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
+        if (!confirm("Czy na pewno chcesz sprzedać to jajko?")) {
+            event.preventDefault();
+        }
+    });
+    $popup.fadeIn();
+}
+
+function openPopupSellTurtle(id) {
+    const $popup = $('#popup-sell-turtle');
+    const route = '/turtles/' + id + '/sell';
+    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
+        if (!confirm("Czy na pewno chcesz sprzedać tego żółwia?")) {
+            event.preventDefault();
+        }
+    });
+    $popup.fadeIn();
+}
+
 function closeForm(id) {
     document.getElementById("myForm-" + id).style.display = "none";
 }

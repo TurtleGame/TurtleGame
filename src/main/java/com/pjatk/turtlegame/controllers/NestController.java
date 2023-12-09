@@ -4,6 +4,7 @@ import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.DTOs.EggsForm;
 import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.repositories.ItemOwnerMarketRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleEggService;
@@ -16,11 +17,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping(path = "/nest")
 @AllArgsConstructor
 public class NestController {
     UserRepository userRepository;
+    ItemOwnerMarketRepository itemOwnerMarketRepository;
     UserService userService;
     TurtleService turtleService;
     ItemService itemService;
@@ -41,6 +45,7 @@ public class NestController {
                           @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                           @PathVariable int id,
                           @RequestParam("Gold") int gold,
+                          @RequestParam("Quantity") int quantity,
                           Model model,
                           BindingResult bindingResult) throws Exception {
 
@@ -49,8 +54,15 @@ public class NestController {
 
             return "pages/nest";
         }
+        if (!itemOwnerMarketRepository.existsByItemIdAndUserId(id, turtleUserDetails.getId())) {
+            itemService.sellEgg(turtleUserDetails.getId(), id, gold, quantity);
+        }
+        else {
+            bindingResult.rejectValue("turtleId", "error.alreadyExists", "Jajko jest już w sprzedaży.");
 
-        itemService.sellEgg(turtleUserDetails.getId(), id, gold);
+            return "pages/nest";
+        }
+
         return "redirect:/nest";
     }
 

@@ -16,4 +16,7 @@ public class SellTurtle {
 
     @NotNull(message = "Musisz ustalić cenę!")
     private int gold;
+
+    @NotNull(message = "Musisz wybrać ilość!")
+    private int quantity;
 }
