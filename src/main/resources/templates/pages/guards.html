@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}" lang="pl">
+
+<h1 layout:fragment="header">Strażnicy</h1>
+
+<div layout:fragment="content">
+    <!-- wyprawa -->
+    <form action="" method="post" th:each="guard : ${guards}">
+        <div class="card mb-2">
+            <div class="flex flex-row mb-4 gap-4">
+                <div class="flex">
+                    <img th:src="@{${'/assets/images/guards/' + guard.id + '.png'}}"
+                         style="width: 175px; height: 175px; border-radius: 0.25rem;" alt="guard"/>
+                </div>
+                <div>
+                    <h2 style="margin-top: 0;" th:text="${guard.getName()}"></h2>
+                    <div th:text="${guard.getDescription()}"></div>
+                </div>
+            </div>
+            <div class="flex flex-row gap-4">
+                <div class="flex flex-row gap-4 size-wide">
+                        <select class="select" name="turtle">
+                            <option disabled selected>Wybierz żółwia</option>
+                            <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
+                                    th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
+                        </select>
+                </div>
+                <div class="flex flex-row" style="width: 220px;">
+                    <input type="hidden" name="expedition" th:value="${guard.id}"/>
+                    <input class="button" type="submit" value="Walcz"/>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
