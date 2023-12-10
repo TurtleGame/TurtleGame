@@ -17,7 +17,7 @@
     <img src="/assets/images/logo.png" alt="logo"/>
 </div>
 
-<div class="form card" id="login-form" th:classappend="${context == 'login' ? '' : 'hidden'}">
+<div id="login-form" class="form card" th:classappend="${context == 'login' ? '' : 'hidden'}">
     <h2 class="text-center m-0">Zaloguj</h2>
     <div class="separator"></div>
 
@@ -48,13 +48,16 @@
                 <input type="submit" class="button" value="Zaloguj"/>
             </div>
             <div class="text-center">
-                <a href="#" class="link" onclick="switchForms(); return false;">Załóż konto</a>
+                <a href="#" class="link" onclick="switchForms('registration-form');">Załóż konto</a>
+            </div>
+            <div class="text-center">
+                <a href="#" class="link" onclick="switchForms('remind-password-form');">Przypomnij hasło</a>
             </div>
         </div>
     </form>
 </div>
 
-<div class="form card" id="remind-password">
+<div id="remind-password-form" class="form card hidden">
     <h2 class="text-center m-0">Przypomnij hasło</h2>
     <div class="separator"></div>
     <form th:action="@{/remind-password}" method="post">
@@ -72,12 +75,15 @@
             <div class="text-center mb-4">
                 <input type="submit" class="button" value="Przypomnij hasło"/>
             </div>
+            <div class="text-center">
+                <a href="#" class="link" onclick="switchForms('login-form');">Wróć do logowania</a>
+            </div>
         </div>
     </form>
 
 </div>
 
-<div class="form card" id="registration-form" th:classappend="${context == 'register' ? '' : 'hidden'}">
+<div id="registration-form" class="form card" th:classappend="${context == 'register' ? '' : 'hidden'}">
     <h2 class="text-center m-0">Zarejestruj</h2>
 
     <div class="separator"></div>
@@ -127,7 +133,7 @@
                 <input type="submit" class="button" value="Zarejestruj"/>
             </div>
             <div class="text-center">
-                <a href="#" class="link" onclick="switchForms(); return false;">Wróć do logowania</a>
+                <a href="#" class="link" onclick="switchForms('login-form');">Wróć do logowania</a>
             </div>
         </div>
     </form>

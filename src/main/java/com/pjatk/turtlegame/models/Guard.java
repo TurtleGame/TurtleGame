@@ -34,5 +34,45 @@ public class Guard {
     @OneToMany(mappedBy = "guard", fetch = FetchType.EAGER)
     private List<GuardStatistic> guardStatistics;
 
+    public int getHP() {
+        return  getGuardStatistics()
+                .stream()
+                .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 1)
+                .mapToInt(GuardStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getMP() {
+        return getGuardStatistics()
+                .stream()
+                .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 2)
+                .mapToInt(GuardStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getAgility() {
+        return getGuardStatistics()
+                .stream()
+                .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 3)
+                .mapToInt(GuardStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getStrength() {
+        return getGuardStatistics()
+                .stream()
+                .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 4)
+                .mapToInt(GuardStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getStamina() {
+        return getGuardStatistics()
+                .stream()
+                .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 5)
+                .mapToInt(GuardStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
 
 }

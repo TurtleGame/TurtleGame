@@ -55,29 +55,9 @@
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
                 <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
-                    <button class="button mb-2" th:onclick="'openForm(' + ${egg.getId()} + ')'">Adoptuj</button>
+                    <button class="button mb-2" th:onclick="'openPopupAdoptEgg(' + ${egg.getId()} + ')'">Adoptuj</button>
                 </div>
                 <button type="button" class="button mb-2" th:onclick="'openPopupSellEgg(' + ${egg.getId()} + ')'">Sprzedaj</button>
-                <div class="form-popup" th:id="'myForm-' + ${egg.getId()}">
-                    <h1>Nadaj imię</h1>
-                    <form th:action="@{'/nest/' + ${egg.getId()} + '/adopt'}" method="post">
-                        <label for="Name"><b>Imię</b></label>
-                        <input class="input" type="text" id="Name" name="Name" required>
-                        <button type="submit" class="button mb-2" onclick="adoptEggConfirm(this)">Adoptuj</button>
-                    </form>
-                    <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm(' + ${egg.getId()} + ')'">Wyjdź</button>
-                </div>
-                <div class="form-popup" th:id="'myForm2-' + ${egg.getId()}">
-                    <h1>Ustal cenę</h1>
-                    <form th:action="@{'/nest/' + ${egg.getId()} + '/sell'}" method="post">
-                        <label for="Gold"><b>Ilość złota:</b></label>
-                        <input class="input" type="text" id="Gold" name="Gold" required>
-                        <label for="Quantity"><b>Ilość:</b></label>
-                        <input class="input" type="number" min="1" id="Quantity" name="Quantity" required>
-                        <button type="submit" class="button mb-2" onclick="sellEggConfirm(this)">Sprzedaj</button>
-                    </form>
-                    <button type="submit" class="button button-danger mb-3" th:onclick="'closeForm2(' + ${egg.getId()} + ')'">Wyjdź</button>
-                </div>
             </div>
 
             <!-- end of egg -->
@@ -90,6 +70,20 @@
 </div>
 
 <div layout:fragment="popups">
+
+    <div id="popup-adopt-egg" class="popup-backdrop" style="display: none;">
+        <form class="popup" action="" method="post">
+            <h3>Adoptuj jajko</h3>
+            <div class="popup-content">
+                <label for="popup-adopt-egg-name"><b>Imię</b></label>
+                <input class="input" type="text" id="popup-adopt-egg-name" name="Name" required>
+            </div>
+            <div class="popup-buttons">
+                <button type="submit" class="button">Adoptuj</button>
+            </div>
+        </form>
+    </div>
+
     <div id="popup-sell-egg" class="popup-backdrop" style="display: none;">
         <form class="popup" action="" method="post">
             <h3>Ustal cenę</h3>

@@ -223,8 +223,7 @@ function initPopups() {
 function abandonTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz porzucić tego żółwia?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz porzucić tego żółwia?")) {
             event.preventDefault();
         }
     }
@@ -233,8 +232,7 @@ function abandonTurtleConfirm(buttonElement) {
 function sellTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz sprzedać tego żółwia?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz sprzedać tego żółwia?")) {
             event.preventDefault();
         }
     }
@@ -243,8 +241,7 @@ function sellTurtleConfirm(buttonElement) {
 function buyTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz kupić tego żółwia?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz kupić tego żółwia?")) {
             event.preventDefault();
         }
     }
@@ -253,8 +250,7 @@ function buyTurtleConfirm(buttonElement) {
 function undoTurtleConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz wycofać tego żółwia ze sprzedaży?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz wycofać tego żółwia ze sprzedaży?")) {
             event.preventDefault();
         }
     }
@@ -263,8 +259,7 @@ function undoTurtleConfirm(buttonElement) {
 function adoptEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");
     if (form) {
-        var confirmation = confirm("Czy na pewno chcesz zaadoptować to jajko?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz zaadoptować to jajko?")) {
             event.preventDefault();
         }
     }
@@ -273,8 +268,7 @@ function adoptEggConfirm(buttonElement) {
 function sellEggConfirm(buttonElement) {
     var form = buttonElement.closest("form");
     if (form) {
-        var confirmation = confirm("Czy na pewno chcesz sprzedać to jajko?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz sprzedać to jajko?")) {
             event.preventDefault();
         }
     }
@@ -283,8 +277,7 @@ function sellEggConfirm(buttonElement) {
 function buyEggConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz kupić to jajko?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz kupić to jajko?")) {
             event.preventDefault();
         }
     }
@@ -293,8 +286,7 @@ function buyEggConfirm(buttonElement) {
 function undoEggConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz wycofać to jajko ze sprzedaży?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz wycofać to jajko ze sprzedaży?")) {
             event.preventDefault();
         }
     }
@@ -303,8 +295,7 @@ function undoEggConfirm(buttonElement) {
 function buyItemConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz kupić ten przedmiot?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz kupić ten przedmiot?")) {
             event.preventDefault();
         }
     }
@@ -313,50 +304,36 @@ function buyItemConfirm(buttonElement) {
 function undoItemConfirm(buttonElement) {
     const form = buttonElement.closest("form");
     if (form) {
-        const confirmation = confirm("Czy na pewno chcesz wycofać ten przedmiot ze sprzedaży?");
-        if (!confirmation) {
+        if (!confirm("Czy na pewno chcesz wycofać ten przedmiot ze sprzedaży?")) {
             event.preventDefault();
         }
     }
 }
 
-function openForm(id) {
-    document.getElementById("myForm-" + id).style.display = "block";
-}
-
 function openPopupSellItem(id) {
     const $popup = $('#popup-sell-item');
     const route = '/items/' + id + '/details';
-    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
-        if (!confirm("Czy na pewno chcesz sprzedać ten przedmiot?")) {
-            event.preventDefault();
-        }
-    });
+    $popup.find('form').attr('action', route);
     $popup.fadeIn();
 }
 
 function openPopupSellEgg(id) {
     const $popup = $('#popup-sell-egg');
     const route = '/nest/' + id + '/sell';
-    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
-        if (!confirm("Czy na pewno chcesz sprzedać to jajko?")) {
-            event.preventDefault();
-        }
-    });
+    $popup.find('form').attr('action', route);
     $popup.fadeIn();
 }
 
 function openPopupSellTurtle(id) {
     const $popup = $('#popup-sell-turtle');
     const route = '/turtles/' + id + '/sell';
-    $popup.find('form').attr('action', route).unbind('beforeSave').on('beforeSave', function(event) {
-        if (!confirm("Czy na pewno chcesz sprzedać tego żółwia?")) {
-            event.preventDefault();
-        }
-    });
+    $popup.find('form').attr('action', route);
     $popup.fadeIn();
 }
 
-function closeForm(id) {
-    document.getElementById("myForm-" + id).style.display = "none";
+function openPopupAdoptEgg(id) {
+    const $popup = $('#popup-adopt-egg');
+    const route = '/nest/' + id + '/adopt';
+    $popup.find('form').attr('action', route);
+    $popup.fadeIn();
 }

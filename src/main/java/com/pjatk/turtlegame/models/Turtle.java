@@ -95,11 +95,50 @@ public class Turtle {
         if (getCurrentExpedition() != null) {
             if (getCurrentExpedition().getEndAt() != null)
                 return getCurrentExpedition().getEndAt();
-        }
-        else if (getCurrentTraining() != null) {
+        } else if (getCurrentTraining() != null) {
             if (getCurrentTraining().getEndAt() != null)
                 return getCurrentTraining().getEndAt();
         }
         return null;
+    }
+
+    public int getHP() {
+        return 5 * getTurtleStatisticList()
+                .stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1)
+                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getMP() {
+        return getTurtleStatisticList()
+                .stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 2)
+                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getAgility() {
+        return getTurtleStatisticList()
+                .stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3)
+                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getStrength() {
+        return getTurtleStatisticList()
+                .stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 4)
+                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .orElse(0);
+    }
+
+    public int getStamina() {
+        return getTurtleStatisticList()
+                .stream()
+                .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 5)
+                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .orElse(0);
     }
 }
