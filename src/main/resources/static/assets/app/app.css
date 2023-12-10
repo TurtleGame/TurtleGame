@@ -320,6 +320,10 @@ a {
   margin-left: 10px;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 body {
   margin: 0;
   height: 100vh;

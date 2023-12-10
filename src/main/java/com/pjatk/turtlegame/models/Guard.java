@@ -34,8 +34,17 @@ public class Guard {
     @OneToMany(mappedBy = "guard", fetch = FetchType.EAGER)
     private List<GuardStatistic> guardStatistics;
 
+    @OneToMany(mappedBy = "winnerGuard")
+    private List<TurtleBattleHistory> wonBattles;
+
+    @OneToMany(mappedBy = "loserGuard")
+    private List<TurtleBattleHistory> lostBattles;
+
+    @OneToMany(mappedBy = "guard")
+    private List<GuardItem> guardItemList;
+
     public int getHP() {
-        return  getGuardStatistics()
+        return  5 * getGuardStatistics()
                 .stream()
                 .filter(guardStatistic -> guardStatistic.getStatistic().getId() == 1)
                 .mapToInt(GuardStatistic::getValue).findFirst()

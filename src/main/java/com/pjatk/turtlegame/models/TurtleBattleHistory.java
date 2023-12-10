@@ -18,12 +18,20 @@ public class TurtleBattleHistory {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "winnder_id")
-    private Turtle winner;
+    @JoinColumn(name = "winnder_turtle_id")
+    private Turtle winnerTurtle;
 
     @ManyToOne
-    @JoinColumn(name = "loser_id")
-    private Turtle loser;
+    @JoinColumn(name = "loser_turtle_id")
+    private Turtle loserTurtle;
+
+    @ManyToOne
+    @JoinColumn(name = "winnder_guard_id")
+    private Guard winnerGuard;
+
+    @ManyToOne
+    @JoinColumn(name = "loser_guard_id")
+    private Guard loserGuard;
 
     @NotNull
     private LocalDateTime createdAt;

@@ -1,11 +1,30 @@
 package com.pjatk.turtlegame.services;
 
+import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.BattleParticipantDTO;
+import com.pjatk.turtlegame.models.DTOs.BattleResultDTO;
+import com.pjatk.turtlegame.repositories.GuardsRepository;
+import com.pjatk.turtlegame.repositories.TurtleBattleHistoryRepository;
+import com.pjatk.turtlegame.repositories.TurtleRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+
 @Service
+@AllArgsConstructor
 public class BattleService {
+
+    private final GuardsRepository guardsRepository;
+    private final TurtleRepository turtleRepository;
+    private final TurtleBattleHistoryRepository turtleBattleHistoryRepository;
+    private final ItemService itemService;
 
     public static final double NORMAL_ATTACK_MODIFIER_MIN = 0.8;
 
@@ -14,8 +33,57 @@ public class BattleService {
     public static final double NORMAL_DEFENCE_MODIFIER = 0.6;
     public static final double MAGIC_DEFENCE_MODIFIER = 0.8;
 
-    public StringBuilder fight(BattleParticipantDTO f1, BattleParticipantDTO f2) {
-        StringBuilder battleLog = new StringBuilder();
+    @Transactional
+    public BattleResultDTO processFightWithGuard(User user, Integer turtleId, Integer guardId) throws Exception {
+
+        Turtle turtle = user.getTurtle(turtleId);
+        Guard guard = guardsRepository.findById(guardId).orElseThrow();
+
+        if (turtle.getEnergy() <= 0) {
+            throw new Exception("Żółw ma za mało energii");
+        }
+        if (!turtle.isAvailable()) {
+            throw new Exception("Żółw jest zajęty!");
+        }
+
+        turtle.setEnergy(turtle.getEnergy() - 2);
+        turtleRepository.save(turtle);
+
+        BattleParticipantDTO fighter1 = new BattleParticipantDTO(turtle);
+        BattleParticipantDTO fighter2 = new BattleParticipantDTO(guard);
+
+        BattleResultDTO result = fight(fighter1, fighter2);
+
+        TurtleBattleHistory battleHistory = new TurtleBattleHistory();
+        battleHistory.setCreatedAt(LocalDateTime.now());
+        if (result.getWinner().equals(fighter1)) {
+            battleHistory.setWinnerTurtle(turtle);
+            battleHistory.setLoserGuard(guard);
+        } else {
+            battleHistory.setLoserTurtle(turtle);
+            battleHistory.setWinnerGuard(guard);
+        }
+        turtleBattleHistoryRepository.save(battleHistory);
+        result.setTurtleBattleHistory(battleHistory);
+
+        if (result.getWinner().equals(fighter1)) {
+            Random random = new Random();
+            for (GuardItem item : guard.getGuardItemList()) {
+                int randomNumber = random.nextInt(100) + 1;
+                if (randomNumber <= item.getChance()) {
+                    int randomQuantity = random.nextInt(item.getMaxQuantity() - item.getMinQuantity() + 1) + item.getMinQuantity();
+                    itemService.addItem(user, item.getItem(), randomQuantity);
+                    result.getRewards().put(item.getItem(), randomQuantity);
+                }
+            }
+
+        }
+
+        return result;
+    }
+
+    public BattleResultDTO fight(BattleParticipantDTO f1, BattleParticipantDTO f2) {
+        List<StringBuilder> battleLog = new ArrayList<>();
 
         // current rozpoczyna, ponieważ ma więcej agility
         BattleParticipantDTO attacker = (f1.getAgility() > f2.getAgility()) ? f1 : f2;
@@ -46,16 +114,25 @@ public class BattleService {
             }
             power = Math.max(power, 0);
             defender.setCurrentHp(defender.getCurrentHp() - power);
-            battleLog
-                    .append(attacker.getName())
-                    .append(" uderza atakiem ")
-                    .append(attackType)
-                    .append(" zadając ")
-                    .append(power)
-                    .append(" punktów obrażeń. Przeciwnikowi zostaje ")
-                    .append(defender.getCurrentHp())
-                    .append("\n");
-
+            if (attackType.equals("magic") && power == 0) {
+                battleLog.add((new StringBuilder())
+                        .append(attacker.getName())
+                        .append(" atakuje, ale ")
+                        .append(defender.getName())
+                        .append(" robi unik!")
+                );
+            } else {
+                battleLog.add((new StringBuilder())
+                        .append(attacker.getName())
+                        .append(" uderza atakiem ")
+                        .append(attackType)
+                        .append(" zadając ")
+                        .append(power)
+                        .append(" punktów obrażeń. Przeciwnikowi zostaje ")
+                        .append(defender.getCurrentHp())
+                        .append(" punktów zdrowia.")
+                );
+            }
 
             if (defender.getCurrentHp() <= 0) {
                 break;
@@ -65,11 +142,17 @@ public class BattleService {
             attacker = attacker.equals(f1) ? f2 : f1;
             defender = defender.equals(f1) ? f2 : f1;
         }
-        battleLog
+        battleLog.add((new StringBuilder())
                 .append("Zwyciężył - ")
                 .append(attacker.getName())
-                .append("\n");
-        return battleLog;
+        );
+
+        BattleResultDTO result = new BattleResultDTO();
+        result.setBattleLog(battleLog);
+        result.setWinner(attacker);
+        result.setLoser(defender);
+
+        return result;
     }
 
     private String getAttackType(BattleParticipantDTO fighter, int round) {

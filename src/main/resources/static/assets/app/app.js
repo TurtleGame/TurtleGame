@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (context === 'home') {
-        $('.act-add-post').on('click', function() {
+        $('.act-add-post').on('click', function () {
             if (!CKEDITOR.instances['content']) {
                 CKEDITOR.replace('content');
             }
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
             $('.new-news-content').toggleClass("hidden");
         });
 
-        $('.act-edit-post').on('click', function (){
+        $('.act-edit-post').on('click', function () {
             if (!CKEDITOR.instances['edit-content']) {
                 CKEDITOR.replace('edit-content');
             }
@@ -36,11 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (context === 'private-messages') {
 
-        $('.message-title').on('click', function() {
+        $('.message-title').on('click', function () {
             $('.message-content', $(this).parent()).toggleClass('hidden');
         });
 
-        $('.act-read-message').on('click', function() {
+        $('.act-read-message').on('click', function () {
             const messageId = $(this).attr('data-message-id');
             fetch('/private-message/' + messageId + '/read', {
                 method: "POST"
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        $('.act-read-all').on('click', function() {
+        $('.act-read-all').on('click', function () {
             fetch('/private-message/read-all', {
                 method: "POST"
             }).then((response) => {
@@ -75,13 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
             $('[name="recipient"]').append(newOption).trigger('change');
         });
 
-        $('.act-delete').on('click', function() {
+        $('.act-delete').on('click', function () {
             if (!confirm("Czy na pewno chcesz usunąć tą wiadomość?")) {
                 event.preventDefault();
             }
         });
 
-        $('h2', $('.header-container')).on('click', function() {
+        $('h2', $('.header-container')).on('click', function () {
             $('h2', $('.header-container')).removeClass('active-header');
             $(this).addClass('active-header');
             $('#received-message').css('display', 'none');
@@ -152,6 +152,31 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem('activeTab', 'items');
         });
     }
+
+    if (context === 'guards') {
+        const turtleName = $('#turtle-name').text();
+        const guardName = $('#guard-name').text();
+
+        $('#battle-log').find('.card').each(function() {
+            let colored = $(this).html();
+            colored = colored.split(turtleName).join('<strong class="text-success">' + turtleName + '</strong>');
+            colored = colored.split(guardName).join('<strong class="text-danger">' + guardName + '</strong>');
+            $(this).html(colored);
+        });
+
+        $('#battle-log').find('.log').each(function(i) {
+            setInterval(() => {$(this).fadeIn()}, i * 1000);
+        });
+        setTimeout(() => {
+            $('.act-skip').hide();
+            $('.act-back').show();
+        }, $('#battle-log').find('.log').length * 1000 - 1000);
+        $('.act-skip').on('click', function() {
+            $('.act-skip').hide();
+            $('.act-back').show();
+            $('#battle-log').find('.log').fadeIn();
+        });
+    }
 });
 
 function initCountdowns() {
@@ -213,7 +238,7 @@ function initSelect2() {
 }
 
 function initPopups() {
-    $('.popup-backdrop').on('click', function(e) {
+    $('.popup-backdrop').on('click', function (e) {
         if (e.target.classList.contains('popup-backdrop')) {
             $(this).fadeOut();
         }

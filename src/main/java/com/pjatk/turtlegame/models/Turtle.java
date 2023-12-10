@@ -45,10 +45,10 @@ public class Turtle {
     @JoinColumn(name = "type_id")
     private TurtleType turtleType;
 
-    @OneToMany(mappedBy = "winner")
+    @OneToMany(mappedBy = "winnerTurtle")
     private List<TurtleBattleHistory> wonBattles;
 
-    @OneToMany(mappedBy = "loser")
+    @OneToMany(mappedBy = "loserTurtle")
     private List<TurtleBattleHistory> lostBattles;
 
     @OneToMany(mappedBy = "turtle")

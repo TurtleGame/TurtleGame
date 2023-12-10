@@ -43,6 +43,9 @@ public class Item {
     private List<ExpeditionItem> expeditionItemList;
 
     @OneToMany(mappedBy = "item")
+    private List<GuardItem> guardItemList;
+
+    @OneToMany(mappedBy = "item")
     private List<ItemStatistic> itemStatisticList;
 
     @OneToOne(mappedBy = "item")

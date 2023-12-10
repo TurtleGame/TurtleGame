@@ -2,6 +2,7 @@ package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.DTOs.BattleParticipantDTO;
+import com.pjatk.turtlegame.models.DTOs.BattleResultDTO;
 import com.pjatk.turtlegame.models.Guard;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
@@ -16,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
 
@@ -26,7 +28,6 @@ public class GuardsController {
     private final UserRepository userRepository;
     private final GuardsRepository guardsRepository;
     private final BattleService battleService;
-    private final TurtleRepository turtleRepository;
 
     @GetMapping()
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -40,46 +41,32 @@ public class GuardsController {
     @PostMapping("/attack")
     public String attackGuard(Model model,
                               @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                              @RequestParam("guardId") Integer guardId,
-                              @RequestParam("turtleId") Integer turtleId,
-                              HttpServletRequest request) {
+                              @RequestParam(name = "guardId", required = false) Integer guardId,
+                              @RequestParam(name = "turtleId", required = false) Integer turtleId,
+                              RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
         model.addAttribute("context", "guards");
-        Turtle turtle = user.getTurtle(turtleId);
-        Guard guard = guardsRepository.findById(guardId).orElseThrow();
-        turtle.setEnergy(turtle.getEnergy() - 2);
-        turtleRepository.save(turtle);
 
-        BattleParticipantDTO fighter1 = new BattleParticipantDTO(user.getTurtle(turtleId));
-        BattleParticipantDTO fighter2 = new BattleParticipantDTO(guard);
+        if(turtleId == null){
+            redirectAttributes.addFlashAttribute("failedMessage", "Musisz wybrać żółwia");
+            return "redirect:/guards";
+        }
+        if(guardId == null){
+            redirectAttributes.addFlashAttribute("failedMessage", "Musisz wybrać strażnika");
+            return "redirect:/guards";
+        }
 
-        String battleUUID = UUID.randomUUID().toString();
-
-        HttpSession session = request.getSession();
-        session.setAttribute("fighter1", fighter1);
-        session.setAttribute("fighter2", fighter2);
-        session.setAttribute("battleUUID", battleUUID);
-
-        return "redirect:/guards/" + battleUUID;
-
-    }
-
-    @GetMapping("/{battleUUID}")
-    public String handleBattle(@PathVariable String battleUUID,
-                               Model model,
-                               @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                               HttpSession session) {
-
-
-
-        BattleParticipantDTO fighter1 = (BattleParticipantDTO) session.getAttribute("fighter1");
-        BattleParticipantDTO fighter2 = (BattleParticipantDTO) session.getAttribute("fighter2");
-
-
-        model.addAttribute("fighter1", fighter1);
-        model.addAttribute("fighter2", fighter2);
-        model.addAttribute("fight", battleService.fight(fighter1, fighter2));
+        try {
+            BattleResultDTO battleResult = battleService.processFightWithGuard(user, turtleId, guardId);
+            model.addAttribute("battleResult", battleResult);
+            model.addAttribute("turtle", user.getTurtle(turtleId));
+            model.addAttribute("guard", guardsRepository.findById(guardId).orElseThrow());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            return "redirect:/guards";
+        }
 
         return "pages/battlePage";
+
     }
 }

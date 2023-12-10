@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "expedition_item")
+@Table(name = "guard_item")
 @Setter
 @Getter
-public class ExpeditionItem {
+public class GuardItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,6 +27,6 @@ public class ExpeditionItem {
     private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "expedition_id")
-    private Expedition expedition;
+    @JoinColumn(name = "guard_id")
+    private Guard guard;
 }

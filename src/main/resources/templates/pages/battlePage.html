@@ -6,7 +6,50 @@
 
 <div layout:fragment="content">
 
-    <div th:text="${fight}"></div>
+    <div class="flex flex-row gap-4">
+        <div>
+            <div class="card">
+                <div class="flex" style="height: 175px">
+                    <img src="/assets/images/turtles/fire.png" style="width: 155px; margin: auto"/>
+                </div>
+                <div class="text-center">
+                    <strong id="turtle-name" class="text-success" th:text="${turtle.getName()}"></strong>
+                </div>
+                <div class="text-center">Poziom: <span th:text="${turtle.getLevel()}"></span></div>
+            </div>
+        </div>
+        <div id="battle-log" class="size-wide">
+            <div class="card">
+                <div th:each="log, logStat : ${battleResult.getBattleLog()}">
+                    <div class="log p-1 mb-2" th:if="!${logStat.last}" th:text="${log}" style="display: none;"></div>
+                    <div class="log bold card p-2 text-center mb-4" th:if="${logStat.last}" th:text="${log}" style="display: none;"></div>
+                </div>
+                <div th:if="${!battleResult.getRewards().isEmpty()}" class="mb-4 log" style="display: none;">
+                    <div>Nagrody: </div>
+                    <div th:each="rewards : ${battleResult.getRewards()}">
+                        <div><span th:text="${rewards.getKey().getName()}"></span> x<span th:text="${rewards.getValue()}"></span></div>
+                    </div>
+                </div>
+                <button class="button mb-2 act-skip">Pomiń</button>
+                <a th:href="@{/guards}">
+                    <button class="button mb-2 act-back" style="display: none;">Wróć</button>
+                </a>
+
+            </div>
+
+        </div>
+        <div>
+            <div class="card">
+                <div class="flex" style="height: 175px">
+                    <img th:src="@{${'/assets/images/guards/' + guard.id + '.png'}}" style="width: 175px; height: 175px; margin: auto;" alt="guard"/>
+                </div>
+                <div class="text-center">
+                    <strong id="guard-name" class="text-danger" th:text="${guard.getName()}"></strong>
+                </div>
+                <div class="text-center">Strażnik</div>
+            </div>
+        </div>
+    </div>
 
 
 </div>

@@ -5,7 +5,10 @@
 <h1 layout:fragment="header">Strażnicy</h1>
 
 <div layout:fragment="content">
-    <!-- wyprawa -->
+
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
+
+    <!-- lista strażników -->
     <form action="/guards/attack" method="post" th:each="guard : ${guards}">
         <div class="card mb-2">
             <div class="flex flex-row mb-4 gap-4">
