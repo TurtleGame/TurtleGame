@@ -6,6 +6,8 @@
 
 <div layout:fragment="content">
 
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
+
     <div class="card mb-2">
 
         <div class="private-message-header">
@@ -82,7 +84,7 @@
                 <h3>Jajka</h3>
                 <div th:if="${eggs.size() > 0}">
                     <div class="card mb-2" th:each="egg : ${eggs}">
-                        <h2 class="text-center m-0 mb-4" th:text="${egg.getName()}"></h2>
+                        <h2 class="text-center m-0 mb-4" th:text="${egg.getItem().getName()}"></h2>
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-middle flex-center">
                                 <img src="/assets/images/eggs/light.png" style="width: 155px; border-radius: 0.25rem;"/>
@@ -90,15 +92,15 @@
                             <table class="size-wide">
                                 <tr>
                                     <td style="width: 30%; vertical-align: top;">
-                                        <div class="mb-1">Typ <span class="text-primary" th:text="${egg.getTurtleType().getDescription()}"></span></div>
-                                        <div class="mb-1">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></div>
-                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${egg.getRarity().getName()}"></span>
+                                        <div class="mb-1">Typ <span class="text-primary" th:text="${egg.getItem().getTurtleType().getDescription()}"></span></div>
+                                        <div class="mb-1">Żywioł <span class="text-primary" th:text="${egg.getItem().getTurtleType().getName()}"></span></div>
+                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${egg.getItem().getRarity().getName()}"></span>
                                         </div>
                                     </td>
                                     <td style="width: 40%;">
-                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" >f</span></div>
+                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" th:text="${@marketService.getQuantity(egg)}"></span></div>
                                         <br>
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" > złota</span></div>
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(egg)}"> złota</span></div>
                                         <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, egg) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${egg.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyEggConfirm(this)">Kup jajko</button>
@@ -120,7 +122,7 @@
                 <h3>Przedmioty</h3>
                 <div th:if="${items.size() > 0}">
                     <div class="card mb-2" th:each="item : ${items}">
-                        <h2 class="text-center m-0 mb-4" th:text="${item.getName()}"></h2>
+                        <h2 class="text-center m-0 mb-4" th:text="${item.getItem().getName()}"></h2>
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-middle flex-center">
                                 <img src="/assets/images/academyItems/diamondRuby.png" style="width: 155px; border-radius: 0.25rem;"/>
@@ -128,14 +130,14 @@
                             <table class="size-wide">
                                 <tr>
                                     <td style="width: 30%; vertical-align: top;">
-                                        <div class="mb-1">Typ przedmiotu: <span class="text-primary" th:text="${item.getItemType().getName()}"></span></div>
-                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${item.getRarity().getName()}"></span>
+                                        <div class="mb-1">Typ przedmiotu: <span class="text-primary" th:text="${item.getItem().getItemType().getName()}"></span></div>
+                                        <div class="mb-1">Unikalność: <span class="text-primary" th:text="${item.getItem().getRarity().getName()}"></span>
                                         </div>
                                     </td>
                                     <td style="width: 40%;">
-                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" >f</span></div>
+                                        <div class="text-primary"><b>Ilość: </b><span class="text-primary" th:text="${@marketService.getQuantity(item)}"></span></div>
                                         <br>
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" > złota</span></div>
+                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(item)}"> złota</span></div>
                                         <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, item) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${item.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyItemConfirm(this)">Kup przedmiot</button>

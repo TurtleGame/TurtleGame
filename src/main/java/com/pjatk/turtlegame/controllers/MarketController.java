@@ -1,6 +1,7 @@
 package com.pjatk.turtlegame.controllers;
 
 import com.pjatk.turtlegame.models.Item;
+import com.pjatk.turtlegame.models.ItemOwnerMarket;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -33,8 +35,8 @@ public class MarketController {
         Sort.Direction direction = sortDir.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
         List<Turtle> turtles = marketService.getAllTurtles(sortField, direction);
-        List<Item> items = marketService.getAllItems(sortField, direction);
-        List<Item> eggs = marketService.getAllEggs(sortField, direction);
+        List<ItemOwnerMarket> items = marketService.getAllItems(sortField, direction);
+        List<ItemOwnerMarket> eggs = marketService.getAllEggs(sortField, direction);
 
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
@@ -48,9 +50,15 @@ public class MarketController {
 
     @PostMapping("/{id}/buyTurtle")
     public String buyTurtle(@AuthenticationPrincipal UserDetails userDetails,
-                            @PathVariable int id) {
+                            @PathVariable int id,
+                            RedirectAttributes redirectAttributes) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
-        marketService.buyTurtle(id, user);
+
+        try {
+            marketService.buyTurtle(id, user);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+        }
 
         return "redirect:/market";
     }
@@ -66,9 +74,15 @@ public class MarketController {
 
     @PostMapping("/{id}/buyItem")
     public String buyItem(@AuthenticationPrincipal UserDetails userDetails,
-                            @PathVariable int id) {
+                            @PathVariable int id,
+                            RedirectAttributes redirectAttributes) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
-        marketService.buyItem(id, user);
+
+        try {
+            marketService.buyItem(id, user);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+        }
 
         return "redirect:/market";
     }

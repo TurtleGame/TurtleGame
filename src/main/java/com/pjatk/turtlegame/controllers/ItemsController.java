@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/items")
@@ -54,7 +55,7 @@ public class ItemsController {
                           @PathVariable int id,
                           @RequestParam("Gold") int gold,
                           @RequestParam("Quantity") int quantity,
-                          BindingResult bindingResult) throws Exception {
+                          BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
         User user = userRepository.findById(turtleUserDetails.getId());
 
@@ -63,10 +64,14 @@ public class ItemsController {
         }
 
         if (!itemOwnerMarketRepository.existsByItemIdAndUserId(id, user.getId())) {
-            itemService.sellItem(user.getId(), id, gold, quantity);
+            try {
+                itemService.sellItem(user.getId(), id, gold, quantity);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            }
         }
         else {
-            model.addAttribute("errorMessage", "Już sprzedajesz ten przedmiot!");
+            redirectAttributes.addFlashAttribute("failedMessage", "Już sprzedajesz ten przedmiot!");
             model.addAttribute("context", "items");
             model.addAttribute("item", itemService.getItemDetails(id, user.getId()));
             model.addAttribute("statistics", itemService.getItemsStatistics());

@@ -19,6 +19,8 @@
         </ul>
     </div>
 
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
+
     <!-- inkubacja -->
     <div class="card mb-2">
         <h3 class="m-0 mb-3">Inkubator</h3>
@@ -89,7 +91,7 @@
             <h3>Ustal cenę</h3>
             <div class="popup-content">
                 <label for="sell-egg-popup-gold"><b>Ilość złota:</b></label>
-                <input class="input" type="text" id="sell-egg-popup-gold" name="Gold" required="">
+                <input class="input" type="number" min="1" id="sell-egg-popup-gold" name="Gold" required="">
                 <label for="sell-egg-popup-quantity"><b>Ilość:</b></label>
                 <input class="input" type="number" min="1" id="sell-egg-popup-quantity" name="Quantity" required>
             </div>

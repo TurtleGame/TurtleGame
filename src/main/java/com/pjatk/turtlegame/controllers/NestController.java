@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 
@@ -47,7 +48,7 @@ public class NestController {
                           @RequestParam("Gold") int gold,
                           @RequestParam("Quantity") int quantity,
                           Model model,
-                          BindingResult bindingResult) throws Exception {
+                          BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
@@ -55,10 +56,14 @@ public class NestController {
             return "pages/nest";
         }
         if (!itemOwnerMarketRepository.existsByItemIdAndUserId(id, turtleUserDetails.getId())) {
+            try {
             itemService.sellEgg(turtleUserDetails.getId(), id, gold, quantity);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            }
         }
         else {
-            bindingResult.rejectValue("turtleId", "error.alreadyExists", "Jajko jest już w sprzedaży.");
+            redirectAttributes.addFlashAttribute("failedMessage", "Już sprzedajesz to jajko!");
 
             return "pages/nest";
         }

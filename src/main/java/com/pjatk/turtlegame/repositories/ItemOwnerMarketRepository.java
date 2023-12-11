@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface ItemOwnerMarketRepository extends JpaRepository<ItemOwnerMarket, Integer> {
     ItemOwnerMarket findByItemIdAndEndAtIsNull(int itemId);
     ItemOwnerMarket findByItemIdAndUserIdAndEndAtIsNull(int itemId, int ownerId);
-    Optional<ItemOwnerMarket> findByItemIdAndUserId(int itemId, int ownerId);
     Boolean existsByItemIdAndUserId(int itemId, int ownerId);
     List<ItemOwnerMarket> findAllByItemIdAndEndAtIsNull(int itemId);
     List<ItemOwnerMarket> findAllByItemIdAndUserId(int itemId, int ownerId);

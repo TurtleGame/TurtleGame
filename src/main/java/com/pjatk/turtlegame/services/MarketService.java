@@ -69,69 +69,74 @@ public class MarketService {
         return turtles;
     }
 
-    public List<Item> getAllItems (String sortField, Sort.Direction sortDir) {
+    public List<ItemOwnerMarket> getAllItems (String sortField, Sort.Direction sortDir) {
         List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
-        List<ItemOwnerMarket> itemsOwn = new ArrayList<>();
-        List<Item> items = new ArrayList<>();
+        List<ItemOwnerMarket> items = new ArrayList<>();
 
         if (history.isEmpty()) return items;
 
         for(ItemOwnerMarket selling : history) {
             if (!selling.getItem().getItemType().getName().equals("Jajko")) {
-                items.add(selling.getItem());
-                itemsOwn.add(selling);
+                items.add(selling);
             }
         }
 
-        return sortItems(sortField, sortDir, items, itemsOwn);
+        return sortItems(sortField, sortDir, items, 0);
     }
 
-    public List<Item> getAllEggs (String sortField, Sort.Direction sortDir) {
+    public List<ItemOwnerMarket> getAllEggs (String sortField, Sort.Direction sortDir) {
         List<ItemOwnerMarket> history = itemOwnerMarketRepository.findAll();
-        List<ItemOwnerMarket> eggOwn = new ArrayList<>();
-        List<Item> eggs = new ArrayList<>();
+        List<ItemOwnerMarket> eggs = new ArrayList<>();
 
         if (history.isEmpty()) return eggs;
 
         for(ItemOwnerMarket selling : history) {
             if (selling.getItem().getItemType().getName().equals("Jajko")) {
-                eggs.add(selling.getItem());
-                eggOwn.add(selling);
+                eggs.add(selling);
             }
         }
 
-        return sortItems(sortField, sortDir, eggs, eggOwn);
+        return sortItems(sortField, sortDir, eggs, 1);
     }
 
-    public List<Item> sortItems(String sortField, Sort.Direction sortDir, List<Item> items, List<ItemOwnerMarket> itemsOwn) {
+    public List<ItemOwnerMarket> sortItems(String sortField, Sort.Direction sortDir, List<ItemOwnerMarket> itemsOwn, int egg) {
         switch (sortField) {
             case "turtle_id":
                 if (sortDir.isDescending()) {
-                    items.sort(Comparator.comparing(Item::getId).reversed());
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getId()).reversed());
                 } else {
-                    items.sort(Comparator.comparing(Item::getId));
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getId()));
                 }
                 break;
             case "name":
                 if (sortDir.isDescending()) {
-                    items.sort(Comparator.comparing(Item::getName).reversed());
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getName()).reversed());
                 } else {
-                    items.sort(Comparator.comparing(Item::getName));
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getName()));
                 }
                 break;
             case "type":
-                if (sortDir.isDescending()) {
-                    items.sort(Comparator.comparing((Item item) -> item.getItemType().getName()).reversed());
-                } else {
-                    items.sort(Comparator.comparing((Item item) -> item.getItemType().getName()));
+                if (egg == 1) {
+                    if (sortDir.isDescending()) {
+                        itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getTurtleType().getName()).reversed());
+                    } else {
+                        itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getTurtleType().getName()));
+                    }
+                }
+                else {
+                    if (sortDir.isDescending()) {
+                        itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getItemType().getName()).reversed());
+                    } else {
+                        itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getItemType().getName()));
+                    }
                 }
                 break;
             case "level":
             case "rarity":
                 if (sortDir.isDescending()) {
-                    items.sort(Comparator.comparing((Item item) -> item.getRarity().getName()).reversed());
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getRarity().getName()).reversed());
                 } else {
-                    items.sort(Comparator.comparing((Item item) -> item.getRarity().getName()));
+                    itemsOwn.sort(Comparator.comparing((ItemOwnerMarket item) -> item.getItem().getRarity().getName()));
                 }
                 break;
             case "price":
@@ -140,14 +145,10 @@ public class MarketService {
                 } else {
                     itemsOwn.sort(Comparator.comparing(ItemOwnerMarket::getHowMuch));
                 }
-                items.clear();
-                for (ItemOwnerMarket item : itemsOwn) {
-                    items.add(item.getItem());
-                }
                 break;
         }
 
-        return items;
+        return itemsOwn;
     }
 
     public int sellerIsBuyer (User user, Turtle turtle){
@@ -167,23 +168,26 @@ public class MarketService {
         return 0;
     }
 
-    public int sellerIsBuyerItem (User user, Item item) {
-        Optional<ItemOwnerMarket> selling = itemOwnerMarketRepository.findByItemIdAndUserId(item.getId(), user.getId());
+    public int sellerIsBuyerItem (User user, ItemOwnerMarket item) {
+        int userId = 0;
 
-        return selling.map(record -> {
-            System.out.println(1);
+        for (ItemOwnerMarket selling : itemOwnerMarketRepository.findAll()) {
+            if (selling.getId() == item.getId() && selling.getUser().getId() == user.getId()) {
+                userId = selling.getUser().getId();
+            }
+        }
+
+        if (user.getId() == userId)
             return 1;
-        }).orElseGet(() -> {
-            System.out.println(0);
-            return 0;
-        });
+
+        return 0;
     }
 
-    public int getQuantity(Item item, User user) {
+    public int getQuantity(ItemOwnerMarket item) {
         int quantity = 0;
 
-        for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
-            if (selling.getEndAt() == null && selling.getUser().getId() == user.getId()) {
+        for (ItemOwnerMarket selling : itemOwnerMarketRepository.findAll()) {
+            if (selling.getId() == item.getId()) {
                 quantity = selling.getQuantity();
             }
         }
@@ -203,11 +207,11 @@ public class MarketService {
         return shells;
     }
 
-    public int priceGold (Item item, User user) {
+    public int priceGold (ItemOwnerMarket item) {
         int gold = 0;
 
-        for (ItemOwnerMarket selling : item.getItemOwnerMarketList()) {
-            if (selling.getEndAt() == null && selling.getUser().getId() == user.getId()) {
+        for (ItemOwnerMarket selling : itemOwnerMarketRepository.findAll()) {
+            if (selling.getId() == item.getId()) {
                 gold = selling.getHowMuch();
             }
         }
@@ -281,23 +285,23 @@ public class MarketService {
 
     @Transactional
     public void buyItem (int itemId, User newUser) {
-        User oldUser = itemOwnerMarketRepository.findByItemIdAndEndAtIsNull(itemId).getUser();
-        ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, oldUser.getId());
+        User oldUser = itemOwnerMarketRepository.findById(itemId).get().getUser();
+        ItemOwnerMarket transaction = itemOwnerMarketRepository.findById(itemId).get();
         Item item = transaction.getItem();
         PrivateMessage privateMessage = new PrivateMessage();
 
-        if (newUser.getGold() < priceGold(item, oldUser)) {
+        if (newUser.getGold() < priceGold(transaction)) {
 
             throw new IllegalArgumentException("Brak wystarczającej ilości golda");
 
         }
 
-        newUser.setGold(newUser.getGold() - priceGold(item, oldUser));
+        newUser.setGold(newUser.getGold() - priceGold(transaction));
         userRepository.save(newUser);
 
-        oldUser.setGold(oldUser.getGold() + priceGold(item, oldUser));
+        oldUser.setGold(oldUser.getGold() + priceGold(transaction));
         privateMessage.setTitle("Przedmiot został sprzedany!");
-        privateMessage.setContent("Przedmiot: " + item.getName() + " (" + getQuantity(item, oldUser) + ") został sprzedany za " + priceGold(item, oldUser) + " golda.");
+        privateMessage.setContent("Przedmiot: " + item.getName() + " (" + getQuantity(transaction) + ") został sprzedany za " + priceGold(transaction) + " golda.");
         privateMessage.setRecipient(oldUser);
         privateMessage.setSentAt(LocalDateTime.now());
         privateMessage.setGold(0);
@@ -305,25 +309,26 @@ public class MarketService {
 
         userRepository.save(oldUser);
 
-        addItem(newUser, item, transaction.getQuantity());
+        addItem(newUser, item, transaction);
     }
 
     @Transactional
     public void undoItem (int itemId, User user) {
 
-        Item item = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId()).getItem();
-        ItemOwnerMarket transaction = itemOwnerMarketRepository.findByItemIdAndUserIdAndEndAtIsNull(itemId, user.getId());
+        Item item = itemOwnerMarketRepository.findById(itemId).get().getItem();
+        ItemOwnerMarket transaction = itemOwnerMarketRepository.findById(itemId).get();
 
-        addItem(user, item, transaction.getQuantity());
+        addItem(user, item, transaction);
     }
 
-    private void addItem(User user, Item item, int quantity) {
-        item.getItemOwnerMarketList().stream()
-                .filter(history -> {
-                    return history.getEndAt() == null && history.getUser().getId() == user.getId();
-                })
-                .forEach(history -> itemOwnerMarketRepository.delete(history));
+    private void addItem(User user, Item item, ItemOwnerMarket transaction) {
 
-        itemService.addItem(user, item, quantity);
+        for (ItemOwnerMarket selling : itemOwnerMarketRepository.findAll()) {
+            if (selling.getId() == transaction.getId()) {
+                itemOwnerMarketRepository.delete(selling);
+            }
+        }
+
+        itemService.addItem(user, item, transaction.getQuantity());
     }
 }
