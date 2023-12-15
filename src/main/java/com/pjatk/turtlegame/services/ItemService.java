@@ -128,10 +128,12 @@ public class ItemService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć jajka o podanym ID"));
 
-        TurtleType turtleType = turtleTypeRepository.findById(userItem.getItem().getItemType().getId());
+        TurtleType turtleType = turtleTypeRepository.findById(userItem.getItem().getTurtleType().getId());
+
+
 
         TurtleEgg egg = new TurtleEgg();
-        egg.setHatchingAt(LocalDateTime.of(2024, 12, 12, 12, 12));
+        egg.setHatchingAt(LocalDateTime.now().plusHours(turtleType.getHatchingTime()));
         egg.setName(name);
         egg.setWarming(2);
         egg.setTurtleType(turtleType);
