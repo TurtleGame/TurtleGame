@@ -1,7 +1,6 @@
 package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
-import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
@@ -28,12 +27,10 @@ public class ItemService {
     }
 
     public boolean getItem (int itemId, int ownerId) {
-        if (userItemRepository.findByItemIdAndUserId(itemId, ownerId).isPresent())
-            return true;
-        return false;
+        return userItemRepository.findByItemIdAndUserId(itemId, ownerId).isPresent();
     }
 
-    public UserItem getItemDetails (int itemId, int ownerId) throws TurtleNotFoundException, UnauthorizedAccessException {
+    public UserItem getItemDetails (int itemId, int ownerId) throws TurtleNotFoundException {
 
         return userItemRepository.findByItemIdAndUserId(itemId, ownerId)
                 .orElseThrow(() -> new TurtleNotFoundException("Item not found"));
