@@ -10,4 +10,5 @@ import java.util.List;
 public interface AchievementsRepoistory extends JpaRepository<Achievement, Integer> {
 
     List<Achievement> findAll();
+    Achievement findById(int achievementId);
 }
