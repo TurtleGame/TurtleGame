@@ -45,26 +45,38 @@
                 </div>
                 <div>
                     <h2 style="margin-top: 0;" th:text="${training.getName()}"></h2>
-                    <div th:each="item : ${training.getTrainingItemList()}"
-                        th:text="${item.getItem().getName()} + ' (' + ${@academyService.getQuant(user, training, item.getId())} + '/' + ${item.getHowMany()} + ')'"></div>
+                    <ul>
+                        <li
+                            class="training-item"
+                            th:each="item : ${training.getTrainingItemList()}"
+                            th:attr="data-cost=${item.getHowMany()}"
+                        >
+                            <span th:text="${item.getItem().getName()}"></span>
+                            (
+                            <span th:text="${@academyService.getQuant(user, training, item.getId())}"></span>
+                            /
+                            <span class="act-target-cost" th:text="${item.getHowMany()}"></span>
+                            )
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="flex flex-row gap-4">
-                <div class="flex flex-row gap-4 size-wide">
+                <div class="size-wide">
                     <select class="select" name="turtle">
                         <option disabled selected>Wybierz żółwia</option>
                         <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
                                 th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
                     </select>
                 </div>
-                <div class="flex flex-row gap-4" style="width: 220px;">
+                <div style="width: 220px;">
                     <select class="select" name="durationTime">
                         <option value="60">1 godz.</option>
                         <option value="180">3 godz.</option>
                         <option value="360">6 godz.</option>
                     </select>
                 </div>
-                <div class="flex flex-row" style="width: 220px;">
+                <div style="width: 220px;">
                     <input type="hidden" name="training" th:value="${training.id}"/>
                     <span th:if="${@academyService.ifTrainingCan(user, training)}"><input class="button" type="submit" value="Trenuj"/></span>
                     <span th:unless="${@academyService.ifTrainingCan(user, training)}"><input disabled class="button" type="submit" value="Trenuj"/></span>

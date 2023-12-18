@@ -177,6 +177,27 @@ document.addEventListener("DOMContentLoaded", () => {
             $('#battle-log').find('.log').fadeIn();
         });
     }
+
+    if (context === 'academy') {
+        $('[name="durationTime"]').change(function () {
+            const duration = $(this).val();
+            const $parent = $(this).closest('form');
+
+            // Calculate the multiplier based on the selected duration
+            let multiplier = 1;
+            if (duration === '180') {
+                multiplier = 2;
+            } else if (duration === '360') {
+                multiplier = 3;
+            }
+
+            // Update the text and data-original-how-many attributes using the calculated multiplier
+            $('.training-item', $parent).each(function () {
+                const cost = $(this).data('cost');
+                $('.act-target-cost', $(this)).text(cost * multiplier);
+            });
+        });
+    }
 });
 
 function initCountdowns() {
