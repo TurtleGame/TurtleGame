@@ -153,9 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if (context === 'guards') {
+    if (context === 'guards' || context === 'arena') {
         const turtleName = $('#turtle-name').text();
-        const guardName = $('#guard-name').text();
+        const guardName = $('#opponent-name').text();
 
         $('#battle-log').find('.card').each(function() {
             let colored = $(this).html();

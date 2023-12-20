@@ -6,16 +6,14 @@ import com.pjatk.turtlegame.models.DTOs.BattleResultDTO;
 import com.pjatk.turtlegame.repositories.GuardsRepository;
 import com.pjatk.turtlegame.repositories.TurtleBattleHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
+import com.pjatk.turtlegame.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +23,7 @@ public class BattleService {
     private final TurtleRepository turtleRepository;
     private final TurtleBattleHistoryRepository turtleBattleHistoryRepository;
     private final ItemService itemService;
+    private final UserRepository userRepository;
 
     public static final double NORMAL_ATTACK_MODIFIER_MIN = 0.8;
 
@@ -80,6 +79,92 @@ public class BattleService {
         }
 
         return result;
+    }
+
+    @Transactional
+    public BattleResultDTO processFightWithOtherTurtle(User user, Integer ourTurtleId, Integer opponentId) throws Exception {
+        Turtle ourTurtle = user.getTurtle(ourTurtleId);
+        Turtle opponent = turtleRepository.findById(opponentId).orElseThrow();
+        Random random = new Random();
+
+        if (ourTurtle.getEnergy() <= 0) {
+            throw new Exception("Żółw ma za mało energii");
+        }
+        if (!ourTurtle.isAvailable()) {
+            throw new Exception("Żółw jest zajęty!");
+        }
+
+        ourTurtle.setEnergy(ourTurtle.getEnergy() - 2);
+
+
+        BattleParticipantDTO fighter1 = new BattleParticipantDTO(ourTurtle);
+        BattleParticipantDTO fighter2 = new BattleParticipantDTO(opponent);
+
+        BattleResultDTO result = fight(fighter1, fighter2);
+
+        TurtleBattleHistory battleHistory = new TurtleBattleHistory();
+        battleHistory.setCreatedAt(LocalDateTime.now());
+        if (result.getWinner().equals(fighter1)) {
+            battleHistory.setWinnerTurtle(ourTurtle);
+            battleHistory.setLoserTurtle(opponent);
+        } else {
+            battleHistory.setLoserTurtle(ourTurtle);
+            battleHistory.setWinnerTurtle(opponent);
+        }
+        turtleBattleHistoryRepository.save(battleHistory);
+        result.setTurtleBattleHistory(battleHistory);
+
+        if (result.getWinner().equals(fighter1)) {
+
+            int randomGold = random.nextInt(201) + 100;
+            int randomRankingPoints = random.nextInt(11)+20;
+            ourTurtle.setRankingPoints(ourTurtle.getRankingPoints() + randomRankingPoints);
+            user.setGold(user.getGold() + randomGold);
+            userRepository.save(user);
+            result.setGold(randomGold);
+            result.setGainedRankingPoints(randomRankingPoints);
+        } else {
+            int randomRankingPoints = random.nextInt(11)+20;
+            opponent.setRankingPoints(opponent.getRankingPoints() + randomRankingPoints);
+            ourTurtle.setRankingPoints(Math.max(ourTurtle.getRankingPoints() - randomRankingPoints, 0));
+            result.setLostRankingPoints(randomRankingPoints);
+        }
+        turtleRepository.save(ourTurtle);
+        turtleRepository.save(opponent);
+        return result;
+
+    }
+
+    public Turtle findOpponent(Turtle turtle) {
+        int maxDifference = 30;
+        Random random = new Random();
+        List<Turtle> turtleWithSameOwner = turtle.getOwner().getTurtles();
+
+        while (maxDifference <= 1000) {
+            List<Turtle> opponentsList = turtleRepository.findTurtlesByRankingPointsBetween(turtle.getRankingPoints() - maxDifference, turtle.getRankingPoints() + maxDifference);
+
+            opponentsList.removeAll(turtleWithSameOwner);
+
+            if (!opponentsList.isEmpty()) {
+
+                int randomIndex = random.nextInt(opponentsList.size());
+                return opponentsList.get(randomIndex);
+            }
+
+            maxDifference += 10;
+        }
+        return null;
+    }
+
+    public TreeMap<Turtle, Turtle> findOpponents(User user) {
+        List<Turtle> turtleList = user.getTurtles();
+        HashMap<Turtle, Turtle> fightPair = new HashMap<>();
+
+        for (Turtle turtle : turtleList) {
+            fightPair.put(turtle, findOpponent(turtle));
+        }
+
+        return new TreeMap<>(fightPair);
     }
 
     public BattleResultDTO fight(BattleParticipantDTO f1, BattleParticipantDTO f2) {

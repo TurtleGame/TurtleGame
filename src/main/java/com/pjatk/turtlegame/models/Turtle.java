@@ -10,13 +10,14 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.OptionalInt;
 
 @Entity
 @Table(name = "turtle")
 @Setter
 @Getter
-public class Turtle {
+public class Turtle implements Comparable<Turtle> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -31,8 +32,6 @@ public class Turtle {
     @NotNull
     private int level;
 
-    private int unassignedPoints;
-
     @Column(name = "is_available", columnDefinition = "INT(1)")
     private boolean isAvailable;
 
@@ -40,6 +39,8 @@ public class Turtle {
     private boolean isFed;
 
     private int energy;
+
+    private int rankingPoints;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
@@ -140,5 +141,10 @@ public class Turtle {
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 5)
                 .mapToInt(TurtleStatistic::getValue).findFirst()
                 .orElse(0);
+    }
+
+    @Override
+    public int compareTo(Turtle otherTurtle) {
+        return Objects.compare(this.name, otherTurtle.name, String::compareTo);
     }
 }

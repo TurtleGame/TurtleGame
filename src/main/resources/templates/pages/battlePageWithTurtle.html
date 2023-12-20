@@ -24,14 +24,24 @@
                     <div class="log p-1 mb-2" th:if="!${logStat.last}" th:text="${log}" style="display: none;"></div>
                     <div class="log bold card p-2 text-center mb-4" th:if="${logStat.last}" th:text="${log}" style="display: none;"></div>
                 </div>
-                <div th:if="${!battleResult.getRewards().isEmpty()}" class="mb-4 log" style="display: none;">
-                    <div>Nagrody: </div>
-                    <div th:each="rewards : ${battleResult.getRewards()}">
-                        <div><span th:text="${rewards.getKey().getName()}"></span> x<span th:text="${rewards.getValue()}"></span></div>
+                <div th:if="${battleResult.getGainedRankingPoints()}" class="mb-4 log" style="display: none;">
+                    <div>Zdobywasz: </div>
+                        <div>
+                            <img src="/assets/images/gold.png" width="20" height="20" alt="gold"> x<span th:text="${battleResult.getGold()}"></span></div>
+                    <div>
+                        <i class="fas fa-caret-up"></i> <span th:text="${battleResult.getGainedRankingPoints()}"></span> punktów rankingowych!
                     </div>
                 </div>
+                <div th:if="${battleResult.getLostRankingPoints()}" class="mb-4 log" style="display: none;">
+                    <div>Tracisz: </div>
+                    <div>
+                        <i class="fas fa-caret-down"></i> <span th:text="${battleResult.getLostRankingPoints()}"></span> punktów rankingowych!
+                    </div>
+                </div>
+
+
                 <button class="button mb-2 act-skip">Pomiń</button>
-                <a th:href="@{/guards}">
+                <a th:href="@{/arena}">
                     <button class="button mb-2 act-back" style="display: none;">Wróć</button>
                 </a>
 
@@ -41,13 +51,12 @@
         <div>
             <div class="card">
                 <div class="flex" style="height: 175px">
-                    <img th:src="@{${'/assets/images/guards/' + guard.id + '.png'}}" style="width: 175px; height: 175px; margin: auto;" alt="guard"/>
+                    <img src="/assets/images/turtles/fire.png" style="width: 175px; height: 175px; margin: auto;" alt="opponent"/>
                 </div>
                 <div class="text-center">
-                    <strong id="opponent-name" class="text-danger" th:text="${guard.getName()}"></strong>
-                    <div class="text-center">HP: <span th:text="${guard.getHP()}"></span></div>
+                    <strong id="opponent-name" class="text-danger" th:text="${opponent.getName()}"></strong>
+                    <div class="text-center">HP: <span th:text="${opponent.getHP()}"></span></div>
                 </div>
-                <div class="text-center">Strażnik</div>
             </div>
         </div>
     </div>

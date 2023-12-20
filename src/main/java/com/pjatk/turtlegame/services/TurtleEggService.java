@@ -49,11 +49,11 @@ public class TurtleEggService {
         turtle.setAvailable(true);
         turtle.setLevel(0);
         turtle.setName(egg.getName());
-        turtle.setUnassignedPoints(0);
         turtle.setTurtleType(egg.getTurtleType());
         turtle.setGender(0);
         turtle.setOwner(user);
         turtle.setEnergy(100);
+        turtle.setRankingPoints(0);
 
         turtle.setFed(false);
 

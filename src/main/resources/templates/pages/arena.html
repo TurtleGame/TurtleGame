@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}" lang="pl">
+
+<h1 layout:fragment="header">Arena</h1>
+
+<div layout:fragment="content">
+
+    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
+
+    <div class="card mb-2" th:each="pair : ${turtlePairs}">
+        <form action="arena/attack" method="post">
+            <div style="display: grid;grid-template-columns: repeat(auto-fill, 33.3%);">
+                <div style="display: grid;justify-content: center;">
+                    <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                    <h2 class="text-center m-0 mb-4 text-success" th:text="${pair.getKey().getName()}"></h2>
+
+                    <table class="size-wide" style="text-align: center;">
+                        <tr>
+                            <td style="width: 30%; vertical-align: top;">
+                                <div class="mb-1">Poziom: <span class="text-primary"
+                                                                th:text="${pair.getKey().getLevel()}"></span>
+                                </div>
+                                <div class="mb-1">Punkty: <span class="text-primary"
+                                                                th:text="${pair.getKey().getRankingPoints()}"></span>
+                                    <div class="mb-1">Energia: <span class="text-primary"
+                                                                     th:text="${pair.getKey().getEnergy()}"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="display: grid;justify-content: center;align-content: center;">
+                    <div style="text-align: center;margin: 15px;"><i class="fa fa-swords fa-3x"></i></div>
+                    <input type="hidden" name="ourTurtleId" th:value="${pair.getKey().getId()}"/>
+                    <input type="hidden" name="opponentTurtleId" th:value="${pair.getValue().getId()}"/>
+                    <input class="button" type="submit" value="Walcz"/>
+                </div>
+                <div style="display: grid;justify-content: center;align-content: center;">
+                    <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                    <h2 class="text-center m-0 mb-4 text-danger" th:text="${pair.getValue().getName()}"></h2>
+
+                    <table class="size-wide" style="text-align: center;">
+                        <tr>
+                            <td style="width: 30%; vertical-align: top;">
+                                <div class="mb-1">Poziom: <span class="text-primary"
+                                                                th:text="${pair.getValue().getLevel()}"></span>
+                                </div>
+                                <div class="mb-1">Punkty: <span class="text-primary"
+                                                                th:text="${pair.getValue().getRankingPoints()}"></span>
+                                    <div class="mb-1">Hodowca: <a th:href="@{/user/{id}(id=${pair.getValue().getId()})}"
+                                                                  class="text-primary"
+                                                                  th:style="'color: ' + (${pair.getValue().getOwner().getRole().getColor() ?: ''})"
+                                                                  th:text="${pair.getValue().getOwner().getUsername()}"></a>
+                                        <span th:unless="${pair.getValue().getOwner() != null}">brak</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

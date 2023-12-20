@@ -17,6 +17,12 @@ public class BattleResultDTO {
 
     BattleParticipantDTO loser;
 
+    Integer gold;
+
+    Integer gainedRankingPoints;
+
+    Integer lostRankingPoints;
+
     TurtleBattleHistory turtleBattleHistory;
 
     HashMap<Item, Integer> rewards = new HashMap<>();
