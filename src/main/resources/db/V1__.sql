@@ -118,7 +118,7 @@ CREATE TABLE turtle
 CREATE TABLE turtle_battle_history
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    winnder_id INT                NULL,
+    winner_id INT                NULL,
     loser_id   INT                NULL,
     created_at datetime           NOT NULL,
     CONSTRAINT pk_turtle_battle_history PRIMARY KEY (id)

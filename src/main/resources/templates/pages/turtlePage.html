@@ -6,47 +6,21 @@
 
 <div layout:fragment="content">
 
-    <div class="card mb-2" th:each="turtle : ${user.getTurtles()}">
-        <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
-        <div class="flex flex-row gap-4">
-            <div class="flex flex-middle flex-center">
-                <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+    <div class="turtles-grid">
+
+        <a th:each="turtle : ${user.getTurtles()}" th:href="@{/turtles/{id}/details(id = ${turtle.id})}" class="card turtle-tile text-center">
+            <h2 class="m-0 mb-4" th:text="${turtle.name}"></h2>
+            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+        </a>
+
+        <a href="/nest" class="card turtle-tile text-center flex">
+            <div class="flex-center flex-middle" style="width: 100%;">
+                <i class="fa fa-plus fa-4x"></i>
+                <h2 class="mb-0">Zaadoptuj</h2>
             </div>
-            <table class="size-wide">
-                <tr>
-                    <td style="width: 30%; vertical-align: top;">
-                        <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
-                        </div>
-                        <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
-                        <br/>
-                        <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
-                    </td>
-                    <td style="width: 30%; vertical-align: top;">
-                        <div th:each="stat : ${turtle.getTurtleStatisticList()}">
-                            <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary" th:text="${stat.getValue()}"></span></div>
-                        </div>
-                    </td>
-                    <td style="width: 40%;">
-                        <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}">
-                            <button class="button mb-2">Szczegóły</button>
-                        </a>
-                        <a href="#">
-                            <button class="button mb-2">Historia walk</button>
-                        </a>
-                        <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
-                            <button type="submit" class="button mb-2" onclick="abandonTurtleConfirm(this)">Porzuć żółwia</button>
-                        </form>
-                        <button type="button" class="button mb-2" th:onclick="'openPopupSellTurtle(' + ${turtle.getId()} + ')'">Sprzedaj żółwia</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        </a>
 
     </div>
-    <a href="/nest">
-        <button class="button mb-2">Zaadoptuj żółwia</button>
-    </a>
-
 </div>
 
 <div layout:fragment="popups">

@@ -5,7 +5,9 @@ import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
 import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
 import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
 import com.pjatk.turtlegame.models.DTOs.SellTurtle;
+import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.repositories.TurtleBattleHistoryRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleService;
@@ -25,6 +27,7 @@ public class TurtleController {
     private final TurtleService turtleService;
     private final ItemService itemService;
     private final UserRepository userRepository;
+    private final TurtleBattleHistoryRepository turtleBattleHistoryRepository;
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -59,7 +62,9 @@ public class TurtleController {
     }
 
     @GetMapping("/{id}/details")
-    public String turtleDetail(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
+    public String turtleDetail(Model model,
+                               @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                               @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
         User user = userRepository.findById(turtleUserDetails.getId());
         model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
         model.addAttribute("foods", itemService.getFood(user));
@@ -67,6 +72,16 @@ public class TurtleController {
         model.addAttribute("feedTurtleDTO", new FeedTurtleDTO());
 
         return "pages/turtleDetails";
+    }
+
+    @GetMapping("/{id}/fight-history")
+    public String turtleFightHistory(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails, @PathVariable int id) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+        Turtle turtle = user.getTurtle(id);
+        model.addAttribute("turtle", turtle);
+        model.addAttribute("history", turtleBattleHistoryRepository.findTurtleBattleHistoriesByWinnerTurtleOrLoserTurtleAndWinnerGuardIsNull(turtle, turtle));
+
+        return "pages/historyPage";
     }
 
     @PostMapping("/{id}/details")

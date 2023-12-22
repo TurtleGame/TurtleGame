@@ -724,6 +724,23 @@ main .content {
   display: inline-block;
 }
 
+.turtles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+
+.turtle-tile {
+  color: #ffffff;
+  opacity: 0.75;
+  transition: all 0.2s;
+  border: 1px solid var(--border-default);
+}
+
+.turtle-tile:hover {
+  opacity: 9;
+}
+
 .popup-backdrop {
   display: flex;
   position: fixed;

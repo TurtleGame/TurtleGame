@@ -13,41 +13,88 @@
         </ul>
     </div>
 
-    <!-- karmienie -->
-    <form method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details'}">
-        <div class="card mb-2">
-            <h2 style="margin-top: 0;">Nakarm żółwia</h2>
-
-            <div class="flex flex-row mb-4 gap-4">
-                <div th:if="${!foods.isEmpty()}">
-                    <ul>
-                        <li th:each="food : ${foods}">
-                            <img src="/assets/images/items/scroll.png" alt="item"/>
-                            <span th:text="${food.getName()}"></span> dodaje <span
-                                th:text="${food.getItemStatistic(food.getId()).getValue()}"></span> punkt do
-                            umiejętności: <span
-                                th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
-                        </li>
-                    </ul>
-                </div>
-                <div th:if="${foods.isEmpty()}">Brak pokarmu dla żółwi. Wyślij swojego żółwia na <a
-                        href="/expeditions">wyprawę</a> albo kup pokarm w sklepie!
-                </div>
+    <div class="card mb-2">
+        <!-- aktywna wyprawa -->
+        <div class="flex flex-middle flex-center">
+            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+        </div>
+        <div style="text-align: center">
+            <h3 class="mb-1"><span th:text="${turtle.getName()}"></span></h3>
+            <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
             </div>
-            <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
-                <div class="flex flex-row gap-4 size-wide">
+            <div class="mb-1">Żywioł: <span class="text-primary" th:text="${turtle.getTurtleType().getName()}"></span>
+            </div>
+            <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
+            <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getHP()}"></span></div>
+            <!-- end of wyprawa -->
+        </div>
+    </div>
+
+    <div class="card mb-2">
+        <h3 class="m-0 text-center">Akcje</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
+            <div class="p-3 m-1">
+                <a  th:href="@{/turtles/{id}/fight-history(id = ${turtle.id})}">
+                    <button class="button mb-2">Historia walk</button>
+                </a>
+            </div>
+            <div class="p-3 m-1">
+                <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
+                    <button type="submit" class="button" onclick="abandonTurtleConfirm(this)">Porzuć żółwia
+                    </button>
+                </form>
+            </div>
+            <div class="p-3 m-1">
+                <button type="button" class="button" th:onclick="'openPopupSellTurtle(' + ${turtle.getId()} + ')'">
+                    Sprzedaj żółwia
+                </button>
+            </div>
+        </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <div class="card mb-2">
+            <!-- karmienie -->
+            <form method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details'}">
+                <h2 style="margin-top: 0;">Nakarm żółwia</h2>
+                <div class="flex flex-row mb-4 gap-4">
+                    <div th:if="${!foods.isEmpty()}">
+                        <ul>
+                            <li style=" list-style: none;"
+                            th:each="food : ${foods}">
+                            <img src="/assets/images/items/scroll.png" alt="item"/>
+                            <span th:text="${food.getName()}"></span> wzmacnia umiejętność: <span
+                                th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div th:if="${foods.isEmpty()}">Brak pokarmu dla żółwi. Wyślij swojego żółwia na <a
+                            href="/expeditions">wyprawę</a> albo kup pokarm w sklepie!
+                    </div>
+                </div>
+                <div class="flex flex-row gap-4" th:if="${!turtle.isFed()}">
+                    <div class="flex flex-row gap-4 size-wide">
                         <select class="select" name="foodId" required>
                             <option disabled selected>Wybierz pokarm</option>
                             <option th:each="food : ${foods}" th:value="${food.getId()}"
                                     th:text="${food.getName()}"></option>
                         </select>
+                    </div>
+                    <div class="flex flex-row" style="width: 220px;">
+                        <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
+                        <input class="button" type="submit" value="Nakarm"/>
+                    </div>
                 </div>
-                <div class="flex flex-row" style="width: 220px;">
-                    <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
-                    <input class="button" type="submit" value="Nakarm"/>
+                <div th:if="${turtle.isFed()}">Żółw jest najedzony. Wróć jutro.</div>
+            </form>
+          <div class="m-2">  Każdy pokarm dodaje 1 punkt do wybranej umiejętności.</div>
+        </div>
+        <div class="card mb-2 ">
+            <h2 style="margin-top: 0;">Statystyki</h2>
+            <div th:each="stat : ${turtle.getTurtleStatisticList()}">
+                <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary"
+                                                                                                  th:text="${stat.getValue()}"></span>
                 </div>
             </div>
-            <div th:if="${turtle.isFed()}">Żółw jest najedzony. Wróć jutro.</div>
         </div>
-    </form>
+    </div>
 </div>
