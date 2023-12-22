@@ -1,15 +1,8 @@
 package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.exceptions.TurtleNotFoundException;
-import com.pjatk.turtlegame.exceptions.UnauthorizedAccessException;
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleEgg;
-import com.pjatk.turtlegame.models.TurtleOwnerHistory;
-import com.pjatk.turtlegame.models.User;
-import com.pjatk.turtlegame.repositories.TurtleEggRepository;
-import com.pjatk.turtlegame.repositories.TurtleOwnerHistoryRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.models.*;
+import com.pjatk.turtlegame.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +18,10 @@ public class TurtleEggService {
     TurtleRepository turtleRepository;
     TurtleStatisticService turtleStatisticService;
     TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
+    PrivateMessageRepository privateMessageRepository;
 
     @Transactional
-    public void warmEgg(int userId, int eggId) throws TurtleNotFoundException, UnauthorizedAccessException {
+    public void warmEgg(int userId, int eggId) throws TurtleNotFoundException {
 
         TurtleEgg egg = turtleEggRepository.findByIdAndUserId(eggId, userId)
                 .orElseThrow(() -> new TurtleNotFoundException("Turtle not found"));
@@ -41,9 +35,11 @@ public class TurtleEggService {
         turtleEggRepository.save(egg);
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public void transformEgg(TurtleEgg egg, User user) {
         LocalDateTime now = LocalDateTime.now();
+        PrivateMessage privateMessage = new PrivateMessage();
+
 
         Turtle turtle = new Turtle();
         turtle.setAvailable(true);
@@ -56,6 +52,13 @@ public class TurtleEggService {
         turtle.setRankingPoints(0);
 
         turtle.setFed(false);
+
+        privateMessage.setTitle("Jajko się wykluło!");
+        privateMessage.setContent("Jajko " + turtle.getName() + " wykluło się i stało się żółwiem typu " + turtle.getTurtleType().getName() + "!");
+        privateMessage.setRecipient(user);
+        privateMessage.setSentAt(LocalDateTime.now());
+        privateMessage.setGold(0);
+        privateMessageRepository.save(privateMessage);
 
         turtleRepository.save(turtle);
 
