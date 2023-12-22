@@ -18,7 +18,7 @@ public class TurtleBattleHistory {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "winnder_turtle_id")
+    @JoinColumn(name = "winner_turtle_id")
     private Turtle winnerTurtle;
 
     @ManyToOne
@@ -26,7 +26,7 @@ public class TurtleBattleHistory {
     private Turtle loserTurtle;
 
     @ManyToOne
-    @JoinColumn(name = "winnder_guard_id")
+    @JoinColumn(name = "winner_guard_id")
     private Guard winnerGuard;
 
     @ManyToOne

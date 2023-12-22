@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(path = "/achievements")
@@ -22,13 +23,14 @@ public class AchievementsController {
     AchievementsService achievementsService;
 
     @GetMapping
-    public String achievementIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+    public String achievementIndex(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                   RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
         try {
             achievementsService.checkAchievements(user);
         } catch (Exception e) {
-
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
         }
 
         model.addAttribute("achievements", achievementsRepoistory.findAll());

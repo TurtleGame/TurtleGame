@@ -61,6 +61,7 @@ public class TurtleService {
         turtle.setLevel(turtle.getLevel() + 1);
         turtle.setEnergy(100);
         turtle.setFed(true);
+        turtle.setHowMuchFood(turtle.getHowMuchFood() + 1);
 
         List<ItemStatistic> itemStatistics = itemStatisticRepository.findAllByItemId(foodId);
         for (ItemStatistic itemStatistic : itemStatistics) {

@@ -49,6 +49,7 @@ public class TurtleEggService {
         turtle.setGender(0);
         turtle.setOwner(user);
         turtle.setEnergy(100);
+        turtle.setHowMuchFood(0);
         turtle.setRankingPoints(0);
 
         turtle.setFed(false);
@@ -67,6 +68,7 @@ public class TurtleEggService {
         history.setStartAt(now);
         history.setTurtle(turtle);
         history.setUser(user);
+        history.setFirstOwner(1);
         history.setHowMuch(0);
 
         turtleOwnerHistoryRepository.save(history);

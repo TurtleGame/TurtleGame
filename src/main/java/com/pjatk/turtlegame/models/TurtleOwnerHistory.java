@@ -23,6 +23,9 @@ public class TurtleOwnerHistory {
     private LocalDateTime endAt;
 
     @NotNull
+    private int firstOwner;
+
+    @NotNull
     @Column(name = "isSelling", columnDefinition = "INT(1) DEFAULT 0")
     private boolean isSelling;
 

@@ -7,18 +7,36 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class AchievementsService {
     PrivateMessageRepository privateMessageRepository;
     AchievementsEarnedRepoistory achievementsEarnedRepoistory;
+    TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
     AchievementsRepoistory achievementsRepoistory;
     UserService userService;
 
+    @Transactional
     public void checkAchievements(User user) {
-        friendss(user);
+        beginnings(user);
+        bigFamily(user);
+        unique(user);
+        legend(user);
+        elementals(user);
+        proudBreeder(user);
+        theyGrowUpSoFast(user);
+        foodie(user);
+        fashionista(user);
+        ohMy(user);
+        moveOn(user);
+        adventureTime(user);
+        adventurer(user);
+        victory(user);
+        fighters(user);
+        champion(user);
+        friend(user);
         billionaire(user);
     }
 
@@ -28,7 +46,6 @@ public class AchievementsService {
         return earned.isEmpty();
     }
 
-    @Transactional
     public void addAchievement(User user, Achievement achievement) {
         AchievementsEarned earn = new AchievementsEarned();
         PrivateMessage privateMessage = new PrivateMessage();
@@ -47,87 +64,255 @@ public class AchievementsService {
     }
 
     //wyhoduj 1 żółwia (Początki)
-    public void beginnings() {
+    public void beginnings(User user) {
+        Achievement achievement = achievementsRepoistory.findById(1);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                    addAchievement(user, achievement);
+                    break;
+                }
+            }
+        }
     }
 
     //wyhoduj 20 żółwi (Duża rodzina)
-    public void bigFamily() {
+    public void bigFamily(User user) {
+        Achievement achievement = achievementsRepoistory.findById(2);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            int size = 0;
 
+            for (Turtle turtle : turtles) {
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                    size += 1;
+                }
+            }
+
+            if (size >= 20) {
+                addAchievement(user, achievement);
+            }
+        }
     }
 
     //zdobądź unikalnego żółwia (Unikalny)
-    public void unique() {
+    public void unique(User user) {
+        Achievement achievement = achievementsRepoistory.findById(3);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtle.getTurtleType().getRarity().getId() == 2) { //unikalny/rzadki żółw ma id 2
+                    addAchievement(user, achievement);
+                    break;
+                }
+            }
+        }
     }
 
     //wyhoduj Ducha (Legenda)
-    public void legend() {
+    public void legend(User user) {
+        Achievement achievement = achievementsRepoistory.findById(4);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtle.getTurtleType().getRarity().getId() == 3) { //Duch jest jedynym legendarnym żółwiem - legendarny żółw ma id 3
+                    addAchievement(user, achievement);
+                    break;
+                }
+            }
+        }
     }
 
     //zdobądź żółwia z każdej kategorii (Elementals)
-    public void Elementals() {
+    public void elementals(User user) {
+        Achievement achievement = achievementsRepoistory.findById(5);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            List<TurtleType> types = new ArrayList<>();
 
+            for (Turtle turtle : turtles) {
+                types.add(turtle.getTurtleType());
+            }
+            Set<TurtleType> filteredTypes = new HashSet<TurtleType>(types);
+
+            if (filteredTypes.size() == 15)
+                addAchievement(user, achievement);
+        }
     }
 
     //żółw osiąga 5 poziom (Dumny hodowca)
-    public void ProudBreeder () {
+    public void proudBreeder (User user) {
+        Achievement achievement = achievementsRepoistory.findById(6);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                    if (turtle.getLevel() >= 5) {
+                        addAchievement(user, achievement);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     //żółw osiąga 20 poziom (Tak szybko dorastają)
-    public void theyGrowUpSoFast() {
+    public void theyGrowUpSoFast(User user) {
+        Achievement achievement = achievementsRepoistory.findById(7);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                    if (turtle.getLevel() >= 20) {
+                        addAchievement(user, achievement);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     //nakarm żółwia 20 razy (Foodie)
-    public void Foodie() {
+    public void foodie(User user) {
+        Achievement achievement = achievementsRepoistory.findById(8);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                if (turtle.getHowMuchFood() >= 20) {
+                    addAchievement(user, achievement);
+                    break;
+                }
+            }
+        }
     }
 
-    //wyposaż żółwia każdym elementem ubioru (?) (Fashionista)
-    public void fashionista() {
-
+    //wyposaż żółwia każdym elementem ubioru (?) (Fashionista) TODO
+    public void fashionista(User user) {
+        Achievement achievement = achievementsRepoistory.findById(9);
+        if (isNotEarned(user, achievement)) {
+            addAchievement(user, achievement);
+        }
     }
 
-    //wyposaż żółwia w rzadkie lub legendarne przedmioty (?) (O wow)
-    public void ohMy() {
-
+    //wyposaż żółwia w rzadkie lub legendarne przedmioty (?) (O wow) TODO
+    public void ohMy(User user) {
+        Achievement achievement = achievementsRepoistory.findById(10);
+        if (isNotEarned(user, achievement)) {
+            addAchievement(user, achievement);
+        }
     }
 
     //sprzedaj żółwia na rynku (Pogódź się z tym)
-    public void moveOn() {
+    public void moveOn(User user) {
+        Achievement achievement = achievementsRepoistory.findById(11);
+        if (isNotEarned(user, achievement)) {
+            List<TurtleOwnerHistory> sold = user.getOwnerHistoryList().stream()
+                    .filter(history -> history.getEndAt() != null)
+                    .toList();
 
+            if (!sold.isEmpty())
+                addAchievement(user, achievement);
+        }
     }
 
     //wyrusz na wyprawę (Pora na przygodę)
     public void adventureTime(User user) {
         Achievement achievement = achievementsRepoistory.findById(12);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+
+            for (Turtle turtle : turtles) {
+                if (!turtle.getTurtleExpeditionHistoryList().isEmpty())
+                    addAchievement(user, achievement);
+                break;
+            }
+        }
+
     }
 
     //wyrusz na 100 wypraw (Poszukiwacz przygód)
-    public void adventurer() {
+    public void adventurer(User user) {
+        Achievement achievement = achievementsRepoistory.findById(13);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            int expeditions = 0;
 
+            for (Turtle turtle : turtles) {
+                for (TurtleExpeditionHistory ignored : turtle.getTurtleExpeditionHistoryList()) {
+                        expeditions += 1;
+                    }
+            }
+
+            if (expeditions >= 100) {
+                addAchievement(user, achievement);
+            }
+        }
     }
 
     //pokonaj 1 żółwia na arenie (Zwycięstwo)
-    public void victory() {
+    public void victory(User user) {
+        Achievement achievement = achievementsRepoistory.findById(14);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                    if (history.getLoserTurtle() != null) {
+                        addAchievement(user, achievement);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     //pokonaj 20 żółwi na arenie (Wojownik)
-    public void fighterr() {
+    public void fighters(User user) {
+        Achievement achievement = achievementsRepoistory.findById(15);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            int battles = 0;
 
+            for (Turtle turtle : turtles) {
+                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                    if (history.getLoserTurtle() != null) {
+                        battles += 1;
+                    }
+                }
+            }
+
+            if (battles >= 20) {
+                addAchievement(user, achievement);
+            }
+        }
     }
 
     //pokonaj Ducha (Champion)
-    public void champion() {
+    public void champion(User user) {
+        Achievement achievement = achievementsRepoistory.findById(16);
+        if (isNotEarned(user, achievement)) {
+            List<Turtle> turtles = user.getTurtles().stream().toList();
 
+            for (Turtle turtle : turtles) {
+                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                    if (history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
+                        addAchievement(user, achievement);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     //miej 5 znajomych (Przyjaciele)
-    public void friendss(User user) {
+    public void friend(User user) {
         Achievement achievement = achievementsRepoistory.findById(17);
         if (isNotEarned(user, achievement)) {
             if (userService.getFriends(user).size() >= 5) {
@@ -140,7 +325,23 @@ public class AchievementsService {
     public void billionaire(User user) {
         Achievement achievement = achievementsRepoistory.findById(18);
         if (isNotEarned(user, achievement)) {
-            if (user.getShells() >= 1000) {
+            int shells = 0;
+            List<TurtleOwnerHistory> sold = user.getOwnerHistoryList().stream()
+                    .filter(history -> history.getEndAt() != null)
+                    .toList();
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+
+            for (Turtle turtle : turtles) {
+                for (TurtleExpeditionHistory history : turtle.getTurtleExpeditionHistoryList()) {
+                    shells = shells + history.getShellsGained();
+                }
+            }
+
+            for (TurtleOwnerHistory turtle: sold) {
+                shells = shells + turtle.getHowMuch();
+            }
+
+            if (shells >= 1000) {
                 addAchievement(user, achievement);
             }
         }

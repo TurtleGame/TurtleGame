@@ -38,6 +38,9 @@ public class Turtle implements Comparable<Turtle> {
     @Column(name = "is_fed", columnDefinition = "INT(0)")
     private boolean isFed;
 
+    @Column(name = "how_much_food", columnDefinition = "INT(0)")
+    private int howMuchFood;
+
     private int energy;
 
     private int rankingPoints;

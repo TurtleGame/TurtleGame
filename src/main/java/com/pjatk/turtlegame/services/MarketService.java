@@ -239,7 +239,7 @@ public class MarketService {
 
         oldUser.setShells(oldUser.getShells() + priceShells(turtle));
         privateMessage.setTitle("Żółw został sprzedany!");
-        privateMessage.setContent("Żółw: " + turtle.getName() + " został sprzedany za " + priceShells(turtle) + " muszelek.");
+        privateMessage.setContent("Żółw " + turtle.getName() + " został sprzedany za " + priceShells(turtle) + " muszelek.");
         privateMessage.setRecipient(oldUser);
         privateMessage.setSentAt(LocalDateTime.now());
         privateMessage.setGold(0);
@@ -263,6 +263,7 @@ public class MarketService {
         turtleOwnerHistory.setStartAt(now);
         turtleOwnerHistory.setTurtle(turtle);
         turtleOwnerHistory.setUser(newUser);
+        turtleOwnerHistory.setFirstOwner(0);
         turtleOwnerHistory.setHowMuch(priceShells(turtle));
 
         turtleOwnerHistoryRepository.save(turtleOwnerHistory);
