@@ -24,7 +24,7 @@ public class AcademyService {
     TurtleStaticsRepository turtleStaticsRepository;
 
     @Transactional
-    public void turtleTraining(Turtle turtle, Training training, int durationTime) {
+    public void turtleTraining (Turtle turtle, Training training, int durationTime) {
         turtle.setAvailable(false);
         turtleRepository.save(turtle);
 
@@ -32,7 +32,7 @@ public class AcademyService {
         List<TrainingItem> trainingItems = training.getTrainingItemList();
 
         for (TrainingItem item : trainingItems) {
-            itemService.removeItem(user, item.getItem().getId(), item.getHowMany());
+            itemService.removeItem(user, item.getItem().getId(), item.getHowMany() * getXPFronTraining(durationTime));
         }
 
         TurtleTrainingHistory turtleTraining = new TurtleTrainingHistory();
@@ -45,7 +45,7 @@ public class AcademyService {
         turtleTrainingHistoryRepository.save(turtleTraining);
     }
 
-    public TrainingSkill getSkill(Training training) {
+    public TrainingSkill getSkill (Training training) {
 
         return switch (training.getId()) {
             case 1 -> TrainingSkill.HP;
@@ -57,7 +57,7 @@ public class AcademyService {
         };
     }
 
-    public int getXPFronTraining(int durationTime) {
+    public int getXPFronTraining (int durationTime) {
 
         return switch (durationTime) {
             case 60 -> 1;
@@ -68,7 +68,7 @@ public class AcademyService {
     }
 
     @Transactional
-    public void processTurtleTrainingHistory(List<TurtleTrainingHistory> turtleTrainingHistories) {
+    public void processTurtleTrainingHistory (List<TurtleTrainingHistory> turtleTrainingHistories) {
         for (TurtleTrainingHistory history : turtleTrainingHistories) {
             if (!history.isWasRewarded() && history.getEndAt().isBefore(LocalDateTime.now())) {
                 List<TurtleStatistic> stats = history.getTurtle().getTurtleStatisticList();
@@ -86,7 +86,7 @@ public class AcademyService {
         }
     }
     
-    public int getQuant(User user, Training training, int itemId) {
+    public int getQuant (User user, Training training, int itemId) {
         List<TrainingItem> trainingItems = training.getTrainingItemList();
         List<UserItem> userItems = user.getUserItemList();
 
@@ -111,7 +111,7 @@ public class AcademyService {
         return 0;
     }
 
-    public boolean ifTrainingCan(User user, Training training) {
+    public boolean ifTrainingCan (User user, Training training) {
         List<TrainingItem> trainingItems = training.getTrainingItemList();
         List<UserItem> userItems = user.getUserItemList();
 
