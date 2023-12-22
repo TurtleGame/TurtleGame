@@ -49,10 +49,10 @@
                                 </div>
                                 <div class="mb-1">Punkty: <span class="text-primary"
                                                                 th:text="${pair.getValue().getRankingPoints()}"></span>
-                                    <div class="mb-1">Hodowca: <a th:href="@{/user/{id}(id=${pair.getValue().getId()})}"
+                                    <div class="mb-1">Hodowca:<span th:if="${pair.getValue().getOwner()}"> <a th:href="@{/user/{id}(id=${pair.getValue().getId()})}"
                                                                   class="text-primary"
                                                                   th:style="'color: ' + (${pair.getValue().getOwner().getRole().getColor() ?: ''})"
-                                                                  th:text="${pair.getValue().getOwner().getUsername()}"></a>
+                                                                  th:text="${pair.getValue().getOwner().getUsername()}"></a></span>
                                         <span th:unless="${pair.getValue().getOwner() != null}">brak</span>
                                     </div>
                                 </div>
