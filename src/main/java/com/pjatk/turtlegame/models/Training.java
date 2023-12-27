@@ -27,4 +27,8 @@ public class Training {
 
     @OneToMany(mappedBy = "training")
     private List<TurtleTrainingHistory> turtleTrainingHistories;
+
+    @ManyToOne
+    @JoinColumn(name = "statistic_id")
+    private Statistic statistic;
 }

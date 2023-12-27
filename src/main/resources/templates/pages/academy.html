@@ -18,7 +18,7 @@
         <div class="card bg-light flex flex-row gap-4 p-3 mb-2" th:each="turtle : ${user.getTurtles()}"
              th:if="${turtle.getCurrentTraining()}">
             <div class="flex flex-center flex-middle">
-                <img th:src="@{${'/assets/images/training/' + turtle.getCurrentTraining().getTraining().id + '.png'}}"
+                <img th:src="@{${'/assets/images/training/' + turtle.getCurrentTraining().getTraining().getStatistic().getId() + '.png'}}"
                      style="width: 45px; height: 45px; border-radius: 0.25rem;"/>
             </div>
             <div class="flex flex-column flex-center flex-middle size-wide">
@@ -40,7 +40,7 @@
         <div class="card mb-2">
             <div class="flex flex-row mb-4 gap-4">
                 <div class="flex">
-                    <img th:src="@{${'/assets/images/training/' + training.id + '.png'}}"
+                    <img th:src="@{${'/assets/images/training/' + training.getStatistic().id + '.png'}}"
                          style="width: 175px; height: 175px; border-radius: 0.25rem;"/>
                 </div>
                 <div>

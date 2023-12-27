@@ -34,7 +34,7 @@
         <h3 class="m-0 text-center">Akcje</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
             <div class="p-3 m-1">
-                <a  th:href="@{/turtles/{id}/fight-history(id = ${turtle.id})}">
+                <a th:href="@{/turtles/{id}/fight-history(id = ${turtle.id})}">
                     <button class="button mb-2">Historia walk</button>
                 </a>
             </div>
@@ -60,10 +60,10 @@
                     <div th:if="${!foods.isEmpty()}">
                         <ul>
                             <li style=" list-style: none;"
-                            th:each="food : ${foods}">
-                            <img src="/assets/images/items/scroll.png" alt="item"/>
-                            <span th:text="${food.getName()}"></span> wzmacnia umiejętność: <span
-                                th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
+                                th:each="food : ${foods}">
+                                <img src="/assets/images/items/scroll.png" alt="item"/>
+                                <span th:text="${food.getName()}"></span> wzmacnia umiejętność: <span
+                                    th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
                             </li>
                         </ul>
                     </div>
@@ -86,15 +86,23 @@
                 </div>
                 <div th:if="${turtle.isFed()}">Żółw jest najedzony. Wróć jutro.</div>
             </form>
-          <div class="m-2">  Każdy pokarm dodaje 1 punkt do wybranej umiejętności.</div>
+            <div class="m-2"> Każdy pokarm dodaje 1 punkt do wybranej umiejętności.</div>
         </div>
         <div class="card mb-2 ">
             <h2 style="margin-top: 0;">Statystyki</h2>
-            <div th:each="stat : ${turtle.getTurtleStatisticList()}">
-                <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span class="text-primary"
-                                                                                                  th:text="${stat.getValue()}"></span>
+            <div style="display: grid;
+grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+gap: 1rem;">
+                <div th:each="stat : ${turtle.getTurtleStatisticList()}" style="text-align: center">
+                    <img th:src="@{${'/assets/images/training/' + stat.getStatistic().getId() + '.png'}}" height="75">
+                    <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span
+                            class="text-primary"
+                            th:text="${stat.getValue()}"></span>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

@@ -2,12 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
-<h1 layout:fragment="header">Historia walk żółwia <span th:text="${turtle.getName()}"></span></h1>
+<h1 layout:fragment="header">Historia walk żółwia <span id="ourTurtleName" th:text="${turtle.getName()}"></span></h1>
 
 <div layout:fragment="content">
-
-    <div th:each="historyLog : ${history}">
-        <div th:text="${historyLog.getWinnerTurtle().getName()}"></div>
+    <h2 class="text-center">20 ostatnich walk</h2>
+    <div th:if="${historyWithTurtles.isEmpty()}">
+        Brak walk!
     </div>
-
+    <div th:each="historyLog : ${historyWithTurtles}" class="card mb-2">
+        Żółw <span th:text="${historyLog.getWinnerTurtle().getName()}"
+                   th:class="${historyLog.getWinnerTurtle().getId() == turtle.getId() ? 'text-success' : 'text-danger'}"></span>
+        wygrał z
+        <span th:if="${historyLog.getLoserTurtle()}" th:text="${historyLog.getLoserTurtle().getName()}"
+              th:class="${historyLog.getLoserTurtle().getId() == turtle.getId() ? 'text-success' : 'text-danger'}"></span>
+        <span style=" float: right"
+              th:text="${#temporals.format(historyLog.getCreatedAt(), 'dd.MM.yyyy HH:mm')}"></span>
+    </div>
 </div>

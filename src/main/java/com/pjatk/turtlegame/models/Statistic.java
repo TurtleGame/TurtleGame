@@ -28,4 +28,7 @@ public class Statistic {
     @OneToMany(mappedBy = "statistic")
     private List<GuardStatistic> guardsStatistics;
 
+    @OneToMany(mappedBy = "statistic")
+    private List<Training> trainingList;
+
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface TurtleBattleHistoryRepository extends JpaRepository<TurtleBattleHistory, Integer> {
 
-    List<TurtleBattleHistory> findTurtleBattleHistoriesByWinnerTurtleOrLoserTurtleAndWinnerGuardIsNull(Turtle winnerTurtle, Turtle loserTurtle);
+    List<TurtleBattleHistory> findTurtleBattleHistoriesByWinnerTurtleOrLoserTurtleOrderByCreatedAtDesc(Turtle winnerTurtle, Turtle loserTurtle);
+
 
 }

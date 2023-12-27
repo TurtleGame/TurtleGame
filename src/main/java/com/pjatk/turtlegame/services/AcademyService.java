@@ -39,24 +39,10 @@ public class AcademyService {
         turtleTraining.setTurtle(turtle);
         turtleTraining.setTraining(training);
         turtleTraining.setStartAt(LocalDateTime.now());
-        turtleTraining.setSkill(getSkill(training));
         turtleTraining.setPoints(getXPFronTraining(durationTime));
         turtleTraining.setEndAt(turtleTraining.getStartAt().plusSeconds(durationTime));
         turtleTrainingHistoryRepository.save(turtleTraining);
     }
-
-    public TrainingSkill getSkill (Training training) {
-
-        return switch (training.getId()) {
-            case 1 -> TrainingSkill.HP;
-            case 2 -> TrainingSkill.MP;
-            case 3 -> TrainingSkill.Siła;
-            case 4 -> TrainingSkill.Zręczność;
-            case 5 -> TrainingSkill.Wytrzymałość;
-            default -> null;
-        };
-    }
-
     public int getXPFronTraining (int durationTime) {
 
         return switch (durationTime) {
@@ -74,7 +60,7 @@ public class AcademyService {
                 List<TurtleStatistic> stats = history.getTurtle().getTurtleStatisticList();
 
                 for (TurtleStatistic stat : stats)
-                    if (stat.getStatistic().getName().equals(history.getSkill().name())) {
+                    if (stat.getStatistic().getId() == history.getTraining().getStatistic().getId()) {
                         stat.setValue(stat.getValue() + history.getPoints());
                         turtleStaticsRepository.save(stat);
                         history.setWasRewarded(true);

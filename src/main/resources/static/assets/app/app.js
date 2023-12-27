@@ -155,12 +155,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (context === 'guards' || context === 'arena') {
         const turtleName = $('#turtle-name').text();
-        const guardName = $('#opponent-name').text();
+        const opponent = $('#opponent-name').text();
 
         $('#battle-log').find('.card').each(function() {
             let colored = $(this).html();
             colored = colored.split(turtleName).join('<strong class="text-success">' + turtleName + '</strong>');
-            colored = colored.split(guardName).join('<strong class="text-danger">' + guardName + '</strong>');
+            colored = colored.split(opponent).join('<strong class="text-danger">' + opponent + '</strong>');
             $(this).html(colored);
         });
 

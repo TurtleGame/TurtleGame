@@ -24,9 +24,6 @@ public class TurtleTrainingHistory {
     @NotNull
     private LocalDateTime endAt;
 
-    @Enumerated(EnumType.STRING)
-    private TrainingSkill skill;
-
     @NotNull
     private int points;
 

@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class TurtleService {
     private final ItemService itemService;
     private final TurtleStaticsRepository turtleStaticsRepository;
     private final ItemStatisticRepository itemStatisticRepository;
-    private final GuardsRepository guardsRepository;
+    private final TurtleBattleHistoryRepository turtleBattleHistoryRepository;
 
 
     public void abandonTurtle(int turtleId, User user) {
@@ -92,21 +94,14 @@ public class TurtleService {
         turtleRepository.save(turtle);
     }
 
-    public void fightWithGuards(int turtleId, int guardsId) {
-        Turtle turtle = turtleRepository.findById(turtleId).orElseThrow();
-        Guard guard = guardsRepository.findById(guardsId).orElseThrow();
-        int turtleHP = turtle.getTurtleStatisticList().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1).map(TurtleStatistic::getValue).findFirst().orElseThrow();
-        int guardHP = guard.getGuardStatistics().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1).map(GuardStatistic::getValue).findFirst().orElseThrow();
+    public List<TurtleBattleHistory> findTurtleBattleHistoryWithOtherTurtle(Turtle turtle) {
+        List<TurtleBattleHistory> turtleBattleHistories = turtleBattleHistoryRepository.findTurtleBattleHistoriesByWinnerTurtleOrLoserTurtleOrderByCreatedAtDesc(turtle, turtle);
 
-        int turtleAgility = turtle.getTurtleStatisticList().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3).map(TurtleStatistic::getValue).findFirst().orElseThrow();
-        int guardAgility = guard.getGuardStatistics().stream().filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3).map(GuardStatistic::getValue).findFirst().orElseThrow();
-
-        while (turtleHP > 0 && guardHP > 0) {
-            if (turtleAgility > guardAgility) {
-                    
-            }
-        }
-
+        return turtleBattleHistories
+                .stream()
+                .filter(turtleBattleHistory -> turtleBattleHistory.getLoserGuard() == null && turtleBattleHistory.getWinnerGuard() == null)
+                .limit(20)
+                .collect(Collectors.toList());
     }
 
 

@@ -79,7 +79,8 @@ public class TurtleController {
         User user = userRepository.findById(turtleUserDetails.getId());
         Turtle turtle = user.getTurtle(id);
         model.addAttribute("turtle", turtle);
-        model.addAttribute("history", turtleBattleHistoryRepository.findTurtleBattleHistoriesByWinnerTurtleOrLoserTurtleAndWinnerGuardIsNull(turtle, turtle));
+        model.addAttribute("historyWithTurtles", turtleService.findTurtleBattleHistoryWithOtherTurtle(turtle));
+
 
         return "pages/historyPage";
     }

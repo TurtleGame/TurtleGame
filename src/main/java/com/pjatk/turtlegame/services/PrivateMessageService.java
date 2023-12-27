@@ -64,7 +64,7 @@ public class PrivateMessageService {
         report.setSentAt(LocalDateTime.now());
         report.setTitle("Twój żółw " + turtle.getName() + " skończył trening!");
         report.setGold(0);
-        report.setContent("Twój żółw " + turtle.getName() + " skończył trening " + trainingHistory.getSkill() + ". \n Wytrenował " + trainingHistory.getPoints() + " " + grammar + ".");
+        report.setContent("Twój żółw " + turtle.getName() + " skończył trening " + trainingHistory.getTraining().getName() + ". \n Wytrenował " + trainingHistory.getPoints() + " " + grammar + ".");
 
         privateMessageRepository.save(report);
     }
