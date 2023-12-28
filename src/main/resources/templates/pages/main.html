@@ -4,8 +4,6 @@
 
 <div layout:fragment="content">
 
-    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-
     <div th:each="news : ${news}">
         <div class="card" style="margin-bottom: 5px">
             <div style="margin-top: 0; margin-bottom: 10px">

@@ -6,8 +6,6 @@
 
 <div layout:fragment="content">
 
-    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-
     <div style="display: grid; grid-template-columns: repeat(auto-fill, 50%);">
         <div class="card size-wide mb-2">
             <form th:action="@{/friends/add}" method="POST">

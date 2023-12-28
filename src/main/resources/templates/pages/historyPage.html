@@ -18,4 +18,9 @@
         <span style=" float: right"
               th:text="${#temporals.format(historyLog.getCreatedAt(), 'dd.MM.yyyy HH:mm')}"></span>
     </div>
+    <div class="card">
+    <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}">
+        <button class="button mb-2">Wróć do szczegółów żółwia</button>
+    </a>
+    </div>
 </div>

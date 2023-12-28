@@ -6,8 +6,6 @@
 
 <div layout:fragment="content">
 
-    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-
     <!-- lista strażników -->
     <form action="/guards/attack" method="post" th:each="guard : ${guards}">
         <div class="card mb-2">

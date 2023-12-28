@@ -66,10 +66,17 @@ public class TurtleController {
                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                                @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
         User user = userRepository.findById(turtleUserDetails.getId());
-        model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
-        model.addAttribute("foods", itemService.getFood(user));
-        model.addAttribute("statistics", itemService.getItemsStatistics());
-        model.addAttribute("feedTurtleDTO", new FeedTurtleDTO());
+
+        try {
+            model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
+            model.addAttribute("foods", itemService.getFood(user));
+            model.addAttribute("statistics", itemService.getItemsStatistics());
+            model.addAttribute("feedTurtleDTO", new FeedTurtleDTO());
+        } catch (Exception e) {
+            model.addAttribute("failedMessage", e.getMessage());
+            return "pages/turtlePage";
+        }
+
 
         return "pages/turtleDetails";
     }

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="/assets/app/app.css" />
+    <link rel="stylesheet" href="/assets/app/app.css"/>
     <link href="/assets/fontawesome/css/fontawesome.css" rel="stylesheet">
     <link href="/assets/fontawesome/css/brands.css" rel="stylesheet">
     <link href="/assets/fontawesome/css/solid.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
     <script type="application/javascript" src="/assets/app/app.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="/assets/select2/locales/pl.js"></script>
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
@@ -18,23 +18,16 @@
     <title>TurtleBlast</title>
 </head>
 <body>
-<!-- left sidebar-->
-<nav th:replace="~{layout/leftSidebar :: leftSidebar}"></nav>
-<!-- end left sidebar-->
 
 <!-- main content container-->
 <main>
-    <h1 layout:fragment="header">Strona główna</h1>
-    <div class="content">
-        <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-        <div layout:fragment="content"></div>
-    </div>
-    <div layout:fragment="popups"></div>
-</main>
-<!-- end main content container-->
 
-<!-- right sidebar-->
-<nav th:replace="~{layout/rightSidebar :: rightSidebar}"></nav>
-<!-- end right sidebar-->
+    <div class="form card" style="margin-top: 15%;">
+        <h1 class="m-2">Wystąpił błąd!</h1>
+        <a th:href="@{/}">
+            <button class="button mb-2">Powrót do strony głównej</button>
+        </a>
+    </div>
+</main><!-- end main content container-->
 
 </body>

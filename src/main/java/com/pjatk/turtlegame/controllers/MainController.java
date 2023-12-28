@@ -41,6 +41,8 @@ public class MainController {
     ) {
 
         if (turtleUserDetails != null) {
+            model.addAttribute("context", "home");
+            model.addAttribute("news", newsService.getAll());
             return "pages/main";
         }
         model.addAttribute("context", "login");
@@ -150,9 +152,5 @@ public class MainController {
         return "redirect:/index";
     }
 
-    @GetMapping(path = "/error")
-    public String errorIndex() {
-        return "pages/error";
-    }
 
 }

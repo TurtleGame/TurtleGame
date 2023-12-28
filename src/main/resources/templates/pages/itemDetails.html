@@ -6,8 +6,6 @@
 
 <div layout:fragment="content">
 
-  <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-
   <form method="post" th:action="@{'/items/' + ${item.getItem().getId()} + '/details'}">
     <div class="card mb-2">
       <h2 style="margin-top: 0;"><span th:text="${item.getItem().getName()}"></span></h2>
