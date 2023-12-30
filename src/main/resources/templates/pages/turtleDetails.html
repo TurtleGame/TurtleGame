@@ -32,11 +32,11 @@ grid-template-columns: repeat(2, 1fr);">
                         <option value="">brak</option>
                         <option th:each="helmet : ${helmets}" th:value="${helmet.getItem().getId()}"
                                 th:if="${helmet.getTurtle() == null || helmet.getTurtle().equals(turtle)}"
-                                th:text="${helmet.getItem().getName()}">
+                                th:text="${helmet.getItem().getName()+ ' (+' + helmet.getItem().getItemStatistic().getValue() + ' ' + helmet.getItem().getItemStatistic().getStatistic().getName() + ')'}">
                         </option>
                         <option th:if="${turtle.getHelmet() != null}"
                                 th:value="${turtle.getHelmet().getItem().getId()}"
-                                th:text="${turtle.getHelmet().getItem().getName()}"
+                                th:text="${turtle.getHelmet().getItem().getName() + ' (+' + turtle.getHelmet().getItem().getItemStatistic().getValue() + ' ' + turtle.getHelmet().getItem().getItemStatistic().getStatistic().getName() + ')'}"
                                 th:selected="selected">
 
                         </option>
@@ -47,11 +47,11 @@ grid-template-columns: repeat(2, 1fr);">
                         <option value="">brak</option>
                         <option th:each="sword : ${swords}" th:value="${sword.getItem().getId()}"
                                 th:if="${sword.getTurtle() == null || sword.getTurtle().equals(turtle)}"
-                                th:text="${sword.getItem().getName()}">
+                                th:text="${sword.getItem().getName() + ' (+' + sword.getItem().getItemStatistic().getValue() + ' ' + sword.getItem().getItemStatistic().getStatistic().getName() + ')'}">
                         </option>
                         <option th:if="${turtle.getSword() != null}"
                                 th:value="${turtle.getSword().getItem().getId()}"
-                                th:text="${turtle.getSword().getItem().getName()}"
+                                th:text="${turtle.getSword().getItem().getName() + ' (+' + turtle.getSword().getItem().getItemStatistic().getValue() + ' ' + turtle.getSword().getItem().getItemStatistic().getStatistic().getName() + ')'}"
                                 th:selected="selected">
 
                         </option>
@@ -62,11 +62,11 @@ grid-template-columns: repeat(2, 1fr);">
                         <option value="">brak</option>
                         <option th:each="wand : ${wands}" th:value="${wand.getItem().getId()}"
                                 th:if="${wand.getTurtle() == null || wand.getTurtle().equals(turtle)}"
-                                th:text="${wand.getItem().getName()}">
+                                th:text="${wand.getItem().getName()+ ' (+' + wand.getItem().getItemStatistic().getValue() + ' ' + wand.getItem().getItemStatistic().getStatistic().getName() + ')'}">
                         </option>
                         <option th:if="${turtle.getWand()  != null}"
                                 th:value="${turtle.getWand().getItem().getId()}"
-                                th:text="${turtle.getWand().getItem().getName()}"
+                                th:text="${turtle.getWand().getItem().getName()+ ' (+' + turtle.getWand().getItem().getItemStatistic().getValue() + ' ' + turtle.getWand().getItem().getItemStatistic().getStatistic().getName() + ')'}"
                                 th:selected="selected">
 
                         </option>
@@ -77,13 +77,13 @@ grid-template-columns: repeat(2, 1fr);">
                         <option value="">brak</option>
                         <option th:each="bootsPair : ${boots}" th:value="${bootsPair.getItem().getId()}"
                                 th:if="${bootsPair.getTurtle() == null || bootsPair.getTurtle().equals(turtle)}"
-                                th:text="${bootsPair.getItem().getName()}">
+                                th:text="${bootsPair.getItem().getName()+ ' (+' + bootsPair.getItem().getItemStatistic().getValue() + ' ' + bootsPair.getItem().getItemStatistic().getStatistic().getName() + ')'}">
 
                         </option>
                     </select>
                     <option th:if="${turtle.getBoots()  != null}"
                             th:value="${turtle.getBoots().getItem().getId()}"
-                            th:text="${turtle.getBoots().getItem().getName()}"
+                            th:text="${turtle.getBoots().getItem().getName()+ ' (+' + turtle.getBoots().getItem().getItemStatistic().getValue() + ' ' + turtle.getBoots().getItem().getItemStatistic().getStatistic().getName() + ')'}">
                             th:selected="selected">
 
                     </option>
