@@ -78,18 +78,19 @@ grid-template-columns: repeat(2, 1fr);">
                         <option th:each="bootsPair : ${boots}" th:value="${bootsPair.getItem().getId()}"
                                 th:if="${bootsPair.getTurtle() == null || bootsPair.getTurtle().equals(turtle)}"
                                 th:text="${bootsPair.getItem().getName()+ ' (+' + bootsPair.getItem().getItemStatistic().getValue() + ' ' + bootsPair.getItem().getItemStatistic().getStatistic().getName() + ')'}">
+                        </option>
 
+                        <option th:if="${turtle.getBoots()  != null}"
+                                th:value="${turtle.getBoots().getItem().getId()}"
+                                th:text="${turtle.getBoots().getItem().getName()+ ' (+' + turtle.getBoots().getItem().getItemStatistic().getValue() + ' ' + turtle.getBoots().getItem().getItemStatistic().getStatistic().getName() + ')'}"
+                                th:selected="selected">
                         </option>
                     </select>
-                    <option th:if="${turtle.getBoots()  != null}"
-                            th:value="${turtle.getBoots().getItem().getId()}"
-                            th:text="${turtle.getBoots().getItem().getName()+ ' (+' + turtle.getBoots().getItem().getItemStatistic().getValue() + ' ' + turtle.getBoots().getItem().getItemStatistic().getStatistic().getName() + ')'}">
-                            th:selected="selected">
-
-                    </option>
                 </div>
-                <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
-                <input class="button" type="submit" value="Wyposaż"/>
+                <div class="m-2">
+                    <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
+                    <input class="button" type="submit" value="Wyposaż"/>
+                </div>
             </form>
         </div>
     </div>
