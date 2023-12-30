@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/change-password").permitAll();
                     auth.requestMatchers("/guards/**").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/arena/**").hasAnyAuthority("ADMIN", "USER");
+                    auth.requestMatchers("/favicon.ico").permitAll();
                 })
                 .formLogin(form -> form
                         .loginPage("/login")

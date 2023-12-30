@@ -25,8 +25,7 @@ public class Item {
     @Size(min = 2, max = 100)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private EquipmentSlot slot;
+    private String slot;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
@@ -61,4 +60,15 @@ public class Item {
                 .findFirst()
                 .orElse(null);
     }
+    public ItemStatistic getItemStatistic(){
+        return itemStatisticList.stream()
+                .filter(itemStatistic -> itemStatistic.getItem().getId() == (this).getId())
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean isEquipment() {
+        return this.getItemType().getName().equals("Zbroja");
+    }
+
 }

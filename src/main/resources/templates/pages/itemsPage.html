@@ -11,7 +11,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
 
             <!-- item -->
-            <div th:each="item : ${items}">
+            <div th:each="item : ${items}"  th:unless="${item.turtle != null and item.turtle.id != null}">
                 <div class="card p-3 m-1">
                     <div class="flex flex-row gap-4">
                         <div class="flex flex-center flex-middle">

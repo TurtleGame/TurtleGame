@@ -7,7 +7,6 @@ import com.pjatk.turtlegame.models.DTOs.FeedTurtleDTO;
 import com.pjatk.turtlegame.models.DTOs.SellTurtle;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
-import com.pjatk.turtlegame.repositories.TurtleBattleHistoryRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.ItemService;
 import com.pjatk.turtlegame.services.TurtleService;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -27,7 +27,7 @@ public class TurtleController {
     private final TurtleService turtleService;
     private final ItemService itemService;
     private final UserRepository userRepository;
-    private final TurtleBattleHistoryRepository turtleBattleHistoryRepository;
+
 
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
@@ -64,21 +64,31 @@ public class TurtleController {
     @GetMapping("/{id}/details")
     public String turtleDetail(Model model,
                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                               @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
+                               @PathVariable int id,
+                               RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
         try {
             model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
+            model.addAttribute("armor", user.getUserItemList());
             model.addAttribute("foods", itemService.getFood(user));
             model.addAttribute("statistics", itemService.getItemsStatistics());
+            addEquipmentsModels(model, id, user);
             model.addAttribute("feedTurtleDTO", new FeedTurtleDTO());
         } catch (Exception e) {
-            model.addAttribute("failedMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
             return "pages/turtlePage";
         }
 
 
         return "pages/turtleDetails";
+    }
+
+    private void addEquipmentsModels(Model model, @PathVariable int id, User user) {
+        model.addAttribute("helmets", itemService.getHelmets(user, user.getTurtle(id)));
+        model.addAttribute("wands", itemService.getWands(user, user.getTurtle(id)));
+        model.addAttribute("swords", itemService.getSwords(user, user.getTurtle(id)));
+        model.addAttribute("boots", itemService.getBoots(user, user.getTurtle(id)));
     }
 
     @GetMapping("/{id}/fight-history")
@@ -94,25 +104,58 @@ public class TurtleController {
 
     @PostMapping("/{id}/details")
     public String feedTurtle(@Valid @ModelAttribute("feedTurtleDTO") FeedTurtleDTO feedTurtleDTO,
-                             BindingResult bindingResult,
                              @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                              Model model,
-                             @PathVariable int id) throws UnauthorizedAccessException, TurtleNotFoundException {
+                             @PathVariable int id,
+                             RedirectAttributes redirectAttributes) throws UnauthorizedAccessException, TurtleNotFoundException {
 
         User user = userRepository.findById(turtleUserDetails.getId());
-        if (!bindingResult.hasErrors()) {
-            try {
-                turtleService.feedTurtle(feedTurtleDTO.getFoodId(), user, feedTurtleDTO.getTurtleId());
-                return "redirect:/turtles/{id}/details";
-            } catch (Exception e) {
-                bindingResult.rejectValue("foodId", "error.notFood", e.getMessage());
-            }
+
+        try {
+            turtleService.feedTurtle(feedTurtleDTO.getFoodId(), user, feedTurtleDTO.getTurtleId());
+            return "redirect:/turtles/{id}/details";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("successMessage", "Założyłeś ekwipunek!");
         }
 
-        model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
-        model.addAttribute("foods", itemService.getFood(user));
-        model.addAttribute("statistics", itemService.getItemsStatistics());
+
+        addModels(model, id, user);
 
         return "pages/turtleDetails";
+    }
+
+    @PostMapping("/{id}/details/wear")
+    public String wearArmor(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                            Model model,
+                            @RequestParam(name = "helmetId", required = false) Integer helmetId,
+                            @RequestParam(name = "wandId", required = false) Integer wandId,
+                            @RequestParam(name = "weaponId", required = false) Integer weaponId,
+                            @RequestParam(name = "bootsId", required = false) Integer bootsId,
+                            @PathVariable int id,
+                            RedirectAttributes redirectAttributes
+    ) throws UnauthorizedAccessException, TurtleNotFoundException {
+        User user = userRepository.findById(turtleUserDetails.getId());
+
+        try {
+            itemService.wearItems(user, helmetId, weaponId, wandId, bootsId, id);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Założyłeś ekwipunek!");
+            return "redirect:/turtles/{id}/details";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            addModels(model, id, user);
+
+            return "redirect:/turtles/{id}/details";
+        }
+
+
+    }
+
+    private void addModels(Model model, @PathVariable int id, User user) throws TurtleNotFoundException, UnauthorizedAccessException {
+        model.addAttribute("turtle", turtleService.getTurtleDetails(id, user.getId()));
+        model.addAttribute("foods", itemService.getFood(user));
+        addEquipmentsModels(model, id, user);
+        model.addAttribute("statistics", itemService.getItemsStatistics());
     }
 }

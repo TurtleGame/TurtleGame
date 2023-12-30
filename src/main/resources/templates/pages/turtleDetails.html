@@ -6,27 +6,91 @@
 
 <div layout:fragment="content">
 
-    <div th:if="${#fields.hasErrors('feedTurtleDTO.*')}" class="errorMessage mb-2">
-        <strong>Nie udało się wykonać tej akcji</strong>
-        <ul>
-            <li th:each="err : ${#fields.errors('feedTurtleDTO.*')}" th:text="${err}"/>
-        </ul>
-    </div>
-
-    <div class="card mb-2">
-        <!-- aktywna wyprawa -->
-        <div class="flex flex-middle flex-center">
-            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+    <div class="card mb-2" style="display: grid;
+grid-template-columns: repeat(2, 1fr);">
+        <!-- szczegóły żółwia-->
+        <div>
+            <div class="flex flex-middle flex-center">
+                <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+            </div>
+            <div style="text-align: center">
+                <h3 class="mb-1"><span th:text="${turtle.getName()}"></span></h3>
+                <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
+                </div>
+                <div class="mb-1">Żywioł: <span class="text-primary"
+                                                th:text="${turtle.getTurtleType().getName()}"></span>
+                </div>
+                <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
+                <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getHPtoFight()}"></span></div>
+                <!-- end of wyprawa -->
+            </div>
         </div>
-        <div style="text-align: center">
-            <h3 class="mb-1"><span th:text="${turtle.getName()}"></span></h3>
-            <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
-            </div>
-            <div class="mb-1">Żywioł: <span class="text-primary" th:text="${turtle.getTurtleType().getName()}"></span>
-            </div>
-            <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
-            <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getHP()}"></span></div>
-            <!-- end of wyprawa -->
+        <div>
+            <form method="post" th:action="@{'/turtles/' + ${turtle.getId()} + '/details/wear'}">
+                <div class="m-2">
+                    <select class="select" name="helmetId">
+                        <option value="">brak</option>
+                        <option th:each="helmet : ${helmets}" th:value="${helmet.getItem().getId()}"
+                                th:if="${helmet.getTurtle() == null || helmet.getTurtle().equals(turtle)}"
+                                th:text="${helmet.getItem().getName()}">
+                        </option>
+                        <option th:if="${turtle.getHelmet() != null}"
+                                th:value="${turtle.getHelmet().getItem().getId()}"
+                                th:text="${turtle.getHelmet().getItem().getName()}"
+                                th:selected="selected">
+
+                        </option>
+                    </select>
+                </div>
+                <div class="m-2">
+                    <select class="select" name="weaponId">
+                        <option value="">brak</option>
+                        <option th:each="sword : ${swords}" th:value="${sword.getItem().getId()}"
+                                th:if="${sword.getTurtle() == null || sword.getTurtle().equals(turtle)}"
+                                th:text="${sword.getItem().getName()}">
+                        </option>
+                        <option th:if="${turtle.getSword() != null}"
+                                th:value="${turtle.getSword().getItem().getId()}"
+                                th:text="${turtle.getSword().getItem().getName()}"
+                                th:selected="selected">
+
+                        </option>
+                    </select>
+                </div>
+                <div class="m-2">
+                    <select class="select" name="wandId">
+                        <option value="">brak</option>
+                        <option th:each="wand : ${wands}" th:value="${wand.getItem().getId()}"
+                                th:if="${wand.getTurtle() == null || wand.getTurtle().equals(turtle)}"
+                                th:text="${wand.getItem().getName()}">
+                        </option>
+                        <option th:if="${turtle.getWand()  != null}"
+                                th:value="${turtle.getWand().getItem().getId()}"
+                                th:text="${turtle.getWand().getItem().getName()}"
+                                th:selected="selected">
+
+                        </option>
+                    </select>
+                </div>
+                <div class="m-2">
+                    <select class="select" name="bootsId">
+                        <option value="">brak</option>
+                        <option th:each="bootsPair : ${boots}" th:value="${bootsPair.getItem().getId()}"
+                                th:if="${bootsPair.getTurtle() == null || bootsPair.getTurtle().equals(turtle)}"
+                                th:text="${bootsPair.getItem().getName()}">
+
+                        </option>
+                    </select>
+                    <option th:if="${turtle.getBoots()  != null}"
+                            th:value="${turtle.getBoots().getItem().getId()}"
+                            th:text="${turtle.getBoots().getItem().getName()}"
+                            th:selected="selected">
+
+                    </option>
+                </div>
+                <input type="hidden" name="turtleId" th:value="${turtle.id}"/>
+                <input class="button" type="submit" value="Wyposaż"/>
+            </form>
         </div>
     </div>
 
@@ -98,7 +162,7 @@ gap: 1rem;">
                     <img th:src="@{${'/assets/images/training/' + stat.getStatistic().getId() + '.png'}}" height="75">
                     <div class="mb-1"><span th:text="${stat.getStatistic().getName()}"></span>: <span
                             class="text-primary"
-                            th:text="${stat.getValue()}"></span>
+                            th:text="${turtle.getStatistic(stat.getStatistic().getId())}"></span>
                     </div>
                 </div>
             </div>

@@ -6,8 +6,6 @@
 
 <div layout:fragment="content">
 
-    <div th:replace="~{fragments/messagesFragment :: messages}"></div>
-
     <div class="card mb-2" th:each="pair : ${turtlePairs}">
         <form action="arena/attack" method="post">
             <div style="display: grid;grid-template-columns: repeat(auto-fill, 33.3%);">

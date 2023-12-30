@@ -46,8 +46,6 @@ public class User {
     @NotNull
     private boolean isEmailConfirmed;
 
-    private LocalDateTime birthdate;
-
     @NotNull
     private Integer gold;
 
@@ -73,9 +71,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<UserStatus> userStatusList;
-
-    @OneToMany(mappedBy = "user")
-    private List<ChatEntry> chatEntryList;
 
     @OneToMany(mappedBy = "sender")
     private List<PrivateMessage> sendPrivateMessageList;
@@ -170,7 +165,7 @@ public class User {
                 .toList();
     }
 
-    public List<FriendRequest> getAllFriendRequests(){
+    public List<FriendRequest> getAllFriendRequests() {
         return receivedFriendRequests.stream().toList();
     }
 

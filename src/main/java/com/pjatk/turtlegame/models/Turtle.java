@@ -106,43 +106,148 @@ public class Turtle implements Comparable<Turtle> {
     }
 
     public int getHP() {
-        return 5 * getTurtleStatisticList()
+        return  getTurtleStatisticList()
                 .stream()
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 1)
                 .mapToInt(TurtleStatistic::getValue).findFirst()
                 .orElse(0);
     }
 
+    public int getHPtoFight(){
+        return getHP() * 5;
+    }
+
     public int getMP() {
-        return getTurtleStatisticList()
+        int mp = getTurtleStatisticList()
                 .stream()
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 2)
-                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .mapToInt(TurtleStatistic::getValue)
+                .findFirst()
                 .orElse(0);
+
+        if(owner != null){
+
+            int mpFromWand = owner.getUserItemList()
+                    .stream()
+                    .filter(wand -> "Różdżka".equals(wand.getItem().getSlot()) &&  wand.getTurtle() != null && wand.getTurtle().getId() == this.id)
+                    .mapToInt(wand -> wand.getItem().getItemStatistic().getValue())
+                    .findFirst()
+                    .orElse(0);
+            return mp + mpFromWand;
+        }
+
+        return mp;
     }
 
     public int getAgility() {
-        return getTurtleStatisticList()
+        int agility = getTurtleStatisticList()
                 .stream()
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 3)
                 .mapToInt(TurtleStatistic::getValue).findFirst()
                 .orElse(0);
+
+        if (owner != null) {
+            int agilityFromBoots = owner.getUserItemList()
+                    .stream()
+                    .filter(boots -> "Buty".equals(boots.getItem().getSlot()) && boots.getTurtle() != null && boots.getTurtle().getId() == this.id)
+                    .mapToInt(boots -> boots.getItem().getItemStatistic().getValue())
+                    .findFirst()
+                    .orElse(0);
+            return agilityFromBoots + agility;
+        }
+
+
+        return agility;
     }
 
     public int getStrength() {
-        return getTurtleStatisticList()
+        int strength = getTurtleStatisticList()
                 .stream()
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 4)
                 .mapToInt(TurtleStatistic::getValue).findFirst()
                 .orElse(0);
+
+        if (owner != null) {
+            int strengthFromSword = owner.getUserItemList()
+                    .stream()
+                    .filter(sword -> "Miecz".equals(sword.getItem().getSlot()) && sword.getTurtle() != null && sword.getTurtle().getId() == this.id)
+                    .mapToInt(sword -> sword.getItem().getItemStatistic().getValue())
+                    .findFirst()
+                    .orElse(0);
+            return strengthFromSword + strength;
+        }
+        return strength;
+
     }
 
     public int getStamina() {
-        return getTurtleStatisticList()
+        int stamina = getTurtleStatisticList()
                 .stream()
                 .filter(turtleStatistic -> turtleStatistic.getStatistic().getId() == 5)
-                .mapToInt(TurtleStatistic::getValue).findFirst()
+                .mapToInt(TurtleStatistic::getValue)
+                .findFirst()
                 .orElse(0);
+
+        if (owner != null) {
+            int helmetStamina = owner.getUserItemList()
+                    .stream()
+                    .filter(helmet -> "Hełm".equals(helmet.getItem().getSlot()) && helmet.getTurtle() != null && helmet.getTurtle().getId() == this.id)
+                    .mapToInt(helmet -> helmet.getItem().getItemStatistic().getValue())
+                    .findFirst()
+                    .orElse(0);
+
+            return stamina + helmetStamina;
+        }
+
+        return stamina;
+    }
+
+
+    public int getStatistic(Integer statisticId) {
+        return switch (statisticId) {
+            case 1 -> getHP();
+            case 2 -> getMP();
+            case 3 -> getAgility();
+            case 4 -> getStrength();
+            case 5 -> getStamina();
+            default -> throw new IllegalStateException("Unexpected value: " + statisticId);
+        };
+    }
+
+    public UserItem getHelmet(){
+        return owner
+                .getUserItemList()
+                .stream()
+                .filter(helmet -> helmet.getTurtle() != null && helmet.getTurtle().getId() == this.getId() && helmet.getItem().getSlot().equals("Hełm"))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public UserItem getSword(){
+        return owner
+                .getUserItemList()
+                .stream()
+                .filter(sword -> sword.getTurtle() != null && sword.getTurtle().getId() == this.getId() && sword.getItem().getSlot().equals("Miecz"))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public UserItem getWand(){
+        return owner
+                .getUserItemList()
+                .stream()
+                .filter(wand -> wand.getTurtle() != null && wand.getTurtle().getId() == this.getId() && wand.getItem().getSlot().equals("Różdżka"))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public UserItem getBoots(){
+        return owner
+                .getUserItemList()
+                .stream()
+                .filter(boots -> boots.getTurtle() != null && boots.getTurtle().getId() == this.getId() && boots.getItem().getSlot().equals("Buty"))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
