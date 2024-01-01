@@ -50,6 +50,7 @@ public class UserService {
         user.setShells(0);
         user.setRegistrationDate(LocalDateTime.now());
         user.setActivationToken(token);
+        user.setTurtleLimit(5);
         user.setActivationTokenExpireAt(LocalDateTime.now().plusWeeks(1));
         user.setUserItemList(null);
         user.setRole(roleRepository.findById(2).orElseThrow(null));
@@ -159,11 +160,12 @@ public class UserService {
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
-
-
     }
 
+    @Transactional
     public void changeUsername(User user, String username) throws Exception {
+        int changeUsernamePrice = 1;
+
         if (username.length() < 2 || username.length() > 15) {
             throw new Exception("Zła długość nicku");
         }
@@ -171,13 +173,25 @@ public class UserService {
         if (userRepository.findUserByUsername(username) != null) {
             throw new Exception("Nick jest już zajęty");
         }
-        if (user.getShells() < 1) {
+        if (user.getShells() < changeUsernamePrice) {
             throw new Exception("Nie masz wystarczającej ilości muszelek!");
         }
-        user.setShells(user.getShells() - 1);
+        user.setShells(user.getShells() - changeUsernamePrice);
         user.setUsername(username);
         userRepository.save(user);
 
+    }
+
+    @Transactional
+    public void increaseLimit(User user) throws Exception {
+        int increaseLimitPrice = 10;
+        if (user.getShells() < increaseLimitPrice) {
+            throw new Exception("Nie masz wystarczającej ilości muszelek!");
+        }
+
+        user.setShells(user.getShells() - increaseLimitPrice);
+        user.setTurtleLimit(user.getTurtleLimit() + 1);
+        userRepository.save(user);
     }
 
     public void changeAvatar(User user, MultipartFile avatar) throws IOException {
@@ -378,5 +392,6 @@ public class UserService {
                 "\n" +
                 "</div></div>";
     }
+
 }
 

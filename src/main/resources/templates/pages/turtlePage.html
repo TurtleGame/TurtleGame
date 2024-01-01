@@ -2,24 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/master.html}">
 
-<h1 layout:fragment="header">Twoje żółwie</h1>
+<h1 layout:fragment="header">Twoje żółwie (<span th:text="${user.getTurtles().size}"></span>/<span th:text="${user.getTurtleLimit()}"></span>)</h1>
 
 <div layout:fragment="content">
 
     <div class="turtles-grid">
 
-        <a th:each="turtle : ${user.getTurtles()}" th:href="@{/turtles/{id}/details(id = ${turtle.id})}" class="card turtle-tile text-center">
+        <a th:each="turtle : ${user.getTurtles()}" th:href="@{/turtles/{id}/details(id = ${turtle.id})}"
+           class="card turtle-tile text-center">
             <h2 class="m-0 mb-4" th:text="${turtle.name}"></h2>
             <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
         </a>
-
-        <a href="/nest" class="card turtle-tile text-center flex">
-            <div class="flex-center flex-middle" style="width: 100%;">
-                <i class="fa fa-plus fa-4x"></i>
-                <h2 class="mb-0">Zaadoptuj</h2>
-            </div>
-        </a>
-
+            <a th:if="${user.canHaveMoreTurtles()}" href="/nest" class="card turtle-tile text-center flex">
+                <div class="flex-center flex-middle" style="width: 100%;">
+                    <i class="fa fa-plus fa-4x"></i>
+                    <h2 class="mb-0">Zaadoptuj</h2>
+                </div>
+            </a>
+            <a th:unless="${user.canHaveMoreTurtles()}" href="/user/edit" class="card turtle-tile text-center flex">
+                <div class="flex-center flex-middle" style="width: 100%;">
+                    <i class="fa fa-plus fa-4x"></i>
+                    <h2 class="mb-0">Osiągnięto limit żółwi!
+                        &nbsp;Kliknij aby go zwiększyć!</h2>
+                </div>
+            </a>
     </div>
 </div>
 

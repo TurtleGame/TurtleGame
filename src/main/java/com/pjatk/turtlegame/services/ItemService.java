@@ -126,7 +126,15 @@ public class ItemService {
         selling(gold, quantity, user, selling, userItem);
     }
 
-    public void adoptEgg(User user, int eggId, String name) {
+    public void adoptEgg(User user, int eggId, String name) throws Exception {
+
+        if (name.length() < 2 || name.length() > 50) {
+            throw new Exception("Nieprawidłowe imię");
+        }
+
+        if(!user.canHaveMoreTurtles()){
+            throw  new Exception("Nie możesz adoptować więcej żółwi!");
+        }
         UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == eggId)

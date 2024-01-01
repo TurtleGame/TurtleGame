@@ -6,19 +6,6 @@
 
 <div layout:fragment="content">
 
-    <div th:if="${#fields.hasErrors('eggsForm.*')}" class="errorMessage mb-2">
-        <strong>Nie udało się wykonać tej akcji</strong>
-        <ul>
-            <li th:each="err : ${#fields.errors('eggsForm.*')}" th:text="${err}"/>
-        </ul>
-    </div>
-    <div th:if="${#fields.hasErrors('sellTurtle.*')}" class="errorMessage mb-2">
-        <strong>Nie udało się wykonać tej akcji</strong>
-        <ul>
-            <li th:each="err : ${#fields.errors('sellTurtle.*')}" th:text="${err}"/>
-        </ul>
-    </div>
-
     <!-- inkubacja -->
     <div class="card mb-2">
         <h3 class="m-0 mb-3">Inkubator</h3>
@@ -54,7 +41,7 @@
                 <img src="/assets/images/eggs/fire.png" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
                 <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
-                <div th:classappend="${user.getEggs().size == 4 ? 'hidden' : ''}">
+                <div th:if="${user.canHaveMoreTurtles()}">
                     <button class="button mb-2" th:onclick="'openPopupAdoptEgg(' + ${egg.getId()} + ')'">Adoptuj</button>
                 </div>
                 <button type="button" class="button mb-2" th:onclick="'openPopupSellEgg(' + ${egg.getId()} + ')'">Sprzedaj</button>

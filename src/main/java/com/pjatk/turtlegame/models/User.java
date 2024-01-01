@@ -58,6 +58,8 @@ public class User {
 
     private LocalDateTime lastActivity;
 
+    private int turtleLimit;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -135,6 +137,10 @@ public class User {
                 .filter(turtle1 -> turtle1.getId() == turtleId)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
+    }
+
+    public boolean canHaveMoreTurtles(){
+        return getTurtles().size() + getEggs().size() < turtleLimit;
     }
 
     public boolean isUserHaveUnreadMessage() {

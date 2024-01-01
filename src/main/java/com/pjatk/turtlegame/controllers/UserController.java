@@ -98,6 +98,23 @@ public class UserController {
         return "redirect:/logout";
     }
 
+    @PostMapping(path = "/increase-limit")
+    public String increaseLimit(
+                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                Model model,
+                                RedirectAttributes redirectAttributes){
+        User user = userRepository.findById(turtleUserDetails.getId());
+
+        try{
+            userService.increaseLimit(user);
+        }catch (Exception e){
+            model.addAttribute("failedMessage", e.getMessage());
+            return "pages/editPage";
+        }
+        redirectAttributes.addFlashAttribute("successMessage", "Limit zwiększony!");
+        return "redirect:/user/edit";
+    }
+
     @PostMapping(path = "change-avatar")
     public String changeAvatar(@RequestParam("avatar") MultipartFile avatar,
                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,

@@ -47,22 +47,19 @@ public class NestController {
                           @PathVariable int id,
                           @RequestParam("Gold") int gold,
                           @RequestParam("Quantity") int quantity,
-                          Model model,
-                          BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
+                           Model model,
+                           RedirectAttributes redirectAttributes){
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
 
-            return "pages/nest";
-        }
         if (!itemOwnerMarketRepository.existsByItemIdAndUserId(id, turtleUserDetails.getId())) {
             try {
-            itemService.sellEgg(turtleUserDetails.getId(), id, gold, quantity);
+                itemService.sellEgg(turtleUserDetails.getId(), id, gold, quantity);
             } catch (Exception e) {
+                model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
                 redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
             }
-        }
-        else {
+        } else {
+            model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
             redirectAttributes.addFlashAttribute("failedMessage", "Już sprzedajesz to jajko!");
 
             return "pages/nest";
@@ -76,21 +73,16 @@ public class NestController {
                            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                            @PathVariable int id,
                            @RequestParam("Name") String name,
-                           Model model,
-                           BindingResult bindingResult) throws Exception {
+                           Model model){
         User user = userRepository.findById(turtleUserDetails.getId());
-        //TODO
-        if (name.length() < 2 || name.length() > 50) {
-            bindingResult.rejectValue("Name", "error.wrongName", "Nieprawidłowe imię");
-        }
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("eggs", itemService.getEggs(user.getId()));
-
+        try {
+            itemService.adoptEgg(user, id, name);
+        } catch (Exception e) {
+            model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
+            model.addAttribute("failedMessage", e.getMessage());
             return "pages/nest";
         }
-
-        itemService.adoptEgg(user, id, name);
 
         return "redirect:/nest";
     }
