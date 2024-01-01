@@ -1,8 +1,6 @@
 package com.pjatk.turtlegame.config;
 
-import com.pjatk.turtlegame.models.TurtleEgg;
-import com.pjatk.turtlegame.models.TurtleExpeditionHistory;
-import com.pjatk.turtlegame.models.User;
+import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import com.pjatk.turtlegame.services.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,11 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
-import com.pjatk.turtlegame.models.Turtle;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor

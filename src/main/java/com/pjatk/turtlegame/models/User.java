@@ -60,7 +60,6 @@ public class User {
 
     private int turtleLimit;
 
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -71,7 +70,7 @@ public class User {
     @OneToMany(mappedBy = "giver")
     private List<UserStatus> giverStatusList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserStatus> userStatusList;
 
     @OneToMany(mappedBy = "sender")
@@ -139,7 +138,7 @@ public class User {
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć żółwia o podanym ID"));
     }
 
-    public boolean canHaveMoreTurtles(){
+    public boolean canHaveMoreTurtles() {
         return getTurtles().size() + getEggs().size() < turtleLimit;
     }
 
@@ -175,4 +174,12 @@ public class User {
         return receivedFriendRequests.stream().toList();
     }
 
+    public boolean isAccountBanned() {
+        List<UserStatus> isAccountBanned = userStatusList
+                .stream()
+                .filter(status -> status.getEndAt().isAfter(LocalDateTime.now()))
+                .toList();
+
+        return !isAccountBanned.isEmpty();
+    }
 }

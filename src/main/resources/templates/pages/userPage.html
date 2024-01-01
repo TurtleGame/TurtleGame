@@ -18,7 +18,6 @@
             </div>
             <h5>Status: <span th:if="${isOnline}" th:text="'Online'" th:class="'text-success'"></span>
                 <span th:unless="${isOnline}" th:text="'Offline'" th:class="'text-danger'"></span>
-
             </h5>
             <span class="text-muted text-sm">W grze od <span
                     th:text="${#temporals.format(userInformation.getRegistrationDate(), 'dd.MM.YYY')}"></span></span>

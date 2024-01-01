@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                     auth.requestMatchers("/news").hasAnyAuthority("ADMIN", "USER");
                     auth.requestMatchers("/news/create").hasAuthority("ADMIN");
                     auth.requestMatchers("/news/edit").hasAuthority("ADMIN");
+                    auth.requestMatchers("/admin-panel/**").hasAuthority("ADMIN");
                     auth.requestMatchers("/media/**").permitAll();
                     auth.requestMatchers("/remind-password").permitAll();
                     auth.requestMatchers("/change-password").permitAll();

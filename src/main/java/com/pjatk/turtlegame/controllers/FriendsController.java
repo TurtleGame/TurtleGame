@@ -23,6 +23,7 @@ public class FriendsController {
     @GetMapping
     public String index(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         User user = userRepository.findById(turtleUserDetails.getId());
+        model.addAttribute("context", "friends");
         model.addAttribute("friends", userService.getFriends(user));
 
         return "pages/friends";

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/master.html}" lang="pl">
+
+<h1 layout:fragment="header">Panel administracyjny</h1>
+
+<div layout:fragment="content">
+
+    <div class="card size-wide mb-2">
+        <h2>Zbanuj użytkownika</h2>
+        <div>
+            <form th:action="@{/admin-panel/ban-user}" method="POST">
+                <div class="text-primary" style="font-weight: bold;">Wyszukaj użytkownika:</div>
+                <label>
+                    <select class="select2" name="playerUsername"></select>
+                </label>
+                <div>
+                    <label for="reason" class="text-primary"><b>Powód bana:</b></label>
+                    <textarea class="textarea" id="reason" name="reason" required
+                    ></textarea>
+                </div>
+                <div>
+                    <label class="text-primary" style="font-weight: bold;">Długość bana:
+                        <input type="date" name="banExpireAt" id="banExpireAt"/>
+                    </label>
+                </div>
+                <button type="submit" class="button mb-2">Zbanuj użytkownika</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</html>
