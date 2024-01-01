@@ -29,13 +29,13 @@
                         <div>
                             <img src="/assets/images/gold.png" width="20" height="20" alt="gold"> x<span th:text="${battleResult.getGold()}"></span></div>
                     <div>
-                        <i class="fas fa-caret-up"></i> <span th:text="${battleResult.getGainedRankingPoints()}"></span> punktów rankingowych!
+                        <i class="fas fa-caret-up text-success"></i> <span th:text="${battleResult.getGainedRankingPoints()}"></span> punktów rankingowych!
                     </div>
                 </div>
                 <div th:if="${battleResult.getLostRankingPoints()}" class="mb-4 log" style="display: none;">
                     <div>Tracisz: </div>
                     <div>
-                        <i class="fas fa-caret-down"></i> <span th:text="${battleResult.getLostRankingPoints()}"></span> punktów rankingowych!
+                        <i class="fas fa-caret-down text-danger"></i> <span th:text="${battleResult.getLostRankingPoints()}"></span> punktów rankingowych!
                     </div>
                 </div>
 

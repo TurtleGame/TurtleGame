@@ -16,8 +16,9 @@
             <div class="card p-3 m-1 text-center" th:each="egg : ${user.getEggs()}">
                 <img src="/assets/images/eggs/fire.png" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
-                <h5 class="m-0">Żywioł <span class="text-primary">Dym</span></h5>
-                <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany.</div>
+                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
+                <h5>Żółw wykluje się: <span class="text-primary" th:text="${#temporals.format(egg.getHatchingAt(), 'dd.MM.yyyy HH:mm')}"></span></h5>
+                <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany. Wróć jutro!</div>
                 <div th:if="${egg.getWarming() != 0}">
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/warm'}" method="post">
                         <button type="submit" class="button mb-2">Ogrzej</button>
