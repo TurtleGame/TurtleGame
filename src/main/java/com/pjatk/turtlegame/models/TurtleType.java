@@ -22,7 +22,7 @@ public class TurtleType {
     private String name;
 
     @NotNull
-    @Size(min = 2, max = 250)
+    @Size(min = 2)
     private String description;
 
     @NotNull

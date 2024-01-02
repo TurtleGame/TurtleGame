@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface StatisticRepository extends JpaRepository<Statistic, Integer> {
     Optional<Statistic> findByName(String name);
+    Statistic findById(int id);
 }

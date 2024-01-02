@@ -139,7 +139,7 @@ public class AchievementsService {
             }
             Set<TurtleType> filteredTypes = new HashSet<TurtleType>(types);
 
-            if (filteredTypes.size() == 15)
+            if (filteredTypes.size() == 7)
                 addAchievement(user, achievement);
         }
     }
@@ -193,19 +193,56 @@ public class AchievementsService {
         }
     }
 
-    //wyposaż żółwia każdym elementem ubioru (?) (Fashionista) TODO
+    //wyposaż żółwia każdym elementem ubioru (Fashionista) TODO
     public void fashionista(User user) {
         Achievement achievement = achievementsRepoistory.findById(9);
         if (isNotEarned(user, achievement)) {
-            addAchievement(user, achievement);
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            List<UserItem> userItems = user.getUserItemList().stream().toList();
+            List<Item> items = new ArrayList<>();
+
+            for (Turtle turtle : turtles) {
+                for (UserItem item : userItems) {
+                    if (item.getTurtle() == turtle) {
+                        items.add(item.getItem());
+                    }
+                }
+                if (items.size() == 4) {
+                    addAchievement(user, achievement);
+                    break;
+                }
+            }
         }
     }
 
-    //wyposaż żółwia w rzadkie lub legendarne przedmioty (?) (O wow) TODO
+    //wyposaż żółwia w rzadkie lub legendarne przedmioty (O wow) TODO
     public void ohMy(User user) {
         Achievement achievement = achievementsRepoistory.findById(10);
         if (isNotEarned(user, achievement)) {
-            addAchievement(user, achievement);
+            List<Turtle> turtles = user.getTurtles().stream().toList();
+            List<UserItem> userItems = user.getUserItemList().stream().toList();
+            List<Item> items = new ArrayList<>();
+
+            int is = 0;
+
+            for (Turtle turtle : turtles) {
+                for (UserItem item : userItems) {
+                    if (item.getTurtle() == turtle) {
+                        items.add(item.getItem());
+                    }
+                }
+                if (items.size() == 4) {
+                    for (Item item : items) {
+                        if (item.getRarity().getId() >= 2) {
+                            is += 1;
+                        }
+                    }
+                    if (is == 4) {
+                        addAchievement(user, achievement);
+                        break;
+                    }
+                }
+            }
         }
     }
 

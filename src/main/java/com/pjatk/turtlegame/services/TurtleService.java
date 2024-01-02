@@ -65,7 +65,11 @@ public class TurtleService {
         turtle.setFed(true);
         turtle.setHowMuchFood(turtle.getHowMuchFood() + 1);
 
-        List<ItemStatistic> itemStatistics = itemStatisticRepository.findAllByItemId(foodId);
+        setStatistics(foodId, turtle, itemStatisticRepository, turtleStaticsRepository);
+    }
+
+    static void setStatistics(Integer itemId, Turtle turtle, ItemStatisticRepository itemStatisticRepository, TurtleStaticsRepository turtleStaticsRepository) {
+        List<ItemStatistic> itemStatistics = itemStatisticRepository.findAllByItemId(itemId);
         for (ItemStatistic itemStatistic : itemStatistics) {
             Optional<TurtleStatistic> statisticToImprove = turtle.getTurtleStatisticList()
                     .stream()
@@ -82,6 +86,11 @@ public class TurtleService {
     public void sellTurtle(int userId, int turtleId, int shells) {
         User user = userRepository.findById(userId);
         Turtle turtle = user.getTurtle(turtleId);
+
+        for (UserItem item: user.getUserItemList()) {
+            if (item.getTurtle() != null)
+                throw new IllegalArgumentException("Zółw nosi zbroję.");
+        }
 
         for (TurtleOwnerHistory selling : turtle.getTurtleOwnerHistoryList()) {
             if (selling.getEndAt() == null) {

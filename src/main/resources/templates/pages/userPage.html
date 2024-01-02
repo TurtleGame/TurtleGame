@@ -65,9 +65,9 @@
                     </div>
                     <div>
                         <div class="mb-1"
-                             th:text="${userInformation.getAchievementEarned(achievement.getId()).getAchievement().getName()}"></div>
+                             th:text="${achievement.getAchievement().getName()}"></div>
                         <div class="text-muted text-sm"
-                             th:text="${#temporals.format(userInformation.getAchievementEarned(achievement.id).getAchievedAt(), 'dd.MM.YYY')}"></div>
+                             th:text="${#temporals.format(achievement.getAchievedAt(), 'dd.MM.YYY')}"></div>
                     </div>
                 </div>
             </div>

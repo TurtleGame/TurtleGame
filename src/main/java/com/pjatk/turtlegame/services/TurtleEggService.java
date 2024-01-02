@@ -43,7 +43,7 @@ public class TurtleEggService {
 
         Turtle turtle = new Turtle();
         turtle.setAvailable(true);
-        turtle.setLevel(0);
+        turtle.setLevel(1);
         turtle.setName(egg.getName());
         turtle.setTurtleType(egg.getTurtleType());
         turtle.setGender(0);

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +23,7 @@ public class ItemService {
     private final TurtleEggRepository turtleEggRepository;
     private final TurtleTypeRepository turtleTypeRepository;
     private final ItemOwnerMarketRepository itemOwnerMarketRepository;
-    private final ItemRepository itemRepository;
+    private final TurtleStaticsRepository turtleStaticsRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -275,6 +276,8 @@ public class ItemService {
                 itemOnTurtle.setUser(user);
                 itemOnTurtle.setItem(userItem.getItem());
                 userItemRepository.save(itemOnTurtle);
+
+                TurtleService.setStatistics(itemId, turtle, itemStatisticRepository, turtleStaticsRepository);
             }
         }
     }

@@ -51,13 +51,17 @@ public class TurtleController {
                              @PathVariable int id,
                              @RequestParam("Gold") int shells,
                              Model model,
-                             BindingResult bindingResult) throws Exception {
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return "pages/turtlePage";
         }
 
-        turtleService.sellTurtle(turtleUserDetails.getId(), id, shells);
+        try {
+            turtleService.sellTurtle(turtleUserDetails.getId(), id, shells);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+        }
         return "redirect:/turtles";
     }
 
