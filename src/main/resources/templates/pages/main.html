@@ -6,16 +6,16 @@
 
     <div th:each="news : ${news}">
         <div class="card" style="margin-bottom: 5px">
-            <div style="margin-top: 0; margin-bottom: 10px">
+            <div class="mb-2">
                 <div th:if="${user.getRole().getName() == 'ADMIN'}">
                     <i class="fa-solid fa-pen-to-square act-edit-post" style="float: right; cursor:pointer" th:attr="data-title=${news.getTitle()},data-content=${news.getContent()}, data-id=${news.getId()}"></i>
                 </div>
-                <h2 th:text="${news.getTitle()}" style="margin-bottom: 0; margin-top: 0"></h2>
+                <h2 th:text="${news.getTitle()}" class="m-0"></h2>
                 <div>Autor: <span th:text="${news.getAuthor().getUsername()}"
                                   th:style="'color: ' + (${news.getAuthor().getRole().getColor() ?: ''})"></span>, data:
                     <span th:text="${#temporals.format(news.getReleaseDate(), 'dd.MM.yyyy')}"></span></div>
-                <div class="card-body" th:utext="${news.getContent()}"></div>
             </div>
+            <div th:utext="${news.getContent()}"></div>
         </div>
     </div>
     <div th:if="${user.getRole().getName() == 'ADMIN'}">

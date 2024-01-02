@@ -31,7 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
             $('[name="edit-content"]', $('.edit-news')).val(content);
             $('[name="news-id"]', $('.edit-news')).val(id);
             CKEDITOR.instances['edit-content'].setData(content);
-        })
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: "smooth",
+                });
+            }, 250);
+        });
     }
 
     if (context === 'private-messages') {
@@ -196,6 +202,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 const cost = $(this).data('cost');
                 $('.act-target-cost', $(this)).text(cost * multiplier);
             });
+        });
+    }
+
+    if (context === 'friends') {
+        $('[name="friendUsername"]').on('change', function() {
+            if ($(this).val()) {
+                $('.act-view-profile').removeAttr('disabled');
+                $('.act-add-friend').removeAttr('disabled');
+            }
+        });
+        $('.act-view-profile').on('click', function() {
+            if ($('[name="friendUsername"]').val()) {
+                const $form = $(this).closest('form');
+                $form.attr('action', '/user/profile');
+                $form.attr('method', 'POST');
+                $form.submit();
+            }
+        });
+        $('.act-add-friend').on('click', function() {
+            if ($('[name="friendUsername"]').val()) {
+                const $form = $(this).closest('form');
+                $form.attr('action', '/friends/add');
+                $form.attr('method', 'POST');
+                $form.submit();
+            }
         });
     }
 });

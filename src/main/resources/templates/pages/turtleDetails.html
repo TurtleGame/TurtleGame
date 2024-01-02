@@ -100,12 +100,13 @@ grid-template-columns: repeat(2, 1fr);">
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 33.3%);">
             <div class="p-3 m-1">
                 <a th:href="@{/turtles/{id}/fight-history(id = ${turtle.id})}">
-                    <button class="button mb-2">Historia walk</button>
+                    <button class="button">Historia walk</button>
                 </a>
             </div>
             <div class="p-3 m-1">
                 <form th:action="@{'/turtles/' + ${turtle.getId()} + '/delete'}" method="post">
-                    <button type="submit" class="button" onclick="abandonTurtleConfirm(this)">Porzuć żółwia
+                    <button type="submit" class="button" onclick="abandonTurtleConfirm(this)">
+                        Porzuć żółwia
                     </button>
                 </form>
             </div>

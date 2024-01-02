@@ -54,8 +54,8 @@
                 <li><a href="/friends" th:classappend="${context == 'friends' ? 'active' : ''}"><i
                         class="fa-solid fa-user-group"></i>Znajomi</a></li>
                 <li th:if="${user.getRole().getName() == 'ADMIN'}"><a href="/admin-panel"
-                                                                      th:classappend="${context == 'admin' ? 'active' : ''}"><i
-                        class="fa-solid fa-user-slash"></i>Panel administracyjny</a></li>
+                                                                      th:classappend="${context == 'admin' ? 'active' : ''}">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>Panel administracyjny</a></li>
             </ul>
         </div>
     </div>

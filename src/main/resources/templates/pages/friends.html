@@ -6,19 +6,20 @@
 
 <div layout:fragment="content">
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, 50%);">
-        <div class="card size-wide mb-2">
-            <form th:action="@{/friends/add}" method="POST">
+    <div class="flex flex-row gap-2 mb-2">
+        <div class="card size-wide">
+            <form>
                 <h2 class="m-0 mb-4">Dodaj znajomych</h2>
-                <div class="m-2">
-                    <label class="mb-4">
-                        <select class="select2" name="friendUsername"></select>
-                    </label>
+                <div class="mb-2">
+                    <select class="select2" name="friendUsername"></select>
                 </div>
-                <button type="submit" class="button mb-2">Wyślij zaproszenie</button>
+                <div class="flex flex-row gap-4">
+                    <button type="button" class="button act-view-profile" disabled>Odwiedź profil</button>
+                    <button type="button" class="button act-add-friend" disabled>Wyślij zaproszenie</button>
+                </div>
             </form>
         </div>
-        <div class="card size-wide mb-2">
+        <div class="card size-wide">
             <h2 class="m-0 mb-4">Oczekujące zaproszenia</h2>
             <div th:each="friendRequest : ${user.getReceivedFriendRequests()}" class="pending-request">
                 <div class="size-wide">

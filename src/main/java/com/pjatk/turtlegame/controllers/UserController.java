@@ -28,7 +28,7 @@ public class UserController {
     public String getUserPage(Model model, @PathVariable int id, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         User user = userRepository.findById(id);
         User loggedUser = userRepository.findById(turtleUserDetails.getId());
-        if(user == null){
+        if (user == null) {
             return "redirect:/main";
         }
 
@@ -40,6 +40,18 @@ public class UserController {
         return "pages/userPage";
     }
 
+
+    @PostMapping(path = "/profile")
+    public String visitProfile(@RequestParam(value = "friendUsername", required = false) String username) {
+        User userToVisit = userRepository.findUserByUsername(username);
+
+        if (userToVisit == null) {
+            return "redirect:/main";
+        }
+
+        return "redirect:/user/" + userToVisit.getId();
+    }
+
     @GetMapping(path = "/edit")
     public String getEditPage(Model model, @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
         model.addAttribute("user", userRepository.findById(turtleUserDetails.getId()));
@@ -48,10 +60,12 @@ public class UserController {
 
     @PostMapping(path = "/edit-info")
     public String changeAboutInfo(@RequestParam("content") String content,
-                                  @AuthenticationPrincipal TurtleUserDetails turtleUserDetails) {
+                                  @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                  RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
         userService.editAbout(content, user);
+        redirectAttributes.addFlashAttribute("successMessage", "Wprowadziłeś zmiany w opisie!");
         return "redirect:/user/edit";
     }
 
@@ -100,14 +114,14 @@ public class UserController {
 
     @PostMapping(path = "/increase-limit")
     public String increaseLimit(
-                                @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                                Model model,
-                                RedirectAttributes redirectAttributes){
+            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(turtleUserDetails.getId());
 
-        try{
+        try {
             userService.increaseLimit(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("failedMessage", e.getMessage());
             return "pages/editPage";
         }

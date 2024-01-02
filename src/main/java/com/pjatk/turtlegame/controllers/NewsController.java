@@ -41,9 +41,11 @@ public class NewsController {
                            @RequestParam("edit-content") String editContent,
                            @RequestParam("news-id") int id,
                            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                           Model model) {
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
         newsService.editNews(editTitle, editContent, id);
         model.addAttribute("news", newsService.getAll());
+        redirectAttributes.addFlashAttribute("successMessage", "Wprowadziłeś zmiany!");
         return "redirect:/main";
     }
 
