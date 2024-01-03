@@ -118,7 +118,7 @@ public class MainController {
         }
 
         userService.addNewUser(userDTO);
-        redirectAttributes.addFlashAttribute("successMessage", "Rejestracja zakończona pomyślnie. Możesz teraz się zalogować.");
+        redirectAttributes.addFlashAttribute("successMessage", "Rejestracja zakończona pomyślnie. Na mailu czeka na Ciebie link aktywacyjny.");
         model.addAttribute("context", "login");
         return "redirect:/";
     }
