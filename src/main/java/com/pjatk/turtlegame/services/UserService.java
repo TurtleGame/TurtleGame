@@ -38,6 +38,7 @@ public class UserService {
     private final ItemService itemService;
     private final EmailService emailService;
     private final UserStatusRepository userStatusRepository;
+    private final PrivateMessageService privateMessageService;
 
     @Transactional
     public void addNewUser(UserDTO userDTO) {
@@ -47,7 +48,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail().trim());
         user.setUsername(userDTO.getUsername().trim());
-        user.setGold(0);
+        user.setGold(1000);
         user.setShells(0);
         user.setRegistrationDate(LocalDateTime.now());
         user.setActivationToken(token);
@@ -56,13 +57,19 @@ public class UserService {
         user.setUserItemList(null);
         user.setRole(roleRepository.findById(2).orElseThrow(null));
         userRepository.save(user);
-        Item item = itemRepository.findById(9).orElseThrow(null);
-        Item egg = itemRepository.findById(21).orElseThrow(null);
+        Item item = itemRepository.findById(10).orElseThrow(null);
+        Item stormEgg = itemRepository.findById(1).orElseThrow(null);
+        Item magmaEgg = itemRepository.findById(2).orElseThrow(null);
+        Item tornadoEgg = itemRepository.findById(3).orElseThrow(null);
         List<UserItem> newList = new ArrayList<>();
         user.setUserItemList(newList);
         itemService.addItem(user, item, 5);
-        itemService.addItem(user, egg, 1);
+        itemService.addItem(user, stormEgg, 1);
+        itemService.addItem(user, magmaEgg, 1);
+        itemService.addItem(user, tornadoEgg, 1);
         emailService.send(userDTO.getEmail().trim(), buildActivationEmail(userDTO.getUsername(), link), "Potwierdź swój adres mailowy");
+        privateMessageService.sendWelcomeMessage(user);
+
     }
 
     public void sendChangePasswordMail(String email) {

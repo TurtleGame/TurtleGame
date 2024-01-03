@@ -4,6 +4,7 @@ import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -67,6 +68,18 @@ public class PrivateMessageService {
         report.setContent("Twój żółw " + turtle.getName() + " skończył trening " + trainingHistory.getTraining().getName() + ". \n Wytrenował " + trainingHistory.getPoints() + " " + grammar + ".");
 
         privateMessageRepository.save(report);
+    }
+
+    @Transactional
+    public void sendWelcomeMessage(User user){
+        PrivateMessage welcomeMessage = new PrivateMessage();
+        welcomeMessage.setRead(false);
+        welcomeMessage.setRecipient(user);
+        welcomeMessage.setSender(null);
+        welcomeMessage.setSentAt(LocalDateTime.now());
+        welcomeMessage.setTitle("Witaj w TurtleBlast!");
+        welcomeMessage.setContent("Witaj w TurtleBlast! \n W zakładce Legowisko czeka na Ciebie niespodzianka. \n Powodzenia w grze, Administracja TurtleBlast" );
+        privateMessageRepository.save(welcomeMessage);
     }
 
     public void deleteMessage(User user, int messageId) {
