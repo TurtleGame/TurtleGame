@@ -15,7 +15,7 @@
                 <div class="card p-3 m-1">
                     <div class="flex flex-row gap-4">
                         <div class="flex flex-center flex-middle">
-                            <img src="assets/images/items/scroll.png"/>
+                            <img th:src="@{${'/assets/images/items/' + item.getItem().getId() + '.png'}}" style="width: 60px; border-radius: 0.25rem;"/>
                         </div>
                         <div class="size-wide">
                             <a th:href="@{/items/{id}/details(id = ${item.getItem().getId()})}">

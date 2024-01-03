@@ -15,7 +15,7 @@
 
             <a th:href="@{/turtles/{id}/details(id = ${turtle.id})}" class="turtle-widget"
                th:each="turtle : ${user.getTurtles()}">
-                <img src="/assets/images/turtles/fire.png"/>
+                <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}"/>
                 <div class="turtle-data">
                     <div class="turtle-name" th:text="${turtle.getName}"></div>
                     <div class="turtle-activity">

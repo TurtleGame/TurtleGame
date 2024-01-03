@@ -11,7 +11,7 @@
         <a th:each="turtle : ${user.getTurtles()}" th:href="@{/turtles/{id}/details(id = ${turtle.id})}"
            class="card turtle-tile text-center">
             <h2 class="m-0 mb-4" th:text="${turtle.name}"></h2>
-            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+            <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
         </a>
             <a th:if="${user.canHaveMoreTurtles()}" href="/nest" class="card turtle-tile text-center flex">
                 <div class="flex-center flex-middle" style="width: 100%;">

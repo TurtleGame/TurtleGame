@@ -11,14 +11,13 @@ grid-template-columns: repeat(2, 1fr);">
         <!-- szczegóły żółwia-->
         <div>
             <div class="flex flex-middle flex-center">
-                <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
             </div>
             <div style="text-align: center">
                 <h3 class="mb-1"><span th:text="${turtle.getName()}"></span></h3>
                 <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
                 </div>
-                <div class="mb-1">Żywioł: <span class="text-primary"
-                                                th:text="${turtle.getTurtleType().getName()}"></span>
+                <div class="mb-1">Żywioł: <span class="text-primary" th:text="${turtle.getTurtleType().getName()}"></span>
                 </div>
                 <div class="mb-1">Energia: <span class="text-primary" th:text="${turtle.getEnergy()}"></span></div>
                 <div class="mb-1">HP: <span class="text-primary" th:text="${turtle.getHPtoFight()}"></span></div>
@@ -127,7 +126,7 @@ grid-template-columns: repeat(2, 1fr);">
                         <ul>
                             <li style=" list-style: none;"
                                 th:each="food : ${foods}">
-                                <img src="/assets/images/items/scroll.png" alt="item"/>
+                                <img th:src="@{${'/assets/images/items/' + food.getId() + '.png'}}" alt="item"/>
                                 <span th:text="${food.getName()}"></span> wzmacnia umiejętność: <span
                                     th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
                             </li>

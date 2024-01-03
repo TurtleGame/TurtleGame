@@ -193,7 +193,7 @@ public class AchievementsService {
         }
     }
 
-    //wyposaż żółwia każdym elementem ubioru (Fashionista) TODO
+    //wyposaż żółwia każdym elementem ubioru (Fashionista)
     public void fashionista(User user) {
         Achievement achievement = achievementsRepoistory.findById(9);
         if (isNotEarned(user, achievement)) {
@@ -215,7 +215,7 @@ public class AchievementsService {
         }
     }
 
-    //wyposaż żółwia w rzadkie lub legendarne przedmioty (O wow) TODO
+    //wyposaż żółwia w rzadkie lub legendarne przedmioty (O wow)
     public void ohMy(User user) {
         Achievement achievement = achievementsRepoistory.findById(10);
         if (isNotEarned(user, achievement)) {

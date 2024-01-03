@@ -9,7 +9,7 @@
         <div th:class="${user.getAchievementEarned(achievement.id) != null ? 'card achievement-unlocked' : 'card achievement-locked'}">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-center flex-middle">
-                    <img th:src="@{${'/assets/images/achievement-' + achievement.getId() + '.png'}}" alt="Osiągnięcie">
+                    <img th:src="@{${'/assets/images/achievements/' + achievement.getId() + '.png'}}" alt="Osiągnięcie">
                 </div>
                 <div>
                     <div class="mb-1">

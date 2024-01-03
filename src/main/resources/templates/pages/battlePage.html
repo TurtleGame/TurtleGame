@@ -10,7 +10,7 @@
         <div>
             <div class="card">
                 <div class="flex" style="height: 175px">
-                    <img src="/assets/images/turtles/fire.png" style="width: 155px; margin: auto"/>
+                    <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}" style="width: 155px; margin: auto"/>
                 </div>
                 <div class="text-center">
                     <strong id="turtle-name" class="text-success" th:text="${turtle.getName()}"></strong>

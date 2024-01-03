@@ -10,7 +10,7 @@
         <form action="arena/attack" method="post">
             <div style="display: grid;grid-template-columns: repeat(auto-fill, 33.3%);">
                 <div style="display: grid;justify-content: center;">
-                    <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                    <img th:src="@{${'/assets/images/turtles/' + pair.getKey().getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                     <h2 class="text-center m-0 mb-4 text-success" th:text="${pair.getKey().getName()}"></h2>
 
                     <table class="size-wide" style="text-align: center;">
@@ -36,7 +36,7 @@
                     <input class="button" type="submit" value="Walcz"/>
                 </div>
                 <div style="display: grid;justify-content: center;align-content: center;">
-                    <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                    <img th:src="@{${'/assets/images/turtles/' + pair.getValue().getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                     <h2 class="text-center m-0 mb-4 text-danger" th:text="${pair.getValue().getName()}"></h2>
 
                     <table class="size-wide" style="text-align: center;">

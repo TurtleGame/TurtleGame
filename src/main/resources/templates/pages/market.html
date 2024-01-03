@@ -30,14 +30,14 @@
                     <h2 class="text-center m-0 mb-4" th:text="${turtle.getName()}"></h2>
                     <div class="flex flex-row gap-4">
                         <div class="flex flex-middle flex-center">
-                            <img src="/assets/images/turtles/fire.png" style="width: 155px; border-radius: 0.25rem;"/>
+                            <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                         </div>
                         <table class="size-wide">
                             <tr>
                                 <td style="width: 30%; vertical-align: top;">
                                     <div class="mb-1">Poziom: <span class="text-primary" th:text="${turtle.getLevel()}"></span>
                                     </div>
-                                    <div class="mb-1">Żywioł: <span class="text-primary">Ogień</span></div>
+                                    <div class="mb-1">Żywioł: <span class="text-primary" th:text="${turtle.getTurtleType().getName()}"></span></div>
                                    </td>
                                 <td style="width: 30%; vertical-align: top;">
                                     <div th:each="stat : ${turtle.getTurtleStatisticList()}">
@@ -85,7 +85,7 @@
                         <h2 class="text-center m-0 mb-4" th:text="${egg.getItem().getName()}"></h2>
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-middle flex-center">
-                                <img src="/assets/images/eggs/light.png" style="width: 155px; border-radius: 0.25rem;"/>
+                                <img th:src="@{${'/assets/images/items/' + egg.getItem().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                             </div>
                             <table class="size-wide">
                                 <tr>
@@ -123,7 +123,7 @@
                         <h2 class="text-center m-0 mb-4" th:text="${item.getItem().getName()}"></h2>
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-middle flex-center">
-                                <img src="/assets/images/academyItems/diamondRuby.png" style="width: 155px; border-radius: 0.25rem;"/>
+                                <img th:src="@{${'/assets/images/items/' + item.getItem().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                             </div>
                             <table class="size-wide">
                                 <tr>

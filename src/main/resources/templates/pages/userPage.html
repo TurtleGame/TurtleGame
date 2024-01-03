@@ -40,7 +40,7 @@
 
             <!-- turtle -->
             <div class="card p-3 m-1 text-center" th:each="turtle : ${userInformation.getTurtles()}">
-                <img src="/assets/images/turtles/fire.png" style="height: 80px;"/>
+                <img th:src="@{${'/assets/images/turtles/' + turtle.getTurtleType().getId() + '.png'}}" style="height: 80px;"/>
                 <h4 class="text-primary m-1" th:text="${turtle.getName()}"></h4>
                 <h5 class="m-0">Poziom <span th:text="${turtle.getLevel()}"></span></h5>
             </div>
@@ -60,7 +60,7 @@
             <div class="card p-3 m-1" th:each="achievement : ${userInformation.getAchievementsEarnedList()}">
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-center flex-middle">
-                        <img th:src="@{${'/assets/images/achievement-' + achievement.getId() + '.png'}}"
+                        <img th:src="@{${'/assets/images/achievements/' + achievement.getId() + '.png'}}"
                              style="width: 36px;"/>
                     </div>
                     <div>
