@@ -250,7 +250,6 @@ public class ItemService {
             if (userItem.getTurtle().equals(turtle)) {
                 userItemRepository.delete(userItem);
                 addItem(user, userItem.getItem(), 1);
-                System.out.println("\r\nUnequipped item " + userItem.getId());
             }
         }
         entityManager.refresh(user);
