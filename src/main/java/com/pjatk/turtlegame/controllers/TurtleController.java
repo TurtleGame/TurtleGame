@@ -119,13 +119,13 @@ public class TurtleController {
             turtleService.feedTurtle(feedTurtleDTO.getFoodId(), user, feedTurtleDTO.getTurtleId());
             return "redirect:/turtles/{id}/details";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("successMessage", "Założyłeś ekwipunek!");
+            model.addAttribute("failedMessage", e.getMessage());
+            addModels(model, id, user);
+
+            return "pages/turtleDetails";
         }
 
 
-        addModels(model, id, user);
-
-        return "pages/turtleDetails";
     }
 
     @PostMapping("/{id}/details/wear")

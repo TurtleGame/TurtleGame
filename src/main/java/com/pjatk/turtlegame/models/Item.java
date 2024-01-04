@@ -44,7 +44,7 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<GuardItem> guardItemList;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
     private List<ItemStatistic> itemStatisticList;
 
     @OneToOne(mappedBy = "item")

@@ -57,6 +57,9 @@ public class TurtleService {
         if (turtle.isFed()) {
             throw new IllegalArgumentException("Zółw jest już nakarmiony.");
         }
+        if(foodId == null){
+            throw new IllegalArgumentException("Musisz wybrać pokarm");
+        }
 
         itemService.removeItem(user, foodId, 1);
 

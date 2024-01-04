@@ -136,6 +136,12 @@ public class PrivateMessageService {
         if (user.getShells() < shells) {
             throw new IllegalArgumentException("Posiadasz za mało muszelek!");
         }
+        if(gold < 0){
+            throw new IllegalArgumentException("Błędna wartość!");
+        }
+        if(shells < 0){
+            throw new IllegalArgumentException("Błędna wartość!");
+        }
         user.setGold(user.getGold() - gold);
         user.setShells(user.getShells() - shells);
         userRepository.save(user);
