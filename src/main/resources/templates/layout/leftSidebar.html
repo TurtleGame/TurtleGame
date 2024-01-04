@@ -6,7 +6,7 @@
 
             <a th:href="@{/user/{id}(id=${user.id})}" class="credentials-container">
                 <div class="avatar">
-                    <img th:src="@{'/media/' + ${user.id} + '.png'}" style="width: 100%"
+                    <img th:src="@{'https://turtleblastavatars.s3.eu-central-1.amazonaws.com/avatars/' + ${user.id} + '.png'}" style="width: 100%"
                          onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"/>
                 </div>
                 <div>

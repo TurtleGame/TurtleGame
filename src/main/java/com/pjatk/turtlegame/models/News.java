@@ -30,6 +30,7 @@ public class News {
     private LocalDateTime releaseDate;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @NotNull

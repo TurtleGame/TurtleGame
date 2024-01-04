@@ -52,6 +52,7 @@ public class User {
     @NotNull
     private Integer shells;
 
+    @Column(columnDefinition = "TEXT")
     private String about;
 
     private LocalDateTime registrationDate;
