@@ -75,9 +75,11 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
-                    addAchievement(user, achievement);
-                    break;
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()) != null) {
+                    if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                        addAchievement(user, achievement);
+                        break;
+                    }
                 }
             }
         }
@@ -92,8 +94,10 @@ public class AchievementsService {
             int size = 0;
 
             for (Turtle turtle : turtles) {
-                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
-                    size += 1;
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()) != null) {
+                    if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                        size += 1;
+                    }
                 }
             }
 
@@ -111,9 +115,11 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                if (turtle.getTurtleType().getRarity().getId() == 2) { //unikalny/rzadki żółw ma id 2
-                    addAchievement(user, achievement);
-                    break;
+                if (turtle.getTurtleType().getRarity() != null) {
+                    if (turtle.getTurtleType().getRarity().getId() == 2) { //unikalny/rzadki żółw ma id 2
+                        addAchievement(user, achievement);
+                        break;
+                    }
                 }
             }
         }
@@ -127,9 +133,11 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                if (turtle.getTurtleType().getRarity().getId() == 3) { //Duch jest jedynym legendarnym żółwiem - legendarny żółw ma id 3
-                    addAchievement(user, achievement);
-                    break;
+                if (turtle.getTurtleType().getRarity() != null) {
+                    if (turtle.getTurtleType().getRarity().getId() == 3) { //Duch jest jedynym legendarnym żółwiem - legendarny żółw ma id 3
+                        addAchievement(user, achievement);
+                        break;
+                    }
                 }
             }
         }
@@ -146,10 +154,12 @@ public class AchievementsService {
             for (Turtle turtle : turtles) {
                 types.add(turtle.getTurtleType());
             }
-            Set<TurtleType> filteredTypes = new HashSet<TurtleType>(types);
+            Set<TurtleType> filteredTypes = new HashSet<>(types);
 
-            if (filteredTypes.size() == 7)
-                addAchievement(user, achievement);
+            if (!filteredTypes.isEmpty()) {
+                if (filteredTypes.size() == 7)
+                    addAchievement(user, achievement);
+            }
         }
     }
 
@@ -161,10 +171,12 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
-                    if (turtle.getLevel() >= 5) {
-                        addAchievement(user, achievement);
-                        break;
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()) != null) {
+                    if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                        if (turtle.getLevel() >= 5) {
+                            addAchievement(user, achievement);
+                            break;
+                        }
                     }
                 }
             }
@@ -179,10 +191,12 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
-                    if (turtle.getLevel() >= 20) {
-                        addAchievement(user, achievement);
-                        break;
+                if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()) != null) {
+                    if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
+                        if (turtle.getLevel() >= 20) {
+                            addAchievement(user, achievement);
+                            break;
+                        }
                     }
                 }
             }
@@ -314,10 +328,12 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                for (TurtleBattleHistory history : turtle.getWonBattles()) {
-                    if (history.getLoserTurtle() != null) {
-                        addAchievement(user, achievement);
-                        break;
+                if (turtle.getWonBattles() != null) {
+                    for (TurtleBattleHistory history : turtle.getWonBattles()) {
+                        if (history.getLoserTurtle() != null) {
+                            addAchievement(user, achievement);
+                            break;
+                        }
                     }
                 }
             }
@@ -333,9 +349,11 @@ public class AchievementsService {
             int battles = 0;
 
             for (Turtle turtle : turtles) {
-                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
-                    if (history.getLoserTurtle() != null) {
-                        battles += 1;
+                if (turtle.getWonBattles() != null) {
+                    for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                        if (history.getLoserTurtle() != null) {
+                            battles += 1;
+                        }
                     }
                 }
             }
@@ -354,10 +372,12 @@ public class AchievementsService {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
-                    if (history.getLoserGuard() != null && history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
-                        addAchievement(user, achievement);
-                        break;
+                if (turtle.getWonBattles() != null) {
+                    for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                        if (history.getLoserGuard() != null && history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
+                            addAchievement(user, achievement);
+                            break;
+                        }
                     }
                 }
             }
