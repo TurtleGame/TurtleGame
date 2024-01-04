@@ -37,7 +37,7 @@ public class ExpeditionService {
         turtleExpedition.setGoldGained(getGoldFromExpedition(expedition, durationTime));
         turtleExpedition.setShellsGained(getShellsFromExpedition(expedition));
         turtleExpedition.setStartAt(LocalDateTime.now());
-        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusHours(durationTime));
+        turtleExpedition.setEndAt(turtleExpedition.getStartAt().plusMinutes(durationTime));
         turtleExpeditionHistoryRepository.save(turtleExpedition);
 
         for (PrivateMessageAttachment attachment : getItemsFromExpedition(expedition, durationTime)) {

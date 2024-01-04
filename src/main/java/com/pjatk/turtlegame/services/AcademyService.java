@@ -40,7 +40,7 @@ public class AcademyService {
         turtleTraining.setTraining(training);
         turtleTraining.setStartAt(LocalDateTime.now());
         turtleTraining.setPoints(getXPFronTraining(durationTime));
-        turtleTraining.setEndAt(turtleTraining.getStartAt().plusHours(durationTime));
+        turtleTraining.setEndAt(turtleTraining.getStartAt().plusMinutes(durationTime));
         turtleTrainingHistoryRepository.save(turtleTraining);
     }
     public int getXPFronTraining (int durationTime) {
