@@ -61,9 +61,12 @@ public class MainController {
     @GetMapping(path = {"/registration"})
     public String indexRegister(
             @RequestParam(name = "error", required = false) String error,
-            @ModelAttribute("userDTO") UserDTO userDTO,
+            @Valid @ModelAttribute("userDTO") UserDTO userDTO,
+            BindingResult bindingResult,
             Model model) {
-
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("failedMessage", bindingResult.getAllErrors());
+        }
         model.addAttribute("context", "register");
 
         return "pages/index";

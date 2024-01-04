@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
@@ -32,6 +31,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -184,9 +184,13 @@ public class UserService {
     @Transactional
     public void changeUsername(User user, String username) throws Exception {
         int changeUsernamePrice = 1;
+        String regex = "^[a-zA-Z0-9]+$";
 
         if (username.length() < 2 || username.length() > 15) {
             throw new Exception("Zła długość nicku");
+        }
+        if(!Pattern.matches(regex, username)){
+            throw new Exception("Nick musi się składać z samych liter i liczb");
         }
 
         if (userRepository.findUserByUsername(username) != null) {

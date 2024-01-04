@@ -19,6 +19,7 @@ public class UserDTO {
     private String email;
 
     @Size(max = 28, message = "Nick za długi!")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Nick musi się składać z samych liter i cyfr")
     private String username;
 
     @Size(min = 6, message = "Hasło musi miec minimum 6 znaków")
