@@ -51,6 +51,7 @@ public class TurtleEggService {
         turtle.setEnergy(100);
         turtle.setHowMuchFood(0);
         turtle.setRankingPoints(0);
+        turtle.setGender(egg.getGender());
 
         turtle.setFed(false);
 

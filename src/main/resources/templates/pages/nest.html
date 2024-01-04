@@ -14,10 +14,14 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, 200px);">
             <!-- egg -->
             <div class="card p-3 m-1 text-center" th:each="egg : ${user.getEggs()}">
-                <img th:src="@{${'/assets/images/items/' + egg.getTurtleType().getId() + '.png'}}" style="height: 120px;" alt="jajko"/>
+                <img th:src="@{${'/assets/images/items/' + egg.getTurtleType().getId() + '.png'}}"
+                     style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
-                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
-                <h5>Żółw wykluje się: <span class="text-primary" th:text="${#temporals.format(egg.getHatchingAt(), 'dd.MM.yyyy HH:mm')}"></span></h5>
+                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span>
+                </h5>
+                <h5>Żółw wykluje się: <span class="text-primary"
+                                            th:text="${#temporals.format(egg.getHatchingAt(), 'dd.MM.yyyy HH:mm')}"></span>
+                </h5>
                 <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany. Wróć jutro!</div>
                 <div th:if="${egg.getWarming() != 0}">
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/warm'}" method="post">
@@ -41,11 +45,15 @@
             <div class="card p-3 m-1 text-center" th:each="egg : ${eggs}">
                 <img th:src="@{${'/assets/images/items/' + egg.getId() + '.png'}}" style="height: 120px;" alt="jajko"/>
                 <h4 class="text-primary m-1" th:text="${egg.getName()}"></h4>
-                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span></h5>
+                <h5 class="m-0">Żywioł <span class="text-primary" th:text="${egg.getTurtleType().getName()}"></span>
+                </h5>
                 <div th:if="${user.canHaveMoreTurtles()}">
-                    <button class="button mb-2" th:onclick="'openPopupAdoptEgg(' + ${egg.getId()} + ')'">Adoptuj</button>
+                    <button class="button mb-2" th:onclick="'openPopupAdoptEgg(' + ${egg.getId()} + ')'">Adoptuj
+                    </button>
                 </div>
-                <button type="button" class="button mb-2" th:onclick="'openPopupSellEgg(' + ${egg.getId()} + ')'">Sprzedaj</button>
+                <button type="button" class="button mb-2" th:onclick="'openPopupSellEgg(' + ${egg.getId()} + ')'">
+                    Sprzedaj
+                </button>
             </div>
 
             <!-- end of egg -->
@@ -65,6 +73,13 @@
             <div class="popup-content">
                 <label for="popup-adopt-egg-name"><b>Imię</b></label>
                 <input class="input" type="text" id="popup-adopt-egg-name" name="Name" required>
+                <div style="margin-top: 2px">
+                    <strong>Płeć</strong>
+                    <input type="radio" id="boy" name="Gender" value="0" required>
+                    <label for="boy"><i class="fa-solid fa-mars" style="color: #1807e7;"></i></label>
+                    <input type="radio" id="girl" name="Gender" value="1" required>
+                    <label for="girl"><i class="fa-solid fa-venus" style="color: #f530f5;"></i></label>
+                </div>
             </div>
             <div class="popup-buttons">
                 <button type="submit" class="button">Adoptuj</button>
