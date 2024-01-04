@@ -46,7 +46,7 @@
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="/assets/images/others/scroll.png" width="20" height="20" alt="item">
+                            <img th:src="@{${'/assets/images/items/' + attachment.getItem().getId() + '.png'}}" width="20" height="20" alt="item">
                             <span th:text="${attachment.getItem().getName()}"></span>: <span th:text="${attachment.getQuantity()}"></span>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="display: flex-row" th:each="attachment : ${message.getAttachment()}">
                         <div>
-                            <img src="/assets/images/others/scroll.png" width="20" height="20" alt="item">
+                            <img th:src="@{${'/assets/images/items/' + attachment.getItem().getId() + '.png'}}" width="20" height="20" alt="item">
                             <span th:text="${attachment.getItem().getName()}"></span>:
                             <span th:text="${attachment.getQuantity()}"></span>
                         </div>

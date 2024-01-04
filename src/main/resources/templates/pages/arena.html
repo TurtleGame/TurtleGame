@@ -32,10 +32,10 @@
                 <div style="display: grid;justify-content: center;align-content: center;">
                     <div style="text-align: center;margin: 15px;"><i class="fa fa-swords fa-3x"></i></div>
                     <input type="hidden" name="ourTurtleId" th:value="${pair.getKey().getId()}"/>
-                    <input type="hidden" name="opponentTurtleId" th:value="${pair.getValue().getId()}"/>
-                    <input class="button" type="submit" value="Walcz"/>
+                    <input type="hidden" th:if="${pair.value != null}" name="opponentTurtleId" th:value="${pair.getValue().getId()}"/>
+                    <input class="button" th:if="${pair.value != null}" type="submit" value="Walcz"/>
                 </div>
-                <div style="display: grid;justify-content: center;align-content: center;">
+                <div style="display: grid;justify-content: center;align-content: center;" th:if="${pair.value != null}">
                     <img th:src="@{${'/assets/images/turtles/' + pair.getValue().getTurtleType().getId() + '.png'}}" style="width: 155px; border-radius: 0.25rem;"/>
                     <h2 class="text-center m-0 mb-4 text-danger" th:text="${pair.getValue().getName()}"></h2>
 
@@ -59,6 +59,7 @@
                         </tr>
                     </table>
                 </div>
+                <div th:if="${pair.value == null}" style="display: grid;justify-content: center; align-content: center">Brak przeciwnika, spróbuj ponownie później.</div>
             </div>
         </form>
     </div>

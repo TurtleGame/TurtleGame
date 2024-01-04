@@ -126,7 +126,7 @@ grid-template-columns: repeat(2, 1fr);">
                         <ul>
                             <li style=" list-style: none;"
                                 th:each="food : ${foods}">
-                                <img th:src="@{${'/assets/images/items/' + food.getId() + '.png'}}" alt="item"/>
+                                <img th:src="@{${'/assets/images/items/' + food.getId() + '.png'}}"  style="height: 50px" alt="item"/>
                                 <span th:text="${food.getName()}"></span> wzmacnia umiejętność: <span
                                     th:text="${food.getItemStatistic(food.getId()).getStatistic().getName()}"></span>
                             </li>
