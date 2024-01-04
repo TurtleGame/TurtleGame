@@ -87,10 +87,10 @@ public class TurtleService {
         User user = userRepository.findById(userId);
         Turtle turtle = user.getTurtle(turtleId);
 
-        for (UserItem item: user.getUserItemList()) {
-            if (item.getTurtle() != null)
-                throw new IllegalArgumentException("Zółw nosi zbroję.");
+        if (turtle.getWand() != null || turtle.getSword() != null || turtle.getBoots() != null || turtle.getHelmet() != null) {
+            throw new IllegalArgumentException("Żółw nosi zbroję.");
         }
+
 
         for (TurtleOwnerHistory selling : turtle.getTurtleOwnerHistoryList()) {
             if (selling.getEndAt() == null) {
