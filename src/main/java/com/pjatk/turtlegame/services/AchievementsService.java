@@ -12,32 +12,36 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class AchievementsService {
-    PrivateMessageRepository privateMessageRepository;
-    AchievementsEarnedRepoistory achievementsEarnedRepoistory;
-    TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
-    AchievementsRepoistory achievementsRepoistory;
-    UserService userService;
+   private final PrivateMessageRepository privateMessageRepository;
+   private final AchievementsEarnedRepoistory achievementsEarnedRepoistory;
+   private final TurtleOwnerHistoryRepository turtleOwnerHistoryRepository;
+   private final AchievementsRepoistory achievementsRepoistory;
+   private final UserService userService;
 
     @Transactional
-    public void checkAchievements(User user) {
-        beginnings(user);
-        bigFamily(user);
-        unique(user);
-        legend(user);
-        elementals(user);
-        proudBreeder(user);
-        theyGrowUpSoFast(user);
-        foodie(user);
-        fashionista(user);
-        ohMy(user);
-        moveOn(user);
-        adventureTime(user);
-        adventurer(user);
-        victory(user);
-        fighters(user);
-        champion(user);
-        friend(user);
-        billionaire(user);
+    public void checkAchievements(User user) throws Exception {
+        try{
+            beginnings(user);
+            bigFamily(user);
+            unique(user);
+            legend(user);
+            elementals(user);
+            proudBreeder(user);
+            theyGrowUpSoFast(user);
+            foodie(user);
+            fashionista(user);
+            ohMy(user);
+            moveOn(user);
+            adventureTime(user);
+            adventurer(user);
+            victory(user);
+            fighters(user);
+            champion(user);
+            friend(user);
+            billionaire(user);
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
     public boolean isNotEarned(User user, Achievement achievement) {
@@ -46,10 +50,10 @@ public class AchievementsService {
         return earned.isEmpty();
     }
 
+    @Transactional
     public void addAchievement(User user, Achievement achievement) {
         AchievementsEarned earn = new AchievementsEarned();
         PrivateMessage privateMessage = new PrivateMessage();
-
         earn.setAchievedAt(LocalDateTime.now());
         earn.setAchievement(achievement);
         earn.setUser(user);
@@ -64,6 +68,7 @@ public class AchievementsService {
     }
 
     //wyhoduj 1 żółwia (Początki)
+    @Transactional
     public void beginnings(User user) {
         Achievement achievement = achievementsRepoistory.findById(1);
         if (isNotEarned(user, achievement)) {
@@ -79,6 +84,7 @@ public class AchievementsService {
     }
 
     //wyhoduj 20 żółwi (Duża rodzina)
+    @Transactional
     public void bigFamily(User user) {
         Achievement achievement = achievementsRepoistory.findById(2);
         if (isNotEarned(user, achievement)) {
@@ -98,6 +104,7 @@ public class AchievementsService {
     }
 
     //zdobądź unikalnego żółwia (Unikalny)
+    @Transactional
     public void unique(User user) {
         Achievement achievement = achievementsRepoistory.findById(3);
         if (isNotEarned(user, achievement)) {
@@ -113,6 +120,7 @@ public class AchievementsService {
     }
 
     //wyhoduj Ducha (Legenda)
+    @Transactional
     public void legend(User user) {
         Achievement achievement = achievementsRepoistory.findById(4);
         if (isNotEarned(user, achievement)) {
@@ -128,6 +136,7 @@ public class AchievementsService {
     }
 
     //zdobądź żółwia z każdej kategorii (Elementals)
+    @Transactional
     public void elementals(User user) {
         Achievement achievement = achievementsRepoistory.findById(5);
         if (isNotEarned(user, achievement)) {
@@ -145,7 +154,8 @@ public class AchievementsService {
     }
 
     //żółw osiąga 5 poziom (Dumny hodowca)
-    public void proudBreeder (User user) {
+    @Transactional
+    public void proudBreeder(User user) {
         Achievement achievement = achievementsRepoistory.findById(6);
         if (isNotEarned(user, achievement)) {
             List<Turtle> turtles = user.getTurtles().stream().toList();
@@ -162,6 +172,7 @@ public class AchievementsService {
     }
 
     //żółw osiąga 20 poziom (Tak szybko dorastają)
+    @Transactional
     public void theyGrowUpSoFast(User user) {
         Achievement achievement = achievementsRepoistory.findById(7);
         if (isNotEarned(user, achievement)) {
@@ -179,6 +190,7 @@ public class AchievementsService {
     }
 
     //nakarm żółwia 20 razy (Foodie)
+    @Transactional
     public void foodie(User user) {
         Achievement achievement = achievementsRepoistory.findById(8);
         if (isNotEarned(user, achievement)) {
@@ -194,28 +206,25 @@ public class AchievementsService {
     }
 
     //wyposaż żółwia każdym elementem ubioru (Fashionista)
+    @Transactional
     public void fashionista(User user) {
         Achievement achievement = achievementsRepoistory.findById(9);
         if (isNotEarned(user, achievement)) {
             List<Turtle> turtles = user.getTurtles().stream().toList();
-            List<UserItem> userItems = user.getUserItemList().stream().toList();
-            List<Item> items = new ArrayList<>();
 
             for (Turtle turtle : turtles) {
-                for (UserItem item : userItems) {
-                    if (item.getTurtle() == turtle) {
-                        items.add(item.getItem());
-                    }
-                }
-                if (items.size() == 4) {
+                if (turtle.getHelmet() != null && turtle.getWand() != null && turtle.getSword() != null && turtle.getBoots() != null) {
                     addAchievement(user, achievement);
                     break;
                 }
+
             }
         }
     }
 
+
     //wyposaż żółwia w rzadkie lub legendarne przedmioty (O wow)
+    @Transactional
     public void ohMy(User user) {
         Achievement achievement = achievementsRepoistory.findById(10);
         if (isNotEarned(user, achievement)) {
@@ -231,6 +240,7 @@ public class AchievementsService {
                         items.add(item.getItem());
                     }
                 }
+                //  System.out.println(is);
                 if (items.size() == 4) {
                     for (Item item : items) {
                         if (item.getRarity().getId() >= 2) {
@@ -247,6 +257,7 @@ public class AchievementsService {
     }
 
     //sprzedaj żółwia na rynku (Pogódź się z tym)
+    @Transactional
     public void moveOn(User user) {
         Achievement achievement = achievementsRepoistory.findById(11);
         if (isNotEarned(user, achievement)) {
@@ -260,6 +271,7 @@ public class AchievementsService {
     }
 
     //wyrusz na wyprawę (Pora na przygodę)
+    @Transactional
     public void adventureTime(User user) {
         Achievement achievement = achievementsRepoistory.findById(12);
         if (isNotEarned(user, achievement)) {
@@ -275,6 +287,7 @@ public class AchievementsService {
     }
 
     //wyrusz na 100 wypraw (Poszukiwacz przygód)
+    @Transactional
     public void adventurer(User user) {
         Achievement achievement = achievementsRepoistory.findById(13);
         if (isNotEarned(user, achievement)) {
@@ -283,8 +296,8 @@ public class AchievementsService {
 
             for (Turtle turtle : turtles) {
                 for (TurtleExpeditionHistory ignored : turtle.getTurtleExpeditionHistoryList()) {
-                        expeditions += 1;
-                    }
+                    expeditions += 1;
+                }
             }
 
             if (expeditions >= 100) {
@@ -294,13 +307,14 @@ public class AchievementsService {
     }
 
     //pokonaj 1 żółwia na arenie (Zwycięstwo)
+    @Transactional
     public void victory(User user) {
         Achievement achievement = achievementsRepoistory.findById(14);
         if (isNotEarned(user, achievement)) {
             List<Turtle> turtles = user.getTurtles().stream().toList();
 
             for (Turtle turtle : turtles) {
-                for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
+                for (TurtleBattleHistory history : turtle.getWonBattles()) {
                     if (history.getLoserTurtle() != null) {
                         addAchievement(user, achievement);
                         break;
@@ -311,6 +325,7 @@ public class AchievementsService {
     }
 
     //pokonaj 20 żółwi na arenie (Wojownik)
+    @Transactional
     public void fighters(User user) {
         Achievement achievement = achievementsRepoistory.findById(15);
         if (isNotEarned(user, achievement)) {
@@ -332,6 +347,7 @@ public class AchievementsService {
     }
 
     //pokonaj Ducha (Champion)
+    @Transactional
     public void champion(User user) {
         Achievement achievement = achievementsRepoistory.findById(16);
         if (isNotEarned(user, achievement)) {
@@ -339,7 +355,7 @@ public class AchievementsService {
 
             for (Turtle turtle : turtles) {
                 for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
-                    if (history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
+                    if (history.getLoserGuard() != null && history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
                         addAchievement(user, achievement);
                         break;
                     }
@@ -349,6 +365,7 @@ public class AchievementsService {
     }
 
     //miej 5 znajomych (Przyjaciele)
+    @Transactional
     public void friend(User user) {
         Achievement achievement = achievementsRepoistory.findById(17);
         if (isNotEarned(user, achievement)) {
@@ -359,6 +376,7 @@ public class AchievementsService {
     }
 
     //Zarób 1000 muszelek (Miliarder)
+    @Transactional
     public void billionaire(User user) {
         Achievement achievement = achievementsRepoistory.findById(18);
         if (isNotEarned(user, achievement)) {
@@ -374,7 +392,7 @@ public class AchievementsService {
                 }
             }
 
-            for (TurtleOwnerHistory turtle: sold) {
+            for (TurtleOwnerHistory turtle : sold) {
                 shells = shells + turtle.getHowMuch();
             }
 
