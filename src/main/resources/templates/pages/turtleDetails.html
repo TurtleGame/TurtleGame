@@ -16,9 +16,8 @@ grid-template-columns: repeat(2, 1fr);">
             </div>
             <div style="text-align: center">
                 <h3 class="mb-1"><span th:text="${turtle.getName()}"></span>
-                    <i th:class="${turtle.getGender() == 1} ? 'fa-solid fa-venus' : 'fa-solid fa-mars'" th:style="'color: ' + (${turtle.getGender() == 1} ? '#f530f5' : '#1807e7')"></i>
-
-
+                    <i th:class="${turtle.getGender() == 1} ? 'fa-solid fa-venus' : 'fa-solid fa-mars'"
+                       th:style="'color: ' + (${turtle.getGender() == 1} ? '#f530f5' : '#1807e7')"></i>
 
 
                 </h3>
@@ -178,5 +177,19 @@ gap: 1rem;">
             </div>
 
         </div>
+    </div>
+</div>
+<div layout:fragment="popups">
+    <div id="popup-sell-turtle" class="popup-backdrop" style="display: none;">
+        <form class="popup" action="" method="post">
+            <h3>Ustal cenę</h3>
+            <div class="popup-content">
+                <label for="sell-egg-popup-shells"><b>Ilość muszelek:</b></label>
+                <input class="input" type="number" min="1" id="sell-egg-popup-shells" name="shells" required="">
+            </div>
+            <div class="popup-buttons">
+                <button type="submit" class="button">Sprzedaj</button>
+            </div>
+        </form>
     </div>
 </div>

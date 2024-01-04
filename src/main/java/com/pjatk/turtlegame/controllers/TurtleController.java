@@ -49,7 +49,7 @@ public class TurtleController {
     public String sellTurtle(@ModelAttribute("sellTurtle") SellTurtle sellTurtle,
                              @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                              @PathVariable int id,
-                             @RequestParam("Gold") int shells,
+                             @RequestParam("shells") int shells,
                              Model model,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) throws Exception {
 
