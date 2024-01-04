@@ -127,7 +127,7 @@ public class ItemService {
         selling(gold, quantity, user, selling, userItem);
     }
 
-    public void adoptEgg(User user, int eggId, String name) throws Exception {
+    public void adoptEgg(User user, int eggId, String name, int gender) throws Exception {
 
         if (name.length() < 2 || name.length() > 50) {
             throw new Exception("Nieprawidłowe imię");
@@ -151,6 +151,7 @@ public class ItemService {
         egg.setWarming(2);
         egg.setTurtleType(turtleType);
         egg.setUser(user);
+        egg.setGender(gender);
         turtleEggRepository.save(egg);
 
         removeItem(user, userItem.getItem().getId(), 1);
