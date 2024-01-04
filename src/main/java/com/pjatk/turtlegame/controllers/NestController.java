@@ -73,11 +73,12 @@ public class NestController {
                            @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                            @PathVariable int id,
                            @RequestParam("Name") String name,
+                           @RequestParam("Gender") int gender,
                            Model model){
         User user = userRepository.findById(turtleUserDetails.getId());
 
         try {
-            itemService.adoptEgg(user, id, name);
+            itemService.adoptEgg(user, id, name, gender);
         } catch (Exception e) {
             model.addAttribute("eggs", itemService.getEggs(turtleUserDetails.getId()));
             model.addAttribute("failedMessage", e.getMessage());

@@ -35,4 +35,6 @@ public class TurtleEgg {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private int gender;
 }
