@@ -24,6 +24,7 @@ public class PrivateMessage {
     private String title;
 
     @NotNull
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @NotNull
