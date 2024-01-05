@@ -46,25 +46,32 @@ public class ItemService {
 
     }
 
+    @Transactional
     public void removeItem(User user, int itemId, int quantity) {
         UserItem userItem = user.getUserItemList()
                 .stream()
                 .filter(entry -> entry.getItem().getId() == itemId && entry.getTurtle() == null)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć przedmiotu użytkownika o podanym ID"));
-
+        if (!entityManager.contains(userItem)) {
+            userItem = entityManager.merge(userItem);
+        }
+        entityManager.refresh(userItem);
         if (userItem.getQuantity() > quantity) {
 
             userItem.setQuantity(userItem.getQuantity() - quantity);
             userItemRepository.save(userItem);
-
+            entityManager.refresh(userItem);
         } else if (userItem.getQuantity() == quantity) {
             userItemRepository.delete(userItem);
+            entityManager.refresh(userItem);
         } else {
             throw new IllegalArgumentException("Brak wystarczającej ilości");
         }
+
     }
 
+    @Transactional
     public void addItem(User user, Item item, int quantity) {
 
         List<UserItem> userItemList = user.getUserItemList();
@@ -82,8 +89,12 @@ public class ItemService {
         } else {
             userItem.setQuantity(userItem.getQuantity() + quantity);
         }
-
+        if (!entityManager.contains(userItem)) {
+            userItem = entityManager.merge(userItem);
+        }
+        entityManager.refresh(userItem);
         userItemRepository.save(userItem);
+        entityManager.refresh(userItem);
     }
 
     public void sellItem(int userId, int itemId, int gold, int quantity) {
@@ -133,8 +144,8 @@ public class ItemService {
             throw new Exception("Nieprawidłowe imię");
         }
 
-        if(!user.canHaveMoreTurtles()){
-            throw  new Exception("Nie możesz adoptować więcej żółwi!");
+        if (!user.canHaveMoreTurtles()) {
+            throw new Exception("Nie możesz adoptować więcej żółwi!");
         }
         UserItem userItem = user.getUserItemList()
                 .stream()
@@ -199,7 +210,7 @@ public class ItemService {
                 .filter(item -> item.getItem().getItemType().getName().equals("Zbroja") && item.getItem().getSlot().equals("Buty"))
                 .collect(Collectors.toList());
 
-        if(turtle.getBoots() != null){
+        if (turtle.getBoots() != null) {
             return userItems
                     .stream()
                     .filter(item -> item.getItem().getId() != turtle.getBoots().getItem().getId())
@@ -215,7 +226,7 @@ public class ItemService {
                 .filter(item -> item.getItem().getItemType().getName().equals("Zbroja") && item.getItem().getSlot().equals("Miecz"))
                 .collect(Collectors.toList());
 
-        if(turtle.getSword() !=null){
+        if (turtle.getSword() != null) {
             return userItems
                     .stream()
                     .filter(item -> item.getItem().getId() != turtle.getSword().getItem().getId())
@@ -231,7 +242,7 @@ public class ItemService {
                 .filter(item -> item.getItem().getItemType().getName().equals("Zbroja") && item.getItem().getSlot().equals("Różdżka"))
                 .collect(Collectors.toList());
 
-        if(turtle.getWand() !=null){
+        if (turtle.getWand() != null) {
             return userItems
                     .stream()
                     .filter(item -> item.getItem().getId() != turtle.getWand().getItem().getId())
