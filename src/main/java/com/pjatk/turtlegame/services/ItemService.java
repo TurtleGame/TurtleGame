@@ -53,18 +53,13 @@ public class ItemService {
                 .filter(entry -> entry.getItem().getId() == itemId && entry.getTurtle() == null)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Nie można znaleźć przedmiotu użytkownika o podanym ID"));
-        if (!entityManager.contains(userItem)) {
-            userItem = entityManager.merge(userItem);
-        }
-        entityManager.refresh(userItem);
+
         if (userItem.getQuantity() > quantity) {
 
             userItem.setQuantity(userItem.getQuantity() - quantity);
-            userItemRepository.save(userItem);
-            entityManager.refresh(userItem);
+
         } else if (userItem.getQuantity() == quantity) {
             userItemRepository.delete(userItem);
-            entityManager.refresh(userItem);
         } else {
             throw new IllegalArgumentException("Brak wystarczającej ilości");
         }
