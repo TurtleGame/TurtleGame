@@ -43,7 +43,7 @@ public class MyInterceptor implements HandlerInterceptor {
         }
     }
 
-    @Scheduled(fixedRate = 2 * 60 * 1000)
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
     @Transactional
     public void resetWarming() {
         List<TurtleEgg> eggs = turtleEggRepository.findAll();
