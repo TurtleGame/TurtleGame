@@ -345,7 +345,7 @@ main {
 main h1 {
   text-align: center;
   color: var(--text-bright);
-  text-shadow: 1px 1px 5px #000000;
+  text-shadow: 1px 1px 5px #151e2a, 0 0 10px #1c438c;
   margin: 2.5rem 0;
 }
 main .content {

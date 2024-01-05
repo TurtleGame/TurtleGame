@@ -25,6 +25,10 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    public SecretKeyGenerator secretKeyGenerator(){
+        return new SecretKeyGenerator();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -63,6 +67,7 @@ public class WebSecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/main", true)
                         .permitAll())
+                .rememberMe(remember -> remember.key(secretKeyGenerator().generateSecretKey()))
                 .httpBasic(withDefaults())
                 .build();
     }
