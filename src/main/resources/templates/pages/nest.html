@@ -22,7 +22,7 @@
                 <h5>Żółw wykluje się: <span class="text-primary"
                                             th:text="${#temporals.format(egg.getHatchingAt(), 'dd.MM.yyyy HH:mm')}"></span>
                 </h5>
-                <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany. Wróć jutro!</div>
+                <div th:if="${egg.getWarming() == 0}">Żółw jest ogrzany. Wróć później!</div>
                 <div th:if="${egg.getWarming() != 0}">
                     <form th:action="@{'/nest/' + ${egg.getId()} + '/warm'}" method="post">
                         <button type="submit" class="button mb-2">Ogrzej</button>
