@@ -60,7 +60,7 @@
             <div class="card p-3 m-1" th:each="achievement : ${userInformation.getAchievementsEarnedList()}">
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-center flex-middle">
-                        <img th:src="@{${'/assets/images/achievements/' + achievement.getId() + '.png'}}"
+                        <img th:src="@{${'/assets/images/achievements/' + achievement.getAchievement().getId() + '.png'}}"
                              style="width: 36px;"/>
                     </div>
                     <div>
