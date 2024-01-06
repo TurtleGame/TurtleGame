@@ -29,7 +29,7 @@ public class BattleParticipantDTO {
     public BattleParticipantDTO(Turtle turtle) {
         this.name = turtle.getName();
         this.hp = turtle.getHPtoFight();
-        this.currentHp = turtle.getHP();
+        this.currentHp = turtle.getHPtoFight();
         this.strength = turtle.getStrength();
         this.agility = turtle.getAgility();
         this.mp = turtle.getMP();
