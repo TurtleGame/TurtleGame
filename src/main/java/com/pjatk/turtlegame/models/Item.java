@@ -71,4 +71,8 @@ public class Item {
         return this.getItemType().getName().equals("Zbroja");
     }
 
+    public boolean isEgg() {
+        return this.getItemType().getName().equals("Jajko");
+    }
+
 }
