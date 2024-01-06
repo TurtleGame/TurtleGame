@@ -51,8 +51,10 @@
                 </div>
                 <div>
                     <h2 style="margin-top: 0;" th:text="${expedition.getName()}"></h2>
+                    <div>Minimalny poziom żółwia: <span class="text-primary" th:text="${expedition.getMinLevel()}"></span></div>
                     <div th:text="${expedition.getDescription()}"></div>
                 </div>
+
             </div>
             <div class="flex flex-row gap-4">
                 <div class="flex flex-row gap-4 size-wide">

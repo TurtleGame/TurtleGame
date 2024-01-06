@@ -2,6 +2,8 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.parameters.P;
@@ -22,11 +24,12 @@ public class PrivateMessageService {
     TurtleTrainingHistoryRepository turtleTrainingHistory;
     PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
     PrivateMessageRepository privateMessageRepository;
+    EntityManager entityManager;
 
-    @Transactional
-    public void sendExpeditionReport(Turtle turtle) {
+    @org.springframework.transaction.annotation.Transactional
+    public void sendExpeditionReport(TurtleExpeditionHistory expeditionHistory) {
+        Turtle turtle = expeditionHistory.getTurtle();
         User user = turtle.getOwner();
-        TurtleExpeditionHistory expeditionHistory = turtleExpeditionHistory.findTopByTurtleIdOrderByEndAtDesc(turtle.getId());
 
         PrivateMessage report = new PrivateMessage();
         report.setTurtle(turtle);
@@ -40,8 +43,8 @@ public class PrivateMessageService {
         report.setContent("Twój żółw " + turtle.getName() + " wrócił z wyprawy. \n Zobacz co przyniósł!");
 
         privateMessageRepository.save(report);
-
-        for (PrivateMessageAttachment attachment : expeditionHistory.getPrivateMessageAttachments()) {
+        List<PrivateMessageAttachment> privateMessageAttachmentList = privateMessageAttachmentRepository.findAllByTurtleExpeditionHistoryId(expeditionHistory.getId());
+        for (PrivateMessageAttachment attachment : privateMessageAttachmentList) {
             attachment.setPrivateMessage(report);
             privateMessageAttachmentRepository.save(attachment);
             itemService.addItem(user, attachment.getItem(), attachment.getQuantity());
@@ -71,14 +74,14 @@ public class PrivateMessageService {
     }
 
     @Transactional
-    public void sendWelcomeMessage(User user){
+    public void sendWelcomeMessage(User user) {
         PrivateMessage welcomeMessage = new PrivateMessage();
         welcomeMessage.setRead(false);
         welcomeMessage.setRecipient(user);
         welcomeMessage.setSender(null);
         welcomeMessage.setSentAt(LocalDateTime.now());
         welcomeMessage.setTitle("Witaj w TurtleBlast!");
-        welcomeMessage.setContent("Witaj w TurtleBlast! \n W zakładce Legowisko czeka na Ciebie niespodzianka. \n Powodzenia w grze, Administracja TurtleBlast" );
+        welcomeMessage.setContent("Witaj w TurtleBlast! \n W zakładce Legowisko czeka na Ciebie niespodzianka. \n Powodzenia w grze, Administracja TurtleBlast");
         privateMessageRepository.save(welcomeMessage);
     }
 
@@ -106,12 +109,12 @@ public class PrivateMessageService {
         });
     }
 
-    public void markAllMessagesAsRead(User user){
+    public void markAllMessagesAsRead(User user) {
         List<PrivateMessage> messageList = user
                 .getRecipientPrivateMessageList()
                 .stream().toList();
 
-        for(PrivateMessage message : messageList){
+        for (PrivateMessage message : messageList) {
             message.setRead(true);
             privateMessageRepository.save(message);
         }
@@ -124,10 +127,10 @@ public class PrivateMessageService {
             gold = 0;
         }
 
-        if(shells == null){
+        if (shells == null) {
             shells = 0;
         }
-        if(user.getUsername().equals(username)){
+        if (user.getUsername().equals(username)) {
             throw new IllegalArgumentException("Nie możesz wysłać wiadomości do siebie!");
         }
         if (user.getGold() < gold) {
@@ -136,10 +139,10 @@ public class PrivateMessageService {
         if (user.getShells() < shells) {
             throw new IllegalArgumentException("Posiadasz za mało muszelek!");
         }
-        if(gold < 0){
+        if (gold < 0) {
             throw new IllegalArgumentException("Błędna wartość!");
         }
-        if(shells < 0){
+        if (shells < 0) {
             throw new IllegalArgumentException("Błędna wartość!");
         }
         user.setGold(user.getGold() - gold);

@@ -66,10 +66,8 @@ public class ItemService {
 
     }
 
-    @Transactional
     public void addItem(User user, Item item, int quantity) {
-
-        List<UserItem> userItemList = user.getUserItemList();
+        List<UserItem> userItemList = userItemRepository.findAllByUserId(user.getId());
 
         UserItem userItem = userItemList
                 .stream()
@@ -84,12 +82,9 @@ public class ItemService {
         } else {
             userItem.setQuantity(userItem.getQuantity() + quantity);
         }
-        if (!entityManager.contains(userItem)) {
-            userItem = entityManager.merge(userItem);
-        }
-        entityManager.refresh(userItem);
+
         userItemRepository.save(userItem);
-        entityManager.refresh(userItem);
+
     }
 
     public void sellItem(int userId, int itemId, int gold, int quantity) {
@@ -247,6 +242,7 @@ public class ItemService {
         return userItems;
     }
 
+    @Transactional
     public void unequippedItem(User user, Turtle turtle) {
         List<UserItem> itemList = user.getUserItemList();
 

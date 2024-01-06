@@ -127,7 +127,7 @@ public class ExpeditionService {
                 userRepository.save(user);
                 history.setWasRewarded(true);
                 turtleExpeditionHistoryRepository.save(history);
-                privateMessageService.sendExpeditionReport(history.getTurtle());
+                privateMessageService.sendExpeditionReport(history);
             }
         }
     }
