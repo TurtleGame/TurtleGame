@@ -70,11 +70,29 @@ public class ExpeditionService {
         List<PrivateMessageAttachment> privateMessageAttachments = new ArrayList<>();
         Random random = new Random();
 
+        boolean eggFound = false;
+        boolean equipmentFound = false;
+
         for (int i = 30; i <= durationTime; i += 30) {
             for (ExpeditionItem expeditionItem : expedition.getExpeditionItemList()) {
                 int randomNumber = random.nextInt(100) + 1;
 
                 if (randomNumber <= expeditionItem.getChance()) {
+                    if (expeditionItem.getItem().isEgg()) {
+                        if (eggFound) {
+                            continue;
+                        }
+                        eggFound = true;
+                    }
+
+                    if (expeditionItem.getItem().isEquipment()) {
+                        if (equipmentFound) {
+                            continue;
+                        }
+                        equipmentFound = true;
+                    }
+
+
                     int randomQuantity = random.nextInt(expeditionItem.getMaxQuantity() - expeditionItem.getMinQuantity() + 1) + expeditionItem.getMinQuantity();
                     boolean rewardFound = false;
 
