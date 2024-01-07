@@ -29,7 +29,8 @@
                 <div th:text="${turtle.getCurrentExpedition().getExpedition().getName()}"></div>
             </div>
             <div class="flex flex-column flex-center flex-middle text-center" style="width: 120px;">
-                <div class="text-primary" th:id="'countdown-' + ${turtle.getId()}" th:data-target-date="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'yyyy-MM-dd HH:mm:ss')}"></div>
+                <div class="text-primary" th:id="'countdown-' + ${turtle.getId()}"
+                     th:data-target-date="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'yyyy-MM-dd HH:mm:ss')}"></div>
                 <div class="text-sm">
                     Powrót o <span
                         th:text="${#temporals.format(turtle.getCurrentExpedition().getEndAt(), 'HH:mm')}"></span>
@@ -43,7 +44,7 @@
 
     <!-- wyprawa -->
     <form action="" method="post" th:each="expedition : ${expeditions}">
-        <div class="card mb-2">
+        <div class="card mb-2 expedition-card">
             <div class="flex flex-row mb-4 gap-4">
                 <div class="flex">
                     <img th:src="@{${'/assets/images/expedition/' + expedition.id + '.png'}}"
@@ -51,29 +52,46 @@
                 </div>
                 <div>
                     <h2 style="margin-top: 0;" th:text="${expedition.getName()}"></h2>
-                    <div>Minimalny poziom żółwia: <span class="text-primary" th:text="${expedition.getMinLevel()}"></span></div>
-                    <div th:text="${expedition.getDescription()}"></div>
+
+                    <div class="mb-3" th:text="${expedition.getDescription()}"></div>
+
+                    <div>Minimalny poziom żółwia: <span class="text-primary"
+                                                        th:text="${expedition.getMinLevel()}"></span></div>
+                    <button type="button" class="but" th:onclick="'openPopupMoreInfo(this)'">
+                        <span class="text-primary">Pokaż możliwe zdobycze</span>
+                    </button>
+
+                    <div class="expedition-items" style="display: none;">
+                        <table>
+                            <tr th:each="item : ${expedition.getExpeditionItemList()}">
+                                <td>
+                                    <img th:src="@{${'/assets/images/items/' + item.getItem().getId() + '.png'}}" style="height: 50px; border-radius: 0.25rem;"/>
+                                </td>
+                                <td th:text="${item.getItem().getName()}"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
 
             </div>
             <div class="flex flex-row gap-4">
                 <div class="flex flex-row gap-4 size-wide">
-                        <select class="select" name="turtle">
-                            <option disabled selected>Wybierz żółwia</option>
-                            <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
-                                    th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
-                        </select>
+                    <select class="select" name="turtle">
+                        <option disabled selected>Wybierz żółwia</option>
+                        <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
+                                th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
+                    </select>
                 </div>
                 <div class="flex flex-row gap-4" style="width: 220px;">
-                        <select class="select" name="durationTime">
-                            <option value="30">30 minut</option>
-                            <option value="60">1 godz.</option>
-                            <option value="120">2 godz.</option>
-                            <option value="180">3 godz.</option>
-                            <option value="240">4 godz.</option>
-                            <option value="300">5 godz.</option>
-                            <option value="360">6 godz.</option>
-                        </select>
+                    <select class="select" name="durationTime">
+                        <option value="30">30 minut</option>
+                        <option value="60">1 godz.</option>
+                        <option value="120">2 godz.</option>
+                        <option value="180">3 godz.</option>
+                        <option value="240">4 godz.</option>
+                        <option value="300">5 godz.</option>
+                        <option value="360">6 godz.</option>
+                    </select>
                 </div>
                 <div class="flex flex-row" style="width: 220px;">
                     <input type="hidden" name="expedition" th:value="${expedition.id}"/>
@@ -83,4 +101,14 @@
         </div>
 
     </form>
+</div>
+
+<div layout:fragment="popups">
+
+    <div id="popup-more-info" class="popup-backdrop" style="display: none;">
+        <div class="popup">
+            <h3>Lista dostępnych zdobyczy</h3>
+            <div class="popup-content"></div>
+        </div>
+    </div>
 </div>

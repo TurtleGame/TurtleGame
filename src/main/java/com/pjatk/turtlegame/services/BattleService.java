@@ -119,7 +119,7 @@ public class BattleService {
             int randomGold = random.nextInt(201) + 100;
             int randomRankingPoints = random.nextInt(11)+20;
             ourTurtle.setRankingPoints(ourTurtle.getRankingPoints() + randomRankingPoints);
-            opponent.setRankingPoints(opponent.getRankingPoints() - randomRankingPoints);
+            opponent.setRankingPoints(Math.max(opponent.getRankingPoints() - randomRankingPoints, 0));
             user.setGold(user.getGold() + randomGold);
             userRepository.save(user);
             result.setGold(randomGold);

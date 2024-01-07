@@ -414,3 +414,13 @@ function openPopupAdoptEgg(id) {
     $popup.find('form').attr('action', route);
     $popup.fadeIn();
 }
+
+function openPopupMoreInfo(trigger){
+    const $popup = $('#popup-more-info');
+    const $items = $(trigger).closest('.expedition-card').find('.expedition-items').clone();
+    const $content = $('.popup-content', $popup);
+    $content.html('');
+    $items.appendTo($content);
+    $items.show();
+    $popup.fadeIn();
+}
