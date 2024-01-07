@@ -26,8 +26,9 @@
                     <div class="card p-3 m-1">
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-center flex-middle">
-                                <img th:src="@{'https://turtleblastavatars.s3.eu-central-1.amazonaws.com/avatars/' + ${friendRequest.getSender().getId()} + '.png'}" style="width: 50px"
-                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';" alt="avatar"/>
+                                <img th:src="@{'/avatars/' + ${user.id} + '.png'}" style="width: 50px"
+                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
+                                     alt="avatar"/>
                             </div>
                             <div class="size-wide">
                                 <a th:href="@{/user/{id}(id=${friendRequest.getSender().getId()})}">
@@ -59,36 +60,38 @@
         </div>
     </div>
 
-        <div class="card size-wide mb-2">
-            <h2 class="m-0 mb-4">Lista znajomych</h2>
-            <div th:each="friend : ${friends}" class="pending-request">
-                <div class="size-wide">
-                    <div class="card p-3 m-1">
-                        <div class="flex flex-row gap-4">
-                            <div class="flex flex-center flex-middle">
-                                <img th:src="@{'https://turtleblastavatars.s3.eu-central-1.amazonaws.com/avatars/' + ${friend.getValue().getId()} + '.png'}" style="width: 50px"
-                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';" alt="avatar"/>
-                            </div>
-                            <div class="size-wide">
-                                <a th:href="@{/user/{id}(id=${friend.getValue().getId()})}">
-                                    <div class="mb-1 username"
-                                         th:text="${friend.getValue().getUsername()}"></div>
-                                </a>
-                                <div class="mb-1" th:text="${friend.getValue().getRole().getName()}"
-                                     th:style="'color: ' + (${friend.getValue().getRole().getColor() ?: ''})"></div>
-                            </div>
-                            <div class="flex flex-right flex-middle">
-                                <a th:href="@{'/private-message?recipient=' + ${friend.getValue().getUsername()}}" class="button" style="margin-top: 10px;"><i class="fa-solid fa-envelope fa-lg" style="margin-right: 10px;"></i></a>
-                                <form th:action="@{'/friends/' + ${friend.getKey()} + '/delete'}" method="POST">
-                                    <button type="submit" class="button">
-                                        <i class="fa-solid fa-x fa-lg" style="color: #e90707;"></i>
-                                    </button>
-                                </form>
-                            </div>
+    <div class="card size-wide mb-2">
+        <h2 class="m-0 mb-4">Lista znajomych</h2>
+        <div th:each="friend : ${friends}" class="pending-request">
+            <div class="size-wide">
+                <div class="card p-3 m-1">
+                    <div class="flex flex-row gap-4">
+                        <div class="flex flex-center flex-middle">
+                            <img th:src="@{'/avatars/' + ${user.id} + '.png'}" style="width: 50px"
+                                 onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';" alt="avatar"/>
+                        </div>
+                        <div class="size-wide">
+                            <a th:href="@{/user/{id}(id=${friend.getValue().getId()})}">
+                                <div class="mb-1 username"
+                                     th:text="${friend.getValue().getUsername()}"></div>
+                            </a>
+                            <div class="mb-1" th:text="${friend.getValue().getRole().getName()}"
+                                 th:style="'color: ' + (${friend.getValue().getRole().getColor() ?: ''})"></div>
+                        </div>
+                        <div class="flex flex-right flex-middle">
+                            <a th:href="@{'/private-message?recipient=' + ${friend.getValue().getUsername()}}"
+                               class="button" style="margin-top: 10px;"><i class="fa-solid fa-envelope fa-lg"
+                                                                           style="margin-right: 10px;"></i></a>
+                            <form th:action="@{'/friends/' + ${friend.getKey()} + '/delete'}" method="POST">
+                                <button type="submit" class="button">
+                                    <i class="fa-solid fa-x fa-lg" style="color: #e90707;"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </div>
 </html>

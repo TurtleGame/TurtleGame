@@ -54,26 +54,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/media/**")
-                .addResourceLocations("file:///" + System.getProperty("user.dir") + "/src/main/resources/media/avatars/")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        // If the requested resource is not found locally, try to load it from S3
-
-                        String s3BucketUrl = "s3://turtleblastavatars/avatars/"; // Replace with your S3 bucket URL
-                        String s3Key = resourcePath.replace("/media/avatars/", ""); // Adjust as per your S3 key structure
-
-                        try {
-                            URL s3Url = new URL(s3BucketUrl + s3Key);
-                            InputStream s3InputStream = s3Url.openStream();
-                            return new InputStreamResource(s3InputStream);
-                        } catch (IOException e) {
-                            // Handle the exception or log it accordingly
-                            return super.getResource(resourcePath, location);
-                        }
-                    }
-                });
+        registry.addResourceHandler("/avatars/**")
+                .addResourceLocations("file:./avatars/");
     }
+
+
 }

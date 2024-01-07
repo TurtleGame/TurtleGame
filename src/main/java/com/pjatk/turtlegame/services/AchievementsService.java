@@ -78,7 +78,7 @@ public class AchievementsService {
                 if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()) != null) {
                     if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
                         addAchievement(user, achievement);
-                        break;
+                        return;
                     }
                 }
             }
@@ -118,7 +118,7 @@ public class AchievementsService {
                 if (turtle.getTurtleType().getRarity() != null) {
                     if (turtle.getTurtleType().getRarity().getId() == 2) { //unikalny/rzadki żółw ma id 2
                         addAchievement(user, achievement);
-                        break;
+                        return;
                     }
                 }
             }
@@ -136,7 +136,7 @@ public class AchievementsService {
                 if (turtle.getTurtleType().getRarity() != null) {
                     if (turtle.getTurtleType().getRarity().getId() == 3) { //Duch jest jedynym legendarnym żółwiem - legendarny żółw ma id 3
                         addAchievement(user, achievement);
-                        break;
+                        return;
                     }
                 }
             }
@@ -175,7 +175,7 @@ public class AchievementsService {
                     if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
                         if (turtle.getLevel() >= 5) {
                             addAchievement(user, achievement);
-                            break;
+                            return;
                         }
                     }
                 }
@@ -195,7 +195,7 @@ public class AchievementsService {
                     if (turtleOwnerHistoryRepository.findByTurtleIdAndEndAtIsNull(turtle.getId()).getFirstOwner() == 1) {
                         if (turtle.getLevel() >= 20) {
                             addAchievement(user, achievement);
-                            break;
+                            return;
                         }
                     }
                 }
@@ -213,7 +213,7 @@ public class AchievementsService {
             for (Turtle turtle : turtles) {
                 if (turtle.getHowMuchFood() >= 20) {
                     addAchievement(user, achievement);
-                    break;
+                    return;
                 }
             }
         }
@@ -229,7 +229,7 @@ public class AchievementsService {
             for (Turtle turtle : turtles) {
                 if (turtle.getHelmet() != null && turtle.getWand() != null && turtle.getSword() != null && turtle.getBoots() != null) {
                     addAchievement(user, achievement);
-                    break;
+                    return;
                 }
 
             }
@@ -263,7 +263,7 @@ public class AchievementsService {
                     }
                     if (is == 4) {
                         addAchievement(user, achievement);
-                        break;
+                        return;
                     }
                 }
             }
@@ -294,7 +294,7 @@ public class AchievementsService {
             for (Turtle turtle : turtles) {
                 if (!turtle.getTurtleExpeditionHistoryList().isEmpty())
                     addAchievement(user, achievement);
-                break;
+                return;
             }
         }
 
@@ -332,7 +332,7 @@ public class AchievementsService {
                     for (TurtleBattleHistory history : turtle.getWonBattles()) {
                         if (history.getLoserTurtle() != null) {
                             addAchievement(user, achievement);
-                            break;
+                            return;
                         }
                     }
                 }
@@ -376,7 +376,7 @@ public class AchievementsService {
                     for (TurtleBattleHistory history : turtle.getWonBattles().toArray(new TurtleBattleHistory[0])) {
                         if (history.getLoserGuard() != null && history.getLoserGuard().getId() == 3) { //Duch jako guardian ma id 3
                             addAchievement(user, achievement);
-                            break;
+                            return;
                         }
                     }
                 }

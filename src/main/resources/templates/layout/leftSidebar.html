@@ -5,8 +5,9 @@
         <div class="user-data">
 
             <a th:href="@{/user/{id}(id=${user.id})}" class="credentials-container">
-                <div class="avatar">
-                    <img th:src="@{'https://turtleblastavatars.s3.eu-central-1.amazonaws.com/avatars/' + ${user.id} + '.png'}" style="width: 100%"
+                <div class="avatar"> <img th:src="@{'/avatars/' + ${user.id} + '.png'}"
+
+                    style="width: 100%"
                          onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"/>
                 </div>
                 <div>
@@ -52,7 +53,10 @@
                 <li><a href="/guards" th:classappend="${context == 'guards' ? 'active' : ''}"><i
                         class="fa fa-shield-halved"></i>Strażnicy</a></li>
                 <li><a href="/friends" th:classappend="${context == 'friends' ? 'active' : ''}"><i
-                        class="fa-solid fa-user-group"></i>Znajomi</a></li>
+                        class="fa-solid fa-user-group"></i>Znajomi
+                    <i  th:if="${!user.getReceivedFriendRequests().isEmpty()}" class="fa-solid fa-exclamation"  style="color: #c80909;"></i>
+                </a>
+                </li>
                 <li th:if="${user.getRole().getName() == 'ADMIN'}"><a href="/admin-panel"
                                                                       th:classappend="${context == 'admin' ? 'active' : ''}">
                     <i class="fa-solid fa-screwdriver-wrench"></i>Panel administracyjny</a></li>

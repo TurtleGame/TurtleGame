@@ -9,8 +9,8 @@
     <!-- profile avatar & description -->
     <div class="flex flex-row gap-4 mb-2">
         <div class="card" style="width: 25%">
-            <img th:src="@{'https://turtleblastavatars.s3.eu-central-1.amazonaws.com/avatars/' + ${userInformation.id} + '.png'}"
-                 onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
+            <img th:src="@{'/avatars/' + ${user.id} + '.png'}"
+            onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
                  class="card size-wide p-0">
             <h2 class="text-primary mb-0" th:text="${userInformation.getUsername()}"></h2>
             <div th:text="${userInformation.getRole().getName()}"

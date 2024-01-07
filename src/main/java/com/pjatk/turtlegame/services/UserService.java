@@ -12,21 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +44,7 @@ public class UserService {
     public void addNewUser(UserDTO userDTO) {
         String token = UUID.randomUUID().toString();
         User user = new User();
-        String link = "turtleblast.eu-central-1.elasticbeanstalk.com/registration/confirm?token=" + token;
+        String link = "turtleblast.pl/registration/confirm?token=" + token;
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail().trim());
         user.setUsername(userDTO.getUsername().trim());
@@ -90,7 +79,7 @@ public class UserService {
         user.setActivationToken(token);
         user.setActivationTokenExpireAt(LocalDateTime.now().plusWeeks(1));
         userRepository.save(user);
-        String link = "turtleblast.eu-central-1.elasticbeanstalk.com/change-password?token=" + token;
+        String link = "turtleblast.pl/change-password?token=" + token;
         emailService.send(user.getEmail(), buildChangePasswordEmail(user.getUsername(), link), "Zmień hasło");
 
     }
@@ -189,7 +178,7 @@ public class UserService {
         if (username.length() < 2 || username.length() > 15) {
             throw new Exception("Zła długość nicku");
         }
-        if(!Pattern.matches(regex, username)){
+        if (!Pattern.matches(regex, username)) {
             throw new Exception("Nick musi się składać z samych liter i liczb");
         }
 
@@ -232,48 +221,21 @@ public class UserService {
 
     }
 
+
     public void changeAvatar(User user, MultipartFile avatar) throws IOException {
-        String bucketName = "turtleblastavatars";
-        String key = "avatars/" + user.getId() + ".png";
+        String avatarUploadDirectory = envi.getProperty("upload.dir");
+        try {
+            String userId = String.valueOf(user.getId());
+            String filename = userId + ".png";
 
-        String accessKey = envi.getProperty("access.key");
-        String secretKey = envi.getProperty("secret.key");
-        try (S3Client s3 = S3Client.builder().region(Region.EU_CENTRAL_1) // Change the region accordingly
-                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
-                .build()) {
-            String extension = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().lastIndexOf(".") + 1);
-            ArrayList<String> acceptedExtensions = new ArrayList<>(Arrays.asList("jpg", "jpeg", "png"));
-
-            if (!acceptedExtensions.contains(extension)) {
-                throw new IOException("Supported file formats are: " + String.join(", ", acceptedExtensions));
-            }
+            String filePath = avatarUploadDirectory + File.separator + filename;
 
             byte[] bytes = avatar.getBytes();
+            Files.write(Paths.get(filePath), bytes); // Zapisz plik na serwerze jako userId.png
 
-            PutObjectRequest objectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .contentType("image/" + extension)
-                    .build();
 
-            if (extension.equals("jpg") || extension.equals("jpeg")) {
-                try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
-                    BufferedImage image = ImageIO.read(inputStream);
-                    if (image != null) {
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        ImageIO.write(image, "png", os);
-                        objectRequest = objectRequest.toBuilder().contentType("image/png").build();
-                        s3.putObject(objectRequest, RequestBody.fromBytes(os.toByteArray()));
-                    } else {
-                        throw new IOException("Failed to convert image.");
-                    }
-                }
-            } else {
-                s3.putObject(objectRequest, RequestBody.fromBytes(bytes));
-            }
-
-        } catch (S3Exception e) {
-            throw new IOException("Failed to upload file to S3: " + e.getMessage());
+        } catch (IOException e) {
+            throw new IOException("Failed to save avatar on the server: " + e.getMessage());
         }
     }
 
