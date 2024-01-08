@@ -33,7 +33,7 @@ public class MyInterceptor implements HandlerInterceptor {
     TurtleTrainingHistoryRepository turtleTrainingHistoryRepository;
     private final AcademyService academyService;
 
-    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    @Scheduled(cron = "0 01 0 * * ?")
     @Transactional// Uruchamia się codziennie o północy
     public void resetFedFlag() {
         List<Turtle> allTurtles = turtleRepository.findAll();
@@ -43,7 +43,7 @@ public class MyInterceptor implements HandlerInterceptor {
         }
     }
 
-    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    @Scheduled(cron = "0 01 0 * * ?")
     @Transactional
     public void resetWarming() {
         List<TurtleEgg> eggs = turtleEggRepository.findAll();

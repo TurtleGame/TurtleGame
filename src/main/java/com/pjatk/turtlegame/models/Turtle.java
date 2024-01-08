@@ -8,10 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.OptionalInt;
 
 @Entity
 @Table(name = "turtle")
@@ -57,9 +55,6 @@ public class Turtle implements Comparable<Turtle> {
     @OneToMany(mappedBy = "turtle")
     @JsonIgnore
     private List<TurtleOwnerHistory> turtleOwnerHistoryList;
-
-    @OneToMany(mappedBy = "turtle")
-    private List<TurtleTransationHistory> turtleTransationHistoryList;
 
     @OneToMany(mappedBy = "turtle", fetch = FetchType.EAGER)
     private List<TurtleStatistic> turtleStatisticList;

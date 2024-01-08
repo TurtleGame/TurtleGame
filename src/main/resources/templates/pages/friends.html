@@ -26,9 +26,8 @@
                     <div class="card p-3 m-1">
                         <div class="flex flex-row gap-4">
                             <div class="flex flex-center flex-middle">
-                                <img th:src="@{'/avatars/' + ${user.id} + '.png'}" style="width: 50px"
-                                     onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"
-                                     alt="avatar"/>
+                                <img th:src="${friendRequest.getSender().hasAvatar() ? '/avatars/' + friendRequest.getSender().getId() + '.png' : '/assets/images/avatars/0.webp'}"
+                                     style="width: 100%" />
                             </div>
                             <div class="size-wide">
                                 <a th:href="@{/user/{id}(id=${friendRequest.getSender().getId()})}">
@@ -67,8 +66,8 @@
                 <div class="card p-3 m-1">
                     <div class="flex flex-row gap-4">
                         <div class="flex flex-center flex-middle">
-                            <img th:src="@{'/avatars/' + ${user.id} + '.png'}" style="width: 50px"
-                                 onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';" alt="avatar"/>
+                            <img th:src="${friend.hasAvatar() ? '/avatars/' + friend.getId() + '.png' : '/assets/images/avatars/0.webp'}"
+                                 style="width: 100%" />
                         </div>
                         <div class="size-wide">
                             <a th:href="@{/user/{id}(id=${friend.getValue().getId()})}">

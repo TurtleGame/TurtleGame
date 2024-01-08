@@ -49,10 +49,6 @@ public class PrivateMessage {
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id")
-    private Item item;
-
     @OneToMany(mappedBy = "privateMessage", fetch = FetchType.EAGER)
     private List<PrivateMessageAttachment> attachment;
 

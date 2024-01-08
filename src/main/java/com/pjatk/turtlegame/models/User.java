@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -83,12 +84,6 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @OrderBy("item.id ASC")
     private List<UserItem> userItemList;
-
-    @OneToMany(mappedBy = "pastOwner")
-    private List<TurtleTransationHistory> pastOwnerHistoryList;
-
-    @OneToMany(mappedBy = "newOwner")
-    private List<TurtleTransationHistory> newOwnerHistoryList;
 
     @OneToMany(mappedBy = "user")
     private List<TurtleOwnerHistory> ownerHistoryList;
@@ -182,5 +177,11 @@ public class User {
                 .toList();
 
         return !isAccountBanned.isEmpty();
+    }
+
+    public boolean hasAvatar() {
+        String avatarPath = "/avatars/" + id + ".png";
+        File avatarFile = new File(avatarPath);
+        return avatarFile.exists();
     }
 }

@@ -5,11 +5,11 @@
         <div class="user-data">
 
             <a th:href="@{/user/{id}(id=${user.id})}" class="credentials-container">
-                <div class="avatar"> <img th:src="@{'/avatars/' + ${user.id} + '.png'}"
-
-                    style="width: 100%"
-                         onerror="this.onerror=null; this.src='/assets/images/avatars/0.webp';"/>
+                <div class="avatar">
+                    <img th:src="${user.hasAvatar() ? '/avatars/' + user.id + '.png' : '/assets/images/avatars/0.webp'}"
+                         style="width: 100%" />
                 </div>
+
                 <div>
                     <div class="username" th:text="${user.username}">
                     </div>
