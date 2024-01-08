@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initSelect2();
     initPopups();
 
+    document.querySelector('.right-sidebar-toggle').addEventListener('click', function() {
+        document.querySelector('.sidebar-right').classList.toggle('open');
+    });
+
     document.getElementById('logout').addEventListener('click', function () {
         localStorage.removeItem('activeTab');
     });

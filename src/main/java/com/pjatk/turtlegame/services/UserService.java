@@ -231,7 +231,7 @@ public class UserService {
             String filePath = avatarUploadDirectory + File.separator + filename;
 
             byte[] bytes = avatar.getBytes();
-            Files.write(Paths.get(filePath), bytes); // Zapisz plik na serwerze jako userId.png
+            Files.write(Paths.get(filePath), bytes);
 
 
         } catch (IOException e) {

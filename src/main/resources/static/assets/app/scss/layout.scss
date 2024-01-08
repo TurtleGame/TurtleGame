@@ -30,8 +30,6 @@ main {
     backdrop-filter: blur(3px);
     border-radius: 1.25rem 1.25rem 0 0;
   }
-
-
 }
 
 .errorMessage {
@@ -84,6 +82,9 @@ main {
   &.sidebar-right {
     right: 0;
 
+    .right-sidebar-toggle {
+      display: none;
+    }
   }
 }
 
@@ -493,4 +494,73 @@ main {
 }
 .turtle-tile:hover {
   opacity: 9;
+}
+
+@media (max-width: 1600px) {
+  .sidebar {
+    width: 250px;
+    padding: 0.75rem;
+  }
+
+  main {
+    width: auto;
+    margin-left: calc(250px + 1.5rem);
+    margin-right: calc(250px + 1.5rem);
+  }
+
+  main .content {
+    padding: 0;
+    background: transparent;
+  }
+}
+
+@media (max-width: 1400px) {
+
+  .sidebar.sidebar-right {
+    background: rgba(14, 22, 33, 0.95);
+    margin-right: -250px;
+    overflow: visible;
+    transition: all 0.25s;
+    box-shadow: 0 0 0 100vw transparent;
+
+    .right-sidebar-toggle {
+      display: block;
+      position: absolute;
+      left: -55px;
+      top: 10px;
+      width: 45px;
+      height: 45px;
+      color: var(--text-light);
+      background: rgb(14, 22, 33);
+      border: 1px solid var(--bg-light);
+      border-radius: 50%;
+      transition: color 0.25s;
+      cursor: pointer;
+      box-shadow: 0px 1px 5px #151e2a;
+      font-size: 1.2rem;
+
+      i:before {
+        content: "\f0c9";
+      }
+
+      &:hover {
+        color: var(--text-bright);
+      }
+    }
+
+    &.open {
+      box-shadow: 0 0 0 100vw rgba(21, 30, 42, 0.75);
+      margin-right: 0;
+
+      .right-sidebar-toggle i:before {
+        content: "\f00d";
+      }
+    }
+  }
+
+  main {
+    width: auto;
+    margin-left: calc(250px + 1.5rem);
+    margin-right: 1.5rem;
+  }
 }

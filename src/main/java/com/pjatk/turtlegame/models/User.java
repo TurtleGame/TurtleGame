@@ -180,7 +180,7 @@ public class User {
     }
 
     public boolean hasAvatar() {
-        String avatarPath = "/avatars/" + id + ".png";
+        String avatarPath = "./avatars/" + this.getId() + ".png";
         File avatarFile = new File(avatarPath);
         return avatarFile.exists();
     }
