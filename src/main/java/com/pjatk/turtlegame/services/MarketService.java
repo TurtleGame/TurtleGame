@@ -36,7 +36,7 @@ public class MarketService {
         }
 
         for (TurtleOwnerHistory selling : history) {
-            if (selling.isSelling()) {
+            if (selling.isSelling() && selling.getEndAt() == null) {
                 turtles.add(selling.getTurtle());
             }
         }
@@ -251,7 +251,6 @@ public class MarketService {
                 .filter(history -> history.getEndAt() == null)
                 .forEach(history -> {
                     history.setEndAt(now);
-                    history.setSelling(false);
                     turtleOwnerHistoryRepository.save(history);
                 });
 

@@ -276,7 +276,7 @@ public class AchievementsService {
         Achievement achievement = achievementsRepoistory.findById(11);
         if (isNotEarned(user, achievement)) {
             List<TurtleOwnerHistory> sold = user.getOwnerHistoryList().stream()
-                    .filter(history -> history.getEndAt() != null)
+                    .filter(history -> history.getEndAt() != null && history.isSelling())
                     .toList();
 
             if (!sold.isEmpty())
