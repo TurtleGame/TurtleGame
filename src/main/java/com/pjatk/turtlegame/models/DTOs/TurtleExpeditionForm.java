@@ -10,12 +10,9 @@ import lombok.Setter;
 @Getter
 public class TurtleExpeditionForm {
 
-    @NotNull(message = "Musisz wybrać żółwia!")
-    private Turtle turtle;
+    private String turtleId;
 
-    @NotNull(message = "Musisz wybrać wyprawę!")
-    private Expedition expedition;
+    private int expeditionId;
 
-    @NotNull(message = "Musisz wybrać długość wyprawy!")
     private int durationTime;
 }

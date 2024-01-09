@@ -26,7 +26,8 @@
                 <div th:text="${turtle.getCurrentTraining().getTraining().getName()}"></div>
             </div>
             <div class="flex flex-column flex-center flex-middle text-center" style="width: 120px;">
-                <div class="text-primary" th:id="'countdown-' + ${turtle.getId()}" th:data-target-date="${#temporals.format(turtle.getCurrentTraining().getEndAt(), 'yyyy-MM-dd HH:mm:ss')}"></div>
+                <div class="text-primary" th:id="'countdown-' + ${turtle.getId()}"
+                     th:data-target-date="${#temporals.format(turtle.getCurrentTraining().getEndAt(), 'yyyy-MM-dd HH:mm:ss')}"></div>
                 <div class="text-sm">
                     Powrót o <span
                         th:text="${#temporals.format(turtle.getCurrentTraining().getEndAt(), 'HH:mm')}"></span>
@@ -47,9 +48,9 @@
                     <h2 style="margin-top: 0;" th:text="${training.getName()}"></h2>
                     <ul>
                         <li
-                            class="training-item"
-                            th:each="item : ${training.getTrainingItemList()}"
-                            th:attr="data-cost=${item.getHowMany()}"
+                                class="training-item"
+                                th:each="item : ${training.getTrainingItemList()}"
+                                th:attr="data-cost=${item.getHowMany()}"
                         >
                             <span th:text="${item.getItem().getName()}"></span>
                             (
@@ -77,9 +78,9 @@
                     </select>
                 </div>
                 <div style="width: 220px;">
-                    <input type="hidden" name="training" th:value="${training.id}"/>
-                    <span th:if="${@academyService.ifTrainingCan(user, training)}"><input class="button" type="submit" value="Trenuj"/></span>
-                    <span th:unless="${@academyService.ifTrainingCan(user, training)}"><input disabled class="button" type="submit" value="Trenuj"/></span>
+                    <input type="hidden" name="training" th:value="${training.id}"
+                           th:attr="data-trainingId=${training.getId()}"/>
+                    <span><input disabled class="button" type="submit" value="Trenuj"/></span>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ import com.pjatk.turtlegame.repositories.TrainingRepository;
 import com.pjatk.turtlegame.services.AcademyService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,5 +80,17 @@ public class AcademyController {
         }
 
         return "redirect:/academy";
+    }
+
+    @GetMapping("/if-training-can")
+    public ResponseEntity<?> ifTrainingCan(@AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
+                                           @RequestParam(name = "trainingId") Integer trainingId,
+                                           @RequestParam(name = "duration") int durationTime) {
+        User user = userRepository.findById(turtleUserDetails.getId());
+        Training training = trainingRepository.findById(trainingId).orElseThrow();
+        System.out.println(durationTime);
+        boolean canTraining = academyService.ifTrainingCan(user, training, durationTime);
+
+        return ResponseEntity.ok(canTraining);
     }
 }

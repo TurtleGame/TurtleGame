@@ -1,12 +1,9 @@
 package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
-import com.pjatk.turtlegame.repositories.PrivateMessageAttachmentRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.pjatk.turtlegame.repositories.TurtleExpeditionHistoryRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -24,9 +21,33 @@ public class ExpeditionService {
     PrivateMessageAttachmentRepository privateMessageAttachmentRepository;
     private final UserRepository userRepository;
     private final PrivateMessageService privateMessageService;
+    private final ExpeditionRepository expeditionRepository;
 
     @Transactional
-    public void turtleExpedition(Turtle turtle, Expedition expedition, int durationTime) {
+    public void turtleExpedition(int turtleId, int expeditionId, int durationTime, User user) throws Exception {
+
+        Turtle turtle = user.getTurtle(turtleId);
+        Expedition expedition = expeditionRepository.findById(expeditionId);
+
+        if (turtle == null) {
+            throw new Exception("Nie znaleziono żółwia");
+        }
+
+        if (!turtle.isAvailable()) {
+            throw new Exception("Żółw " + turtle.getName() +  " jest zajęty");
+        }
+
+        if (expedition == null) {
+            throw new Exception("Nie znaleziono wyprawy");
+        }
+
+        if (turtle.getLevel() < expedition.getMinLevel()) {
+            throw new Exception("Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
+        }
+
+        if (durationTime == 0) {
+            throw new Exception("Musisz wybrać długość wyprawy");
+        }
 
         turtle.setAvailable(false);
         turtleRepository.save(turtle);
@@ -43,6 +64,15 @@ public class ExpeditionService {
         for (PrivateMessageAttachment attachment : getItemsFromExpedition(expedition, durationTime)) {
             attachment.setTurtleExpeditionHistory(turtleExpedition);
             privateMessageAttachmentRepository.save(attachment);
+        }
+    }
+
+    public void sendAllTurtlesOnExpedition(User user, int expeditionId, int durationTime) throws Exception {
+        for (Turtle turtle : user.getTurtles()) {
+            if (turtle.isAvailable()) {
+                System.out.println(turtle.getName());
+                turtleExpedition(turtle.getId(), expeditionId, durationTime, user);
+            }
         }
     }
 

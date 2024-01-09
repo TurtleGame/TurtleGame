@@ -17,8 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Controller
@@ -45,39 +47,34 @@ public class ExpeditionController {
 
     @PostMapping(path = "")
     public String send(@Valid @ModelAttribute("turtleExpeditionForm") TurtleExpeditionForm turtleExpeditionForm,
-                       BindingResult bindingResult,
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                       Model model
-                    ) throws Exception {
-
+                       Model model,
+                       RedirectAttributes redirectAttributes
+    ) throws Exception {
+        User user = userRepository.findById(turtleUserDetails.getId());
         model.addAttribute("context", "expeditions");
         model.addAttribute("turtleExpeditionForm", turtleExpeditionForm);
         model.addAttribute("expeditions", expeditionRepository.findAll());
 
-        if (bindingResult.hasErrors()) {
-            return "pages/expedition";
+        if (turtleExpeditionForm.getTurtleId() == null) {
+            redirectAttributes.addFlashAttribute("failedMessage", "Musisz wybrać żółwia");
+            return "redirect:/expeditions";
         }
 
-        Turtle turtle = turtleExpeditionForm.getTurtle();
-        Expedition expedition = turtleExpeditionForm.getExpedition();
-        if (turtle.getOwner() == null || turtle.getOwner().getId() != turtleUserDetails.getId()) {
-            bindingResult.rejectValue("turtle", "error.nullTurtle", "Nie znaleziono żółwia.");
-
-            return "pages/expedition";
+        if (turtleExpeditionForm.getTurtleId().equals("*")) {
+            try {
+                expeditionService.sendAllTurtlesOnExpedition(user, turtleExpeditionForm.getExpeditionId(), turtleExpeditionForm.getDurationTime());
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            }
+        } else {
+            try {
+                expeditionService.turtleExpedition(Integer.parseInt(turtleExpeditionForm.getTurtleId()), turtleExpeditionForm.getExpeditionId(), turtleExpeditionForm.getDurationTime(), user);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+            }
         }
-        if (turtle.getLevel() < expedition.getMinLevel()) {
-            bindingResult.rejectValue("expedition", "error.levelTooLow", "Wymagany level, aby wyruszyć na tą wyprawę to " + expedition.getMinLevel());
-
-            return "pages/expedition";
-        }
-        if (turtleExpeditionHistoryRepository.existsByTurtleAndEndAtAfter(turtle, LocalDateTime.now())) {
-            bindingResult.rejectValue("durationTime", "error.alreadyOnExpedition", "Żółw jest juz na wyprawie.");
-
-            return "pages/expedition";
-        }
-
-        expeditionService.turtleExpedition(turtle, expedition, turtleExpeditionForm.getDurationTime());
-
         return "redirect:/expeditions";
     }
+
 }

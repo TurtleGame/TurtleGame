@@ -24,11 +24,24 @@ public class AcademyService {
     TurtleStaticsRepository turtleStaticsRepository;
 
     @Transactional
-    public void turtleTraining (Turtle turtle, Training training, int durationTime) {
+    public void turtleTraining (Turtle turtle, Training training, int durationTime) throws Exception {
+        User user = turtle.getOwner();
+
+        training.getTrainingItemList().forEach(trainingItem -> {
+            user.getUserItemList().stream()
+                    .filter(userItem -> userItem.getId() == trainingItem.getItem().getId())
+                    .filter(userItem -> userItem.getQuantity() < trainingItem.getHowMany())
+                    .findAny()
+                    .ifPresent(userItem -> {
+                        throw new RuntimeException("Za mało składników!");
+                    });
+        });
+
+
         turtle.setAvailable(false);
         turtleRepository.save(turtle);
 
-        User user = turtle.getOwner();
+
         List<TrainingItem> trainingItems = training.getTrainingItemList();
 
         for (TrainingItem item : trainingItems) {
@@ -97,7 +110,7 @@ public class AcademyService {
         return 0;
     }
 
-    public boolean ifTrainingCan (User user, Training training) {
+    public boolean ifTrainingCan (User user, Training training, int durationTime) {
         List<TrainingItem> trainingItems = training.getTrainingItemList();
         List<UserItem> userItems = user.getUserItemList();
 

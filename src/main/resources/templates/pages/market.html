@@ -98,7 +98,7 @@
                                     <td style="width: 40%;">
                                         <div class="text-primary"><b>Ilość: </b><span class="text-primary" th:text="${@marketService.getQuantity(egg)}"></span></div>
                                         <br>
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(egg)}"> złota</span></div>
+                                        <div class="text-primary"><b>Cena: </b> <img src="/assets/images/gold.png" width="20" height="20" alt="gold"><span class="text-primary" th:text="${@marketService.priceGold(egg)}"> złota</span></div>
                                         <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, egg) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${egg.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyEggConfirm(this)">Kup jajko</button>
@@ -135,7 +135,7 @@
                                     <td style="width: 40%;">
                                         <div class="text-primary"><b>Ilość: </b><span class="text-primary" th:text="${@marketService.getQuantity(item)}"></span></div>
                                         <br>
-                                        <div class="text-primary"><b>Cena: </b><span class="text-primary" th:text="${@marketService.priceGold(item)}"> złota</span></div>
+                                        <div class="text-primary"><b>Cena: </b> <img src="/assets/images/gold.png" width="20" height="20" alt="gold"><span class="text-primary" th:text="${@marketService.priceGold(item)}"> złota</span></div>
                                         <br>
                                         <form th:classappend="${@marketService.sellerIsBuyerItem(user, item) == 1 ? 'hidden' : ''}" th:action="@{'/market/' + ${item.getId()} + '/buyItem'}" method="post">
                                             <button type="submit" class="button mb-2" onclick="buyItemConfirm(this)">Kup przedmiot</button>

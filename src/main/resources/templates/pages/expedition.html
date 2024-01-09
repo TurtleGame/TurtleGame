@@ -76,8 +76,9 @@
             </div>
             <div class="flex flex-row gap-4">
                 <div class="flex flex-row gap-4 size-wide">
-                    <select class="select" name="turtle">
+                    <select class="select" name="turtleId">
                         <option disabled selected>Wybierz żółwia</option>
+                        <option value="*">Wszystkie dostępne żółwie</option>
                         <option th:each="turtle : ${user.getTurtles()}" th:value="${turtle.getId()}"
                                 th:text="${turtle.getName()}" th:if="${turtle.isAvailable()}"></option>
                     </select>
@@ -94,7 +95,7 @@
                     </select>
                 </div>
                 <div class="flex flex-row" style="width: 220px;">
-                    <input type="hidden" name="expedition" th:value="${expedition.id}"/>
+                    <input type="hidden" name="expeditionId" th:value="${expedition.id}"/>
                     <input class="button" type="submit" value="Wyślij"/>
                 </div>
             </div>

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSelect2();
     initPopups();
 
-    document.querySelector('.right-sidebar-toggle').addEventListener('click', function() {
+    document.querySelector('.right-sidebar-toggle').addEventListener('click', function () {
         document.querySelector('.sidebar-right').classList.toggle('open');
     });
 
@@ -167,21 +167,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const turtleName = $('#turtle-name').text();
         const opponent = $('#opponent-name').text();
 
-        $('#battle-log').find('.card').each(function() {
+        $('#battle-log').find('.card').each(function () {
             let colored = $(this).html();
             colored = colored.split(turtleName).join('<strong class="text-success">' + turtleName + '</strong>');
             colored = colored.split(opponent).join('<strong class="text-danger">' + opponent + '</strong>');
             $(this).html(colored);
         });
 
-        $('#battle-log').find('.log').each(function(i) {
-            setInterval(() => {$(this).fadeIn()}, i * 1000);
+        $('#battle-log').find('.log').each(function (i) {
+            setInterval(() => {
+                $(this).fadeIn()
+            }, i * 1000);
         });
         setTimeout(() => {
             $('.act-skip').hide();
             $('.act-back').show();
         }, $('#battle-log').find('.log').length * 1000 - 1000);
-        $('.act-skip').on('click', function() {
+        $('.act-skip').on('click', function () {
             $('.act-skip').hide();
             $('.act-back').show();
             $('#battle-log').find('.log').fadeIn();
@@ -189,34 +191,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (context === 'academy') {
-        $('[name="durationTime"]').change(function () {
-            const duration = $(this).val();
-            const $parent = $(this).closest('form');
 
-            // Calculate the multiplier based on the selected duration
+
+        $('[name="durationTime"]').change(function () {
+            const $parent = $(this).closest('form');
+            const trainingId = $('[name = "training"]', $parent).attr('data-trainingId');
+            const duration = $(this).val();
+            const requestData = {
+                trainingId: trainingId,
+                duration: duration
+
+            }
+            const $submitButton = $('input[type="submit"]', $parent);
+
+
             let multiplier = 1;
             if (duration === '180') {
                 multiplier = 2;
             } else if (duration === '360') {
                 multiplier = 3;
             }
-
-            // Update the text and data-original-how-many attributes using the calculated multiplier
+            $.ajax({
+                url: "/academy/if-training-can",
+                data: requestData,
+                type: "GET",
+                success: function (response) {
+                    if (response === true) {
+                        $submitButton.prop('disabled', false);
+                    } else {
+                        $submitButton.prop('disabled', true);
+                    }
+                }
+            })
             $('.training-item', $parent).each(function () {
                 const cost = $(this).data('cost');
+
                 $('.act-target-cost', $(this)).text(cost * multiplier);
             });
         });
     }
 
     if (context === 'friends') {
-        $('[name="friendUsername"]').on('change', function() {
+        $('[name="friendUsername"]').on('change', function () {
             if ($(this).val()) {
                 $('.act-view-profile').removeAttr('disabled');
                 $('.act-add-friend').removeAttr('disabled');
             }
         });
-        $('.act-view-profile').on('click', function() {
+        $('.act-view-profile').on('click', function () {
             if ($('[name="friendUsername"]').val()) {
                 const $form = $(this).closest('form');
                 $form.attr('action', '/user/profile');
@@ -224,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 $form.submit();
             }
         });
-        $('.act-add-friend').on('click', function() {
+        $('.act-add-friend').on('click', function () {
             if ($('[name="friendUsername"]').val()) {
                 const $form = $(this).closest('form');
                 $form.attr('action', '/friends/add');
@@ -419,7 +441,7 @@ function openPopupAdoptEgg(id) {
     $popup.fadeIn();
 }
 
-function openPopupMoreInfo(trigger){
+function openPopupMoreInfo(trigger) {
     const $popup = $('#popup-more-info');
     const $items = $(trigger).closest('.expedition-card').find('.expedition-items').clone();
     const $content = $('.popup-content', $popup);

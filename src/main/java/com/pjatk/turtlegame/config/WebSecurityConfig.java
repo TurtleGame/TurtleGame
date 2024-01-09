@@ -2,10 +2,8 @@ package com.pjatk.turtlegame.config;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -23,10 +21,6 @@ public class WebSecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    public SecretKeyGenerator secretKeyGenerator(){
-        return new SecretKeyGenerator();
     }
 
     @Bean
@@ -68,7 +62,6 @@ public class WebSecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/main", true)
                         .permitAll())
-                .rememberMe(remember -> remember.key(secretKeyGenerator().generateSecretKey()))
                 .httpBasic(withDefaults())
                 .build();
     }
