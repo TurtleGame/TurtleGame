@@ -46,7 +46,6 @@ public class ItemService {
 
     }
 
-    @Transactional
     public void removeItem(User user, int itemId, int quantity) {
         UserItem userItem = user.getUserItemList()
                 .stream()
