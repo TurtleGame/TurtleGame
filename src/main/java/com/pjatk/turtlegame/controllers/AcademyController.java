@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 
@@ -46,7 +47,8 @@ public class AcademyController {
     public String send(@Valid @ModelAttribute("turtleTrainingForm") TurtleTrainingForm turtleTrainingForm,
                        BindingResult bindingResult,
                        @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
-                       Model model
+                       Model model,
+                       RedirectAttributes redirectAttributes
     ) throws Exception {
 
         model.addAttribute("context", "academy");
@@ -70,7 +72,11 @@ public class AcademyController {
             return "pages/academy";
         }
 
-        academyService.turtleTraining(turtle, training, turtleTrainingForm.getDurationTime());
+        try {
+            academyService.turtleTraining(turtle, training, turtleTrainingForm.getDurationTime());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+        }
 
         return "redirect:/academy";
     }
