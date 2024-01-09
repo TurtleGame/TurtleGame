@@ -88,7 +88,6 @@ public class AcademyController {
                                            @RequestParam(name = "duration") int durationTime) {
         User user = userRepository.findById(turtleUserDetails.getId());
         Training training = trainingRepository.findById(trainingId).orElseThrow();
-        System.out.println(durationTime);
         boolean canTraining = academyService.ifTrainingCan(user, training, durationTime);
 
         return ResponseEntity.ok(canTraining);

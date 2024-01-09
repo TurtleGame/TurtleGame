@@ -49,7 +49,7 @@ public class PrivateMessage {
     @JoinColumn(name = "turtle_id")
     private Turtle turtle;
 
-    @OneToMany(mappedBy = "privateMessage", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "privateMessage", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<PrivateMessageAttachment> attachment;
 
 }
