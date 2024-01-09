@@ -80,7 +80,9 @@
                 <div style="width: 220px;">
                     <input type="hidden" name="training" th:value="${training.id}"
                            th:attr="data-trainingId=${training.getId()}"/>
-                    <span><input disabled class="button" type="submit" value="Trenuj"/></span>
+                    <span th:if="${@academyService.ifTrainingCan(user, training, 60)}"><input class="button" type="submit" value="Trenuj"/></span>
+                    <span th:unless="${@academyService.ifTrainingCan(user, training, 60)}">
+                        <span><input disabled class="button" type="submit" value="Trenuj"/></span></span>
                 </div>
             </div>
         </div>
