@@ -24,18 +24,16 @@ public class AcademyService {
     TurtleStaticsRepository turtleStaticsRepository;
 
     @Transactional
-    public void turtleTraining (Turtle turtle, Training training, int durationTime) throws Exception {
+    public void turtleTraining (Turtle turtle, Training training, int durationTime) {
         User user = turtle.getOwner();
 
-        training.getTrainingItemList().forEach(trainingItem -> {
-            user.getUserItemList().stream()
-                    .filter(userItem -> userItem.getId() == trainingItem.getItem().getId())
-                    .filter(userItem -> userItem.getQuantity() < trainingItem.getHowMany())
-                    .findAny()
-                    .ifPresent(userItem -> {
-                        throw new RuntimeException("Za mało składników!");
-                    });
-        });
+        training.getTrainingItemList().forEach(trainingItem -> user.getUserItemList().stream()
+                .filter(userItem -> userItem.getId() == trainingItem.getItem().getId())
+                .filter(userItem -> userItem.getQuantity() < trainingItem.getHowMany())
+                .findAny()
+                .ifPresent(userItem -> {
+                    throw new RuntimeException("Za mało składników!");
+                }));
 
 
         turtle.setAvailable(false);
@@ -115,11 +113,18 @@ public class AcademyService {
         List<UserItem> userItems = user.getUserItemList();
 
         int j = 0;
+        int quantity = switch (durationTime) {
+            case 60 -> 1;
+            case 180 -> 2;
+            case 360 -> 3;
+            default -> 1;
+        };
+
 
         for (TrainingItem trainingItem : trainingItems) {
             for (UserItem userItem : userItems) {
                 if (userItem.getItem().getId() == trainingItem.getItem().getId()) {
-                    if (userItem.getQuantity() < trainingItem.getHowMany())
+                    if (userItem.getQuantity() < trainingItem.getHowMany() * quantity)
                         return false;
                     else j++;
                 }
