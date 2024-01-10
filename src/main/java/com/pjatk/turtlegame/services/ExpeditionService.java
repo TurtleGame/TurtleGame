@@ -68,8 +68,9 @@ public class ExpeditionService {
     }
 
     public void sendAllTurtlesOnExpedition(User user, int expeditionId, int durationTime) throws Exception {
+        Expedition expedition = expeditionRepository.findById(expeditionId);
         for (Turtle turtle : user.getTurtles()) {
-            if (turtle.isAvailable()) {
+            if (turtle.isAvailable() && turtle.getLevel() >= expedition.getMinLevel()) {
                 System.out.println(turtle.getName());
                 turtleExpedition(turtle.getId(), expeditionId, durationTime, user);
             }

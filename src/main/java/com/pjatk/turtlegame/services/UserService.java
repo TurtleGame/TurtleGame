@@ -148,6 +148,9 @@ public class UserService {
     }
 
     public boolean isUserOnline(User user) {
+        if(user.getLastActivity() == null){
+            return false;
+        }
         LocalDateTime currentTime = LocalDateTime.now();
         Duration duration = Duration.between(user.getLastActivity(), currentTime);
         long timeSinceLastActivity = duration.toMillis();
@@ -310,7 +313,7 @@ public class UserService {
     }
 
     private String buildActivationEmail(String name, String link) {
-        String header = buildCommonEmailHeader("Confirm your email");
+        String header = buildCommonEmailHeader("Potwierdź swój adres mailowy");
         return header +
                 "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
                 "    <tbody><tr>\n" +
@@ -319,12 +322,16 @@ public class UserService {
                 "    <tr>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
-                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p>\n" +
-                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p>\n" +
+                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Witaj " + name + ",</p>\n" +
+                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Dziękujemy za rejestrację konta. Aby je aktywować, " +
+                "proszę " +
+                "kliknąć w przycisk Aktywuj Konto lub " +
+                "otwórz link podany poniżej:</p>\n" +
                 "          <blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\">\n" +
-                "              <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p>\n" +
+                "              <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Aktywuj konto</a> </p>\n" +
                 "          </blockquote>\n" +
-                "          Link will expire in 15 minutes. <p>See you soon</p>\n" +
+                link + "<br></br>" +
+                "          \nLink wygaśnie za 15 minut. <p>Do zobaczenia w TurtleBlast!</p>\n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "    </tr>\n" +
@@ -336,6 +343,7 @@ public class UserService {
                 "</div></div>";
     }
 
+
     private String buildChangePasswordEmail(String name, String link) {
         String header = buildCommonEmailHeader("Zmień hasło");
         return header +
@@ -346,12 +354,14 @@ public class UserService {
                 "    <tr>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
-                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p>\n" +
-                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Oto twój link do zmiany hasła: </p>\n" +
+                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Witaj " + name + ",</p>\n" +
+                "          <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Wejdź w podany odnośnik, bądź otwórz link aby zmienić hasło </p>\n" +
                 "          <blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\">\n" +
                 "              <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Zmień hasło</a> </p>\n" +
                 "          </blockquote>\n" +
-                "          <p>Do zobaczenia w turtle blast!</p>\n" +
+
+                link + "<br></br>" +
+                "          <p>Do zobaczenia w TurtleBlast!</p>\n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "    </tr>\n" +
