@@ -269,18 +269,21 @@ public class MarketService {
         turtleRepository.save(turtle);
     }
 
-    public void undoTurtle (int turtleId, User user) {
+    public void undoTurtle (int turtleId, User user) throws Exception {
         Turtle turtle = turtleOwnerHistoryRepository.findByTurtleIdAndUserIdAndEndAtIsNull(turtleId, user.getId()).getTurtle();
 
-        turtle.getTurtleOwnerHistoryList().stream()
-                .filter(history -> history.getEndAt() == null)
-                .forEach(history -> {
-                    history.setSelling(false);
-                    turtleOwnerHistoryRepository.save(history);
-                });
+        if (user.canHaveMoreTurtles()) {
+            turtle.getTurtleOwnerHistoryList().stream()
+                    .filter(history -> history.getEndAt() == null)
+                    .forEach(history -> {
+                        history.setSelling(false);
+                        turtleOwnerHistoryRepository.save(history);
+                    });
 
-        turtle.setOwner(user);
-        turtleRepository.save(turtle);
+            turtle.setOwner(user);
+            turtleRepository.save(turtle);
+        }
+        else throw new Exception("Twój limit żółwi został osiągnięty");
     }
 
     @Transactional

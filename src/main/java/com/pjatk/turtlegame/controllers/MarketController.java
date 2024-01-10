@@ -65,9 +65,14 @@ public class MarketController {
 
     @PostMapping("/{id}/undoTurtle")
     public String undoTurtle(@AuthenticationPrincipal UserDetails userDetails,
-                            @PathVariable int id) {
+                            @PathVariable int id,
+                             RedirectAttributes redirectAttributes) {
         User user = userRepository.findUserByUsername(userDetails.getUsername());
-        marketService.undoTurtle(id, user);
+        try {
+            marketService.undoTurtle(id, user);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", e.getMessage());
+        }
 
         return "redirect:/market";
     }

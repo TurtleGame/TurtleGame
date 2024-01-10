@@ -30,6 +30,10 @@ public class TurtleService {
         LocalDateTime now = LocalDateTime.now();
         Turtle turtle = user.getTurtle(turtleId);
 
+        if (!turtle.isAvailable()) {
+            throw new IllegalArgumentException("Żółw nie może zostać porzucony. Jest zajęty.");
+        }
+
         turtle.getTurtleOwnerHistoryList().stream()
                 .filter(history -> history.getEndAt() == null)
                 .forEach(history -> {
@@ -94,6 +98,9 @@ public class TurtleService {
             throw new IllegalArgumentException("Żółw nosi zbroję.");
         }
 
+        if (!turtle.isAvailable()) {
+            throw new IllegalArgumentException("Żółw nie może zostać wystawiony na sprzedaż. Jest zajęty.");
+        }
 
         for (TurtleOwnerHistory selling : turtle.getTurtleOwnerHistoryList()) {
             if (selling.getEndAt() == null) {
