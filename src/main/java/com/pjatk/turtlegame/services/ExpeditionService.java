@@ -103,7 +103,7 @@ public class ExpeditionService {
 
         boolean eggFound = false;
         boolean equipmentFound = false;
-        boolean foodFound = true;
+        boolean foodFound = false;
 
         for (int i = 30; i <= durationTime; i += 30) {
             for (ExpeditionItem expeditionItem : expedition.getExpeditionItemList()) {
