@@ -103,6 +103,7 @@ public class ExpeditionService {
 
         boolean eggFound = false;
         boolean equipmentFound = false;
+        boolean foodFound = true;
 
         for (int i = 30; i <= durationTime; i += 30) {
             for (ExpeditionItem expeditionItem : expedition.getExpeditionItemList()) {
@@ -121,6 +122,12 @@ public class ExpeditionService {
                             continue;
                         }
                         equipmentFound = true;
+                    }
+                    if (expeditionItem.getItem().isFood()) {
+                        if (foodFound) {
+                            continue;
+                        }
+                        foodFound = true;
                     }
 
 

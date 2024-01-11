@@ -75,4 +75,8 @@ public class Item {
         return this.getItemType().getName().equals("Jajko");
     }
 
+    public boolean isFood(){
+        return this.getItemType().getName().equals("Jedzenie");
+    }
+
 }
