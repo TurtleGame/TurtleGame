@@ -253,8 +253,9 @@ public class AchievementsService {
                     if (item.getTurtle() == turtle) {
                         items.add(item.getItem());
                     }
+                    
                 }
-                //  System.out.println(is);
+
                 if (items.size() == 4) {
                     for (Item item : items) {
                         if (item.getRarity().getId() >= 2) {

@@ -59,17 +59,8 @@ public class MainController {
 
 
     @GetMapping(path = {"/registration"})
-    public String indexRegister(
-            @RequestParam(name = "error", required = false) String error,
-            @Valid @ModelAttribute("userDTO") UserDTO userDTO,
-            BindingResult bindingResult,
-            Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("failedMessage", bindingResult.getAllErrors());
-        }
-        model.addAttribute("context", "register");
-
-        return "pages/index";
+    public String indexRegister() {
+        return "redirect:/";
     }
 
     @PostMapping("/remind-password")
@@ -119,8 +110,11 @@ public class MainController {
         if (bindingResult.hasErrors()) {
             return "pages/index";
         }
-
-        userService.addNewUser(userDTO);
+        try {
+            userService.addNewUser(userDTO);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("failedMessage", "Wystąpił błąd");
+        }
         redirectAttributes.addFlashAttribute("successMessage", "Rejestracja zakończona pomyślnie. Na mailu czeka na Ciebie link aktywacyjny.");
         model.addAttribute("context", "login");
         return "redirect:/";

@@ -71,7 +71,6 @@ public class ExpeditionService {
         Expedition expedition = expeditionRepository.findById(expeditionId);
         for (Turtle turtle : user.getTurtles()) {
             if (turtle.isAvailable() && turtle.getLevel() >= expedition.getMinLevel()) {
-                System.out.println(turtle.getName());
                 turtleExpedition(turtle.getId(), expeditionId, durationTime, user);
             }
         }

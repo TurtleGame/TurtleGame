@@ -15,4 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(message);
         message.hide();
     });
+    $("form").submit(function() {
+        $(":submit", this).attr("disabled", "disabled");
+        $('[type="submit"]').attr('disabled', 'disabled');
+    });
 });
