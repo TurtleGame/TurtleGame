@@ -3,10 +3,12 @@ spring.datasource.username=
 spring.datasource.password=
 
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.sql.init.encoding= UTF-8
 
 spring.jpa.hibernate.ddl-auto= update
 
-spring.flyway.milkline-on-migrate= true
+spring.jpa.defer-datasource-initialization=true
+spring.sql.init.mode=always
 
 app.name = TurtleBlast
 spring.servlet.multipart.max-file-size=2MB
@@ -18,3 +20,8 @@ spring.mail.username=
 spring.mail.password=
 spring.mail.properties.mail.smtp.auth=
 spring.mail.properties.mail.smtp.starttls.enable=
+
+
+upload.dir = ./avatars
+
+spring.web.resources.cache.cachecontrol.max-age=365d
