@@ -66,7 +66,7 @@ public class FriendsController {
     }
 
     @PostMapping("/{id}/accept")
-    public String addFriends(@PathVariable int id,
+    public String acceptFriendRequest(@PathVariable int id,
                              Model model,
                              @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                              RedirectAttributes redirectAttributes) {
