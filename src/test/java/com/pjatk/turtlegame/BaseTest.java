@@ -39,6 +39,12 @@ abstract class BaseTest {
     @Autowired
     TurtleEggRepository turtleEggRepository;
 
+    @Autowired
+    UserItemRepository userItemRepository;
+
+    @Autowired
+    ItemRepository itemRepository;
+
     protected User makeUser(String username, boolean confirmed) {
         UserDTO userDto = new UserDTO();
         userDto.setUsername(username);
@@ -100,5 +106,29 @@ abstract class BaseTest {
 
         newsRepository.save(news);
         return news;
+    }
+
+    protected UserItem makeUserItem(User owner, int itemId, int quantity) {
+        UserItem userItem = new UserItem();
+        userItem.setItem(itemRepository.getById(itemId));
+        userItem.setUser(owner);
+        userItem.setQuantity(quantity);
+        userItem.setTurtle(null);
+
+        userItemRepository.save(userItem);
+        return userItem;
+    }
+
+    protected TurtleEgg makeTurtleEgg(User owner) {
+        TurtleEgg turtleEgg = new TurtleEgg();
+        turtleEgg.setHatchingAt(LocalDateTime.of(2024, 3, 3, 3, 33));
+        turtleEgg.setUser(owner);
+        turtleEgg.setTurtleType(turtleTypeRepository.findById(1));
+        turtleEgg.setName("Teścik");
+        turtleEgg.setGender(0);
+        turtleEgg.setWarming(2);
+
+        turtleEggRepository.save(turtleEgg);
+        return turtleEgg;
     }
 }
