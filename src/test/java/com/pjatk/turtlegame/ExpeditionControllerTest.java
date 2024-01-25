@@ -20,58 +20,52 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ArenaControllerTest extends BaseTest{
+public class ExpeditionControllerTest extends BaseTest{
 
     protected TurtleUserDetails firstUserDetails;
-    protected TurtleUserDetails secondUserDetails;
 
     @BeforeAll
     public void setup(){
-        User user1 = makeUser("1ArenaTester", true);
-        User user2 = makeUser("2ArenaTester", true);
+        User user1 = makeUser("ExpeditionTest", true);
 
         firstUserDetails = new TurtleUserDetails(user1);
-        secondUserDetails = new TurtleUserDetails(user2);
-
 
     }
 
     @Test
-    void canSeeArenaPage() throws Exception {
-        MockHttpServletRequestBuilder request = get("/arena").with(user(firstUserDetails));
+    void canSeeExpeditionPage() throws Exception {
+        MockHttpServletRequestBuilder request = get("/expeditions").with(user(firstUserDetails));
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        assertThat(result.getResponse().getContentAsString()).contains("Arena");
+        assertThat(result.getResponse().getContentAsString()).contains("Wyprawy");
     }
 
     @Test
-    void turtlesCanFightWhenTheyHaveMoreThan0Energy() throws Exception {
+    void canSendTurtleOnExpeditionWhenHaveEnoughLevel() throws Exception {
         Turtle firstTurtle = makeTurtle(firstUserDetails.user(), 50, 1);
-        Turtle secondTurtle = makeTurtle(secondUserDetails.user(), 70, 2);
 
-        MockHttpServletRequestBuilder requestBuilder = post("/arena/attack").with(user(firstUserDetails))
-                .content("ourTurtleId=1&opponentTurtleId=2")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        assertThat(result.getResponse().getStatus()).isEqualTo(200);
-    }
-
-    @Test
-    void turtlesCantFightWhenOurTurtleHave0Energy() throws Exception {
-        Turtle firstTurtle = makeTurtle(firstUserDetails.user(), 0, 1);
-        Turtle secondTurtle = makeTurtle(secondUserDetails.user(), 2, 2);
-
-        MockHttpServletRequestBuilder requestBuilder = post("/arena/attack").with(user(firstUserDetails))
-                .content("ourTurtleId=1&opponentTurtleId=2")
+        MockHttpServletRequestBuilder requestBuilder = post("/expeditions").with(user(firstUserDetails))
+                .content("turtleId="+firstTurtle.getId()+"&durationTime=30&expeditionId=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(302);
-        assertThat(result.getFlashMap().get("failedMessage").toString()).isEqualTo("Żółw ma za mało energii");
+    }
+
+    @Test
+    void cantSendTurtleOnExpeditionWhenDontHaveEnoughLevel() throws Exception {
+        Turtle firstTurtle = makeTurtle(firstUserDetails.user(), 50, 1);
+
+        MockHttpServletRequestBuilder requestBuilder = post("/expeditions").with(user(firstUserDetails))
+                .content("turtleId="+firstTurtle.getId()+"&durationTime=30&expeditionId=3")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(302);
+        assertThat(result.getFlashMap().get("failedMessage").toString()).contains("Wymagany level, aby wyruszyć na tą wyprawę to ");
     }
 
 }
