@@ -20,65 +20,66 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NestControllerTest extends BaseTest {
+public class ItemControllerTest extends BaseTest {
 
     protected TurtleUserDetails firstUserDetails;
 
-    protected TurtleUserDetails secondUserDetails;
 
     @BeforeAll
     public void setup() {
-        User user1 = makeUser("1NestUser", true);
-        User user2 = makeUser("2NestUser", true);
+        User user1 = makeUser("1ItemTest", true);
 
         firstUserDetails = new TurtleUserDetails(user1);
-        secondUserDetails = new TurtleUserDetails(user2);
     }
 
     @Test
-    void canSeeNestPage() throws Exception {
-        MockHttpServletRequestBuilder request = get("/nest").with(user(firstUserDetails));
+    void canSeeItemsPage() throws Exception {
+        MockHttpServletRequestBuilder request = get("/items").with(user(firstUserDetails));
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(200);
-        assertThat(result.getResponse().getContentAsString()).contains("Legowisko");
+        assertThat(result.getResponse().getContentAsString()).contains("Ekwipunek");
     }
 
     @Test
-    void canSellEgg() throws Exception {
+    void canSeeItemDetailsPage() throws Exception {
 
-        MockHttpServletRequestBuilder request = post("/nest/1/sell").with(user(firstUserDetails))
+        MockHttpServletRequestBuilder request = get("/items/10/details").with(user(firstUserDetails));
+
+        MvcResult result = mockMvc.perform(request).andReturn();
+
+        assertThat(result.getResponse().getStatus()).isEqualTo(200);
+        assertThat(result.getResponse().getContentAsString()).contains("Sałata");
+
+    }
+
+    @Test
+    void canSellItem() throws Exception {
+
+        MockHttpServletRequestBuilder request = post("/items/10/details").with(user(firstUserDetails))
                 .content("Gold=100&Quantity=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(302);
-
     }
 
-    @Test
-    void canAdoptEgg() throws Exception {
 
-        MockHttpServletRequestBuilder request = post("/nest/2/adopt").with(user(firstUserDetails))
-                .content("Name=Basia&Gender=1")
+    @Test
+    void cantSellItemIfWeDontHaveEnough() throws Exception {
+
+        MockHttpServletRequestBuilder request = post("/items/10/details").with(user(firstUserDetails))
+                .content("Gold=100&Quantity=1000")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-        ;
 
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(302);
-    }
-
-    @Test
-    void canWarmEgg() throws Exception {
-        addTurtleEgg(firstUserDetails.user());
-        MockHttpServletRequestBuilder request = post("/nest/1/warm").with(user(firstUserDetails));
-
-        MvcResult result = mockMvc.perform(request).andReturn();
-        assertThat(result.getResponse().getStatus()).isEqualTo(302);
+        assertThat(result.getFlashMap().get("failedMessage").toString()).isEqualTo("Brak wystarczającej ilości");
 
     }
+
 
 
 }
