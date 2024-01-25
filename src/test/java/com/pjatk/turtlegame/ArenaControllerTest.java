@@ -65,7 +65,7 @@ public class ArenaControllerTest extends BaseTest{
         Turtle secondTurtle = makeTurtle(secondUserDetails.user(), 2, 2);
 
         MockHttpServletRequestBuilder requestBuilder = post("/arena/attack").with(user(firstUserDetails))
-                .content("ourTurtleId=1&opponentTurtleId=2")
+                .content("ourTurtleId="+firstTurtle.getId()+"&opponentTurtleId="+secondTurtle.getId())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();

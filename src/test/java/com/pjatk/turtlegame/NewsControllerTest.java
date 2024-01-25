@@ -27,8 +27,8 @@ public class NewsControllerTest extends BaseTest {
 
     @BeforeAll
     public void setup() {
-        User admin = makeAdmin("AdminTester", true);
-        User user = makeUser("UserToBan", true);
+        User admin = makeAdmin("AdminNews", true);
+        User user = makeUser("UserNews", true);
 
         adminUserDetails = new TurtleUserDetails(admin);
         userDetails = new TurtleUserDetails(user);

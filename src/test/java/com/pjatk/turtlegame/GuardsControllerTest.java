@@ -26,7 +26,7 @@ public class GuardsControllerTest extends BaseTest{
 
     @BeforeAll
     public void setup(){
-        User user1 = makeUser("1ArenaTester", true);
+        User user1 = makeUser("1GuardTester", true);
 
         firstUserDetails = new TurtleUserDetails(user1);
 
