@@ -1,10 +1,7 @@
 package com.pjatk.turtlegame;
 
+import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
-import com.pjatk.turtlegame.models.News;
-import com.pjatk.turtlegame.models.Turtle;
-import com.pjatk.turtlegame.models.TurtleType;
-import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.*;
 import com.pjatk.turtlegame.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,9 @@ abstract class BaseTest {
 
     @Autowired
     NewsRepository newsRepository;
+
+    @Autowired
+    TurtleEggRepository turtleEggRepository;
 
     protected User makeUser(String username, boolean confirmed) {
         UserDTO userDto = new UserDTO();
@@ -100,6 +100,19 @@ abstract class BaseTest {
 
         newsRepository.save(news);
         return news;
+    }
+
+    protected TurtleEgg addTurtleEgg(User owner){
+        TurtleEgg turtleEgg = new TurtleEgg();
+        turtleEgg.setGender(1);
+        turtleEgg.setName("Basia");
+        turtleEgg.setTurtleType(turtleTypeRepository.findById(1));
+        turtleEgg.setUser(owner);
+        turtleEgg.setWarming(2);
+        turtleEgg.setHatchingAt(LocalDateTime.now().plusHours(10));
+        turtleEggRepository.save(turtleEgg);
+
+        return turtleEgg;
     }
 
 }

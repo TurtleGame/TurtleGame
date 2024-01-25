@@ -95,4 +95,17 @@ public class TurtleControllerTest extends BaseTest {
         assertThat(result.getResponse().getStatus()).isEqualTo(302);
     }
 
+    @Test
+    void cantSellTurtleIfHeIsNotOurs() throws Exception {
+        Turtle turtle = makeTurtle(secondUserDetails.user(), 100, 20);
+
+        MockHttpServletRequestBuilder request = post("/turtles/"+turtle.getId()+"/sell").with(user(firstUserDetails))
+                .content("shells=100")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE);;
+
+        MvcResult result = mockMvc.perform(request).andReturn();
+
+        assertThat(result.getFlashMap().get("failedMessage").toString()).contains("Nie można");
+    }
+
 }
