@@ -1,8 +1,12 @@
 package com.pjatk.turtlegame;
 
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
+import com.pjatk.turtlegame.models.Turtle;
+import com.pjatk.turtlegame.models.TurtleType;
 import com.pjatk.turtlegame.models.User;
 import com.pjatk.turtlegame.repositories.RoleRepository;
+import com.pjatk.turtlegame.repositories.TurtleRepository;
+import com.pjatk.turtlegame.repositories.TurtleTypeRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
 import com.pjatk.turtlegame.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,12 @@ abstract class BaseTest {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TurtleRepository turtleRepository;
+
+    @Autowired
+    TurtleTypeRepository turtleTypeRepository;
 
     protected User makeUser(String username, boolean confirmed) {
         UserDTO userDto = new UserDTO();
@@ -59,5 +69,22 @@ abstract class BaseTest {
         }
 
         return user;
+    }
+
+    protected Turtle makeTurtle(User owner, int energy, int level) {
+        Turtle turtle = new Turtle();
+        turtle.setEnergy(energy);
+        turtle.setGender(0);
+        turtle.setHowMuchFood(0);
+        turtle.setAvailable(true);
+        turtle.setFed(true);
+        turtle.setLevel(level);
+        turtle.setOwner(owner);
+        turtle.setRankingPoints(0);
+        turtle.setTurtleType(turtleTypeRepository.findById(1));
+        turtle.setName("teścik");
+
+        turtleRepository.save(turtle);
+        return turtle;
     }
 }

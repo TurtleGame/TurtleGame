@@ -1,7 +1,6 @@
 package com.pjatk.turtlegame;
 
 import com.pjatk.turtlegame.config.TurtleUserDetails;
-import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;

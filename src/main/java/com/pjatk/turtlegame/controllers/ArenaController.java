@@ -34,7 +34,7 @@ public class ArenaController {
     }
 
     @PostMapping("/attack")
-    public String attackGuard(Model model,
+    public String attackOtherTurtle(Model model,
                               @AuthenticationPrincipal TurtleUserDetails turtleUserDetails,
                               @RequestParam(name = "ourTurtleId", required = false) Integer ourTurtleId,
                               @RequestParam(name = "opponentTurtleId", required = false) Integer opponentTurtleId,
