@@ -1,7 +1,5 @@
 package com.pjatk.turtlegame.controllers;
 
-import com.pjatk.turtlegame.repositories.NewsRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import com.pjatk.turtlegame.config.TurtleUserDetails;
 import com.pjatk.turtlegame.models.DTOs.NewsDTO;

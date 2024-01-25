@@ -1,6 +1,5 @@
 package com.pjatk.turtlegame.repositories;
 
-import com.pjatk.turtlegame.models.ItemType;
 import com.pjatk.turtlegame.models.TurtleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,5 @@
 package com.pjatk.turtlegame.controllers;
 
-import com.pjatk.turtlegame.models.Item;
 import com.pjatk.turtlegame.models.ItemOwnerMarket;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.User;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
 
 @Controller
 @RequestMapping(path = "/market")

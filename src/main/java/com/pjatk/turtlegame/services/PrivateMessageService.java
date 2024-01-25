@@ -2,11 +2,9 @@ package com.pjatk.turtlegame.services;
 
 import com.pjatk.turtlegame.models.*;
 import com.pjatk.turtlegame.repositories.*;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

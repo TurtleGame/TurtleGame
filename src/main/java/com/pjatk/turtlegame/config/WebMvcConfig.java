@@ -5,15 +5,9 @@ import com.pjatk.turtlegame.repositories.*;
 import com.pjatk.turtlegame.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 @Configuration
 @AllArgsConstructor

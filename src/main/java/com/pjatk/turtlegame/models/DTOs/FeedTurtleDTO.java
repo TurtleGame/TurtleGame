@@ -1,6 +1,5 @@
 package com.pjatk.turtlegame.models.DTOs;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

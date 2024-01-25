@@ -1,8 +1,5 @@
 package com.pjatk.turtlegame.models.DTOs;
 
-import com.pjatk.turtlegame.models.Expedition;
-import com.pjatk.turtlegame.models.Turtle;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

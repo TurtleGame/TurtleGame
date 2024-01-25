@@ -7,7 +7,6 @@ import com.pjatk.turtlegame.repositories.GuardsRepository;
 import com.pjatk.turtlegame.repositories.TurtleBattleHistoryRepository;
 import com.pjatk.turtlegame.repositories.TurtleRepository;
 import com.pjatk.turtlegame.repositories.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
