@@ -101,18 +101,4 @@ abstract class BaseTest {
         newsRepository.save(news);
         return news;
     }
-
-    protected TurtleEgg addTurtleEgg(User owner){
-        TurtleEgg turtleEgg = new TurtleEgg();
-        turtleEgg.setGender(1);
-        turtleEgg.setName("Basia");
-        turtleEgg.setTurtleType(turtleTypeRepository.findById(1));
-        turtleEgg.setUser(owner);
-        turtleEgg.setWarming(2);
-        turtleEgg.setHatchingAt(LocalDateTime.now().plusHours(10));
-        turtleEggRepository.save(turtleEgg);
-
-        return turtleEgg;
-    }
-
 }
