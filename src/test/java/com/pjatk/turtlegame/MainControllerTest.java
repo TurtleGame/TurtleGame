@@ -34,7 +34,8 @@ public class MainControllerTest extends BaseTest {
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertThat(result.getResponse().getStatus()).isEqualTo(302);
-        assertThat(result.getFlashMap().get("successMessage")).isEqualTo("Rejestracja zakończona pomyślnie. Na mailu czeka na Ciebie link aktywacyjny.");
+        assertThat(result.getFlashMap().get("successMessage"))
+                .isEqualTo("Rejestracja zakończona pomyślnie. Na mailu czeka na Ciebie link aktywacyjny.");
     }
 
     @Test
