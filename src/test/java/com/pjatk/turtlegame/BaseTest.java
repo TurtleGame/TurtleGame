@@ -1,18 +1,18 @@
 package com.pjatk.turtlegame;
 
 import com.pjatk.turtlegame.models.DTOs.UserDTO;
+import com.pjatk.turtlegame.models.News;
 import com.pjatk.turtlegame.models.Turtle;
 import com.pjatk.turtlegame.models.TurtleType;
 import com.pjatk.turtlegame.models.User;
-import com.pjatk.turtlegame.repositories.RoleRepository;
-import com.pjatk.turtlegame.repositories.TurtleRepository;
-import com.pjatk.turtlegame.repositories.TurtleTypeRepository;
-import com.pjatk.turtlegame.repositories.UserRepository;
+import com.pjatk.turtlegame.repositories.*;
 import com.pjatk.turtlegame.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,6 +35,9 @@ abstract class BaseTest {
 
     @Autowired
     TurtleTypeRepository turtleTypeRepository;
+
+    @Autowired
+    NewsRepository newsRepository;
 
     protected User makeUser(String username, boolean confirmed) {
         UserDTO userDto = new UserDTO();
@@ -87,4 +90,16 @@ abstract class BaseTest {
         turtleRepository.save(turtle);
         return turtle;
     }
+
+    protected News makeNews(User author){
+        News news = new News();
+        news.setContent("testuje");
+        news.setTitle("testuje");
+        news.setAuthor(author);
+        news.setReleaseDate(LocalDateTime.now());
+
+        newsRepository.save(news);
+        return news;
+    }
+
 }
